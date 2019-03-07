@@ -43,6 +43,11 @@
             
             $statement = $database->prepare($sql);
             
+            //パスワードが入力されない時の処理
+            if (empty($_POST['password'])) {
+                $_POST['password'] = null;
+            }
+            
             $statement->bindParam(':name', $_POST['name']);
             $statement->bindParam(':comment', $_POST['comment']);
             $statement->bindParam(':color', $_POST['color']);
@@ -118,7 +123,7 @@
                                       <?php echo htmlspecialchars($record['comment'], ENT_QUOTES, "UTF-8"); ?>
                                   </font><br />
                             時間：<?php echo $record['created_at'] ?><br />
-                            
+    
                             <!--if文でパスワードが設定されていなかったら非表示   -->
                             <?php if (isset($record['password']) && $record['password'] !== null) : ?>
                             <form action="delete.php" method="get">
