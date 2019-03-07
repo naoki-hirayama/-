@@ -19,11 +19,11 @@
     
     if (isset($record['id']) === false) {
         // 404 
-        header('Location: index.php');
+        header( 'HTTP/1.1 404 Not Found' ) ;
         exit;
     } elseif (empty($record['password'])) {
         // 400
-        header('Location: index.php');
+        header('HTTP/1.1 400 Bad Request');
         exit;
     } else {
         
