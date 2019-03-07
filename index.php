@@ -71,9 +71,6 @@
     }
     
     
-
-    
-    
     $statement = null;
     
     $database = null;
