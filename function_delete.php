@@ -1,10 +1,5 @@
 <?php
 
-     //MySQLサーバ接続
-    require('db_conect.php');
-    
-    
-
     $sql = 'SELECT * FROM post WHERE id = :id';
             
     $statement = $database->prepare($sql);

@@ -1,8 +1,5 @@
 <?php
     
-    //MySQLサーバ接続
-    require('db_conect.php');
-    
     // セレクトボックスの連想配列
     $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
     

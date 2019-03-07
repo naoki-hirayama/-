@@ -3,6 +3,8 @@
     require('db_conect.php');
     
     include('function_delete.php');
+    
+    include('function.php');
 
 ?>
 <!DOCTYPE html>
@@ -25,9 +27,9 @@
         
         <ul>
             <li>
-                名前：<?php echo htmlspecialchars($record['name'], ENT_QUOTES, "UTF-8"); ?><br />
+                名前：<?php echo h($record['name']); ?><br />
                 本文：<font color="<?php echo $record['color'] ?>">
-                            <?php echo htmlspecialchars($record['comment'], ENT_QUOTES, "UTF-8"); ?>
+                            <?php echo h($record['comment']); ?>
                       </font><br />
                 時間：<?php echo $record['created_at'] ?><br />
                 ---------------------------------------------<br />

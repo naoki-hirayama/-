@@ -1,3 +1,9 @@
+$ sudo service mysqld start
+
+$ mysql -u root
+
+use bbs
+
 ### 課題①
 
 * 投稿の登録と一覧表示までをやる。  
