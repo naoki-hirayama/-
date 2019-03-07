@@ -1,9 +1,5 @@
 <?php
-    // index.phpの機能
     
-    // function h($string) {
-//     return htmlspecialchars($string, ENT_QUOTS, "UTF-8");
-// }
     //MySQLサーバ接続
     require('db_conect.php');
     

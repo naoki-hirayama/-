@@ -1,5 +1,4 @@
 <?php
-
     //MySQLサーバ接続
     require('db_conect.php');
     
