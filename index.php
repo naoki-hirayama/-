@@ -13,17 +13,13 @@
         // バリデーションを行う
         if (strlen($_POST['name']) === 0) {
             $errors[] = "名前は入力必須です。";
+        } else if (strlen($_POST['name']) > 10) {
+            $errors[] = "名前は１０文字以内です。";
         }
         
         if (strlen($_POST['comment']) === 0) {
             $errors[] = "本文は入力必須です。";
-        }
-
-        if (strlen($_POST['name']) > 10) {
-            $errors[] = "名前は１０文字以内です。";
-        }
-        
-        if (strlen($_POST['comment']) > 100) {
+        } else if (strlen($_POST['comment']) > 100) {
             $errors[] = "本文は１００文字以内です。";
         }
         
@@ -31,13 +27,11 @@
            $errors[] = "文字色が不正です"; 
         }
         
-        if (strlen($_POST['password']) >= 1) {
+        if (strlen($_POST['password']) !== 0) {
             if (strlen($_POST['password']) < 4) {
                 $errors[] = " パスワードは4文字以上です。";
             }
-        }
-        
-        if ($_POST['password'] ==! null) {
+            
             if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['password'])) {
                 $errors[] = " パスワードは半角英数字です。";
             }
@@ -65,7 +59,9 @@
     } else {
         $sql = 'SELECT * FROM post ORDER BY created_at DESC';
         
-        $statement = $database->query($sql);
+        $statement = $database->prepare($sql);
+        
+        $statement->execute();
         
         $records = $statement->fetchAll();
     }
@@ -107,7 +103,7 @@
                 <?php endforeach ?>
             </select><br />
             <p>削除パスワード:</p>
-            <input type="text" name="password"><br />
+            <input type="password" name="password"><br />
             <input type="submit" name="submit" value="投稿">
         </form>
         <?php if (empty($errors)) : ?>
@@ -124,7 +120,7 @@
                             時間：<?php echo $record['created_at'] ?><br />
                             
                             <!--if文でパスワードが設定されていなかったら非表示   -->
-                            <?php if (isset($record['password']) && $record['password'] ==! null) : ?>
+                            <?php if (isset($record['password']) && $record['password'] !== null) : ?>
                             <form action="delete.php" method="get">
                                 <input type="hidden" name="id" value="<?php echo $record['id'] ?>">
                                 <input type="submit" value="削除"/><br />

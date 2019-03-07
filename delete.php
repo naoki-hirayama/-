@@ -3,49 +3,54 @@
     //MySQLサーバ接続
     require('db_conect.php');
 
-    // TODO データベースから削除対象のレコードを取得する
-    $sql = 'SELECT * FROM post WHERE id = '.$_GET['id'].'';
+    // SQLインジェクション
+    // $get_id = $_GET['id'];
+    
+    $sql = 'SELECT * FROM post WHERE id = :id';
             
-    $statement = $database->query($sql);
-            
+    $statement = $database->prepare($sql);
+    
+    $statement->bindParam(':id', $_GET['id']);
+    
+    $statement->execute();
+    
     $record_id = $statement->fetchAll();
     
-    foreach ($record_id as $record) {
-        $password = $record['password'];
-    }
     
-    //パスワードが設定されてない投稿にアクセスされた時の処理
-    if ($password == null) {
+    //idに該当するpostがデータベースに存在するかどうかチェックする 
+    $post_id =  $record_id[0][0];
+    
+    $password_colum = $record_id[0][4];
+     
+    
+    if (isset($post_id) === false) {
+        header('Location: index.php');
+        exit;
+    } elseif (!empty($password_colum)) {
+        foreach ($record_id as $record) {
+        $password = $record['password'];
+        }
+    } else {
         header('Location: index.php');
         exit;
     }
-
+    
     // delete.phpからPOST送信された
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                //パスワードが一致しない、不正時のエラー処理
-                $errors = [];
-                if ($password !== $_POST['password_input']) {
-                    $errors[] = "パスワードが違います";
-                }
-                
-                if (strlen($_POST['password_input']) >= 1) {
-                    if (strlen($_POST['password_input']) < 4) {
-                        $errors[] = " パスワードは4文字以上です。";
-                    }
-                }
-                
-                if ($_POST['password_input'] ==! null) {
-                    if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['password_input'])) {
-                        $errors[] = " パスワードは半角英数字です。";
-                    }
-                }
+            //パスワードが一致しない、不正時のエラー処理
+            $errors = [];
+            if ($password !== $_POST['password_input']) {
+                $errors[] = "パスワードが違います";
+            }
             
             //パスワードが一致した時 
-            if (empty($errors) && ($password === $_POST['password_input'])) {
-                //DELETE文
-                $sql = 'DELETE FROM post WHERE id = '.$_GET['id'].'';
+            if (empty($errors)) {
+                
+                $sql = 'DELETE FROM post WHERE id = :id';
                 
                 $statement = $database->prepare($sql);
+                
+                $statement->bindParam(':id', $_GET['id']);
                 
                 $statement->execute();
                 
@@ -54,6 +59,7 @@
                 header('Location: deleted.php');
                 exit;
             }
+            
     }
     
     $statement = null;
@@ -90,7 +96,7 @@
                     ---------------------------------------------<br />
                     <form action="delete.php?id=<?php echo $record['id'] ?>" method="post">
                         <p>削除パスワード:</p>
-                        <input type="text" name="password_input"><br />
+                        <input type="password" name="password_input"><br />
                         <input type="submit" value="削除"/><br />
                     </form>        
                 </li>
