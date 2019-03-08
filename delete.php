@@ -46,7 +46,8 @@
             
             $statement = null;
             
-            header('Location: views/deleted.php');
+            header('Location: deleted.php');
+            // 変更する！
             exit;
         }
         
@@ -57,4 +58,4 @@
     $database = null;
     
     require_once('function/function.php'); 
-    require_once('views/delete.php');
+    include('views/delete.php');

@@ -1,6 +1,6 @@
 <?php
     $header_title = '投稿画面';
-    include_once('views/layouts/header.php');
+    include('views/layouts/header.php');
 ?>
     <body>
         <h1>投稿画面</h1>
@@ -56,5 +56,5 @@
         <?php endif ?>        
     </body>
 <?php
-    include_once('views/layouts/footer.php');
+    include('views/layouts/footer.php');
 ?>

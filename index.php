@@ -64,7 +64,8 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
             
             $statement = null;
     
-            header('Location: views/send.php');
+            header('Location: send.php');
+            // 変更する！
             exit;
         }
     // GETでアクセスされたら一覧表示用にDBから投稿を取得する
@@ -84,7 +85,9 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
     $database = null;
     
     require_once('function/function.php');
-    require_once('views/index.php');
+    include('views/index.php');
+    // 変更する
+    
     
     
     

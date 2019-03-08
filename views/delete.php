@@ -1,6 +1,6 @@
 <?php
     $header_title = '削除画面';
-    include_once('views/layouts/header.php');
+    include('views/layouts/header.php');
 ?>
     <body>
         <h2>削除画面</h2>
@@ -25,5 +25,5 @@
         </ul>
     </body>
 <?php
-    include_once('views/layouts/footer.php');
+    include('views/layouts/footer.php');
 ?>
