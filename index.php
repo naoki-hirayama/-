@@ -16,6 +16,7 @@
     </head>
     <body>
         <h1>投稿画面</h1>
+        <!-- エラーメッセージ -->
         <ul>
             <?php if (!empty($errors)) : ?>
                 <?php foreach ($errors as $error) : ?>
@@ -23,7 +24,7 @@
                 <?php endforeach ?>
             <?php endif ?>
         </ul>
-        <!-- エラーメッセージを出してね -->
+        <!-- ここまで -->
         <form action="index.php" method="post">
             <p>名前：</p>
             <input type="text" name="name" value="<?php echo $_POST['name'] ?>">
