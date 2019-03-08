@@ -1,6 +1,6 @@
 <?php
     //MySQLサーバ接続
-    require('function/db_conect.php');
+    require_once('function/db_conect.php');
     
     
     $sql = 'SELECT * FROM post WHERE id = :id';

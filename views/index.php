@@ -7,11 +7,13 @@
         <!-- エラーメッセージ -->
         <?php  include('views/layouts/errormessage.php'); ?>
         <!-- ここまで -->
-        <form action="index.php" method="post">
+        <form action="index.php" method="post" enctype="multipart/form-data">
             <p>名前：</p>
             <input type="text" name="name" value="<?php echo $_POST['name'] ?>">
             <p>本文：</p>
             <textarea name="comment" rows="4" cols="20"><?php echo $_POST['comment'] ?></textarea><br />
+            <p>画像：</p>
+            <input type="file" name="picture"><br />
             <select name="color">
                 <?php foreach($select_options as $key => $value) : ?>
                     <option value="<?php echo $key ?>"<?php echo ($key === $_POST['color']) ? 'selected' : ''; ?>>
@@ -34,6 +36,7 @@
                             本文：<font color="<?php echo $record['color'] ?>">
                                       <?php echo h($record['comment']); ?>
                                   </font><br />
+                            画像：      
                             時間：<?php echo $record['created_at'] ?><br />
                              
                             <!--if文でパスワードが設定されていなかったら非表示   -->

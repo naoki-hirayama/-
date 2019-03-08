@@ -1,9 +1,9 @@
 <?php
-    //MySQLサーバ接続
-    require('function/db_conect.php');
-    
-    // セレクトボックスの連想配列
-    $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
+//MySQLサーバ接続
+require_once('function/db_conect.php');
+
+// セレクトボックスの連想配列
+$select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
     
     // POSTでアクセスされたら投稿処理を行う
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,6 +34,12 @@
             if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['password'])) {
                 $errors[] = " パスワードは半角英数字です。";
             }
+        }
+        // 画像のエラー処理
+        $picture_type = substr($_FILES['picture']['name'], -3);
+        
+        if (!(($picture_type == 'png') || ($picture_type == 'jpg') || ($picture_type == 'gif') || ($picture_type == 'JPG'))) {
+            $errors[] = "画像が不正です";
         }
         
         // 成功した場合はDBへ保存してsend.phpにリダイレクトする

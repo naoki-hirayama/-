@@ -13,6 +13,7 @@
                 本文：<font color="<?php echo $record['color'] ?>">
                             <?php echo h($record['comment']); ?>
                       </font><br />
+                画像： <br />     
                 時間：<?php echo $record['created_at'] ?><br />
                 ---------------------------------------------<br />
                 <form action="delete.php?id=<?php echo $record['id'] ?>" method="post">

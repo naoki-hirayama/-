@@ -4,5 +4,6 @@ CREATE TABLE bbs.post (
     comment VARCHAR(100),
     color VARCHAR(6),
     password VARCHAR(100),
+    picture 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
