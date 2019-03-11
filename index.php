@@ -30,12 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (strlen($_POST['password']) < 4) {
             $errors[] = " パスワードは4文字以上です。";
         }
-    }
     
-    if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['password'])) {
-        $errors[] = " パスワードは半角英数字です。";
+        if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['password'])) {
+            $errors[] = " パスワードは半角英数字です。";
+        }
     }
-    
     // 画像サイズチェック
     if ($_FILES['picture']['error'] === 2) {
         $errors[] = "サイズが１Mを超えています。";
@@ -43,13 +42,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // 画像ファイルの不正チェック
     $posted_user_img = $_FILES['picture']['tmp_name'];
-    // 本当のMIMEタイプの取得
+    // MIMEタイプの取得
     $finfo = new finfo(FILEINFO_MIME_TYPE);
-    $mime_type = $finfo->file($posted_user_img);
-    // 頭文字を抽出(image)
-    $true_extension = substr($mime_type, 0, 5);
+    $true_picture_type = $finfo->file($posted_user_img);
+    // 配列に投稿を許可する拡張子を入れる
+    $picture_types = [
+        'image/png',
+        'image/jpg',
+        'image/gif',
+    ];
+    
     // ファイルサイズが大きい時はここではエラーを出さない
-    if (($true_extension !== 'image') && (strlen($true_extension) !==0)) {
+    if ((!in_array($true_picture_type, $picture_types)) && (strlen($true_picture_type) !==0)) {
         $errors[] = "画像が不正です。";
     }
     
