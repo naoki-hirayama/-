@@ -36,7 +36,12 @@
                             本文：<font color="<?php echo $record['color'] ?>">
                                       <?php echo h($record['comment']); ?>
                                   </font><br />
-                            画像：      
+                            画像：
+                                <?php if (isset($record['picture']) && $record['picture'] !== null) : ?>
+                                    <img src="images/<?php echo $record['picture'] ?>" width="300" height="200"><br />
+                                <?php else : ?>
+                                    なし<br />
+                                <?php endif ?>
                             時間：<?php echo $record['created_at'] ?><br />
                              
                             <!--if文でパスワードが設定されていなかったら非表示   -->

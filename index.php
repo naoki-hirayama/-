@@ -2,6 +2,7 @@
 //MySQLサーバ接続
 require_once('function/db_conect.php');
 
+
 // セレクトボックスの連想配列
 $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
     
@@ -12,13 +13,13 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
         // バリデーションを行う
         if (strlen($_POST['name']) === 0) {
             $errors[] = "名前は入力必須です。";
-        } else if (strlen($_POST['name']) > 10) {
+        } else if (mb_strlen($_POST['name'],'UTF-8') > 10) {
             $errors[] = "名前は１０文字以内です。";
         }
         
         if (strlen($_POST['comment']) === 0) {
             $errors[] = "本文は入力必須です。";
-        } else if (strlen($_POST['comment']) > 100) {
+        } else if (mb_strlen($_POST['comment'],'UTF-8') > 100) {
             $errors[] = "本文は１００文字以内です。";
         }
         
@@ -38,13 +39,20 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
         // 画像のエラー処理
         $picture_type = substr($_FILES['picture']['name'], -3);
         
-        if (!(($picture_type == 'png') || ($picture_type == 'jpg') || ($picture_type == 'gif') || ($picture_type == 'JPG'))) {
+        if (!(($picture_type === 'png') || ($picture_type === 'jpg') || ($picture_type === 'gif') || ($picture_type === 'JPG') || ($_FILES['picture']['name'] == null))) {
             $errors[] = "画像が不正です";
+        } else {
+            // 画像処理
+            $file = 'images/' . basename($_FILES['picture']['name']);
+            move_uploaded_file($_FILES['picture']['tmp_name'], $file);    
         }
+        
+         
+              
         
         // 成功した場合はDBへ保存してsend.phpにリダイレクトする
         if (empty($errors)) {
-            $sql = 'INSERT INTO post (name,comment,color,password) VALUES(:name,:comment,:color,:password)';
+            $sql = 'INSERT INTO post (name,comment,color,password,picture) VALUES(:name,:comment,:color,:password,:picture)';
             
             $statement = $database->prepare($sql);
             
@@ -55,10 +63,19 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
                 $password = $_POST['password'];
             }
             
+            // 画像が選択されない時の処理
+            if (empty($_FILES['picture']['name'])) {
+                $picture = null;
+            } else {
+                $picture = $_FILES['picture']['name'];
+            }
+            
             $statement->bindParam(':name', $_POST['name']);
             $statement->bindParam(':comment', $_POST['comment']);
             $statement->bindParam(':color', $_POST['color']);
             $statement->bindParam(':password', $password);
+            $statement->bindParam(':picture', $picture);
+            
             
             $statement->execute();
             
@@ -83,10 +100,10 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
     $statement = null;
     
     $database = null;
-    
+     
     require_once('function/function.php');
     include('views/index.php');
-    // 変更する
+    
     
     
     
