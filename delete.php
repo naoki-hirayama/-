@@ -36,7 +36,6 @@
         //パスワードが一致した時 
         if (empty($errors)) {
             
-            unlink("images/{$record['picture']}");
             
             $sql = 'DELETE FROM post WHERE id = :id';
             
@@ -47,6 +46,8 @@
             $statement->execute();
             
             $statement = null;
+            
+            unlink("images/{$record['picture']}");
             
             header('Location: deleted.php');
             exit;
