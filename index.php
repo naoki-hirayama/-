@@ -48,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 配列に投稿を許可する拡張子を入れる
     $picture_types = [
         'image/png',
-        'image/jpg',
         'image/gif',
         'image/jpeg'
     ];
