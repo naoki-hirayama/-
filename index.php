@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'image/png',
         'image/jpg',
         'image/gif',
+        'image/jpeg'
     ];
     
     // ファイルサイズが大きい時はここではエラーを出さない
@@ -62,11 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // エラーがない時の画像処理
         $file = 'images/' . basename($_FILES['picture']['name']);
         // ファイルを一時フォルダから指定したディレクトリに移動
-        move_uploaded_file($_FILES['picture']['tmp_name'], $file); 
-        
-        $sql = 'INSERT INTO post (name,comment,color,password,picture) VALUES(:name,:comment,:color,:password,:picture)';
-        
-        $statement = db_conect()->prepare($sql);
+        move_uploaded_file($_FILES['picture']['tmp_name'], $file);
         
         //パスワードが入力されない時の処理
         if (empty($_POST['password'])) {
@@ -74,13 +71,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $password = $_POST['password'];
         }
-        
         // 画像が投稿されない時の処理
         if (empty($_FILES['picture']['name'])) {
             $picture = null;
         } else {
             $picture = $_FILES['picture']['name'];
         }
+        
+        $sql = 'INSERT INTO post (name,comment,color,password,picture) VALUES(:name,:comment,:color,:password,:picture)';
+        
+        $statement = db_conect()->prepare($sql);
         
         $statement->bindParam(':name', $_POST['name']);
         $statement->bindParam(':comment', $_POST['comment']);

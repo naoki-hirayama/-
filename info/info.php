@@ -66,3 +66,36 @@ include_once文は、include文と同じく外部ファイルを読み込むと�
 意図しない関数の再定義や値の初期化を防ぎたい場合に使用します。
 
 https://www.sejuku.net/blog/23852
+<?php
+if ($_FILES['picture']['name'] != null) {
+    $valid_picture_types = array(
+        'png',
+        'jpg',
+        'gif',
+    );
+
+    $picture_type = substr($_FILES['picture']['name'], -3);
+    $picture_type = strtolower($picture_type);
+
+    if (!in_array($picture_type, $valid_picture_types)) {
+        $errors[] = "画像が不正です";
+    } else {
+        // 画像処理
+        $file = 'images/' . basename($_FILES['picture']['name']);
+        // ファイルを一時フォルダから指定したディレクトリに移動
+        move_uploaded_file($_FILES['picture']['tmp_name'], $file);
+    }
+}
+
+if (!(($picture_type === 'png') || ($picture_type === 'jpg') || ($picture_type === 'gif') || ($picture_type === 'JPG') || ($_FILES['picture']['name'] == null))) {
+    $errors[] = "画像が不正です";
+} else {
+    // 画像処理
+    $file = 'images/' . basename($_FILES['picture']['name']);
+    // ファイルを一時フォルダから指定したディレクトリに移動
+    move_uploaded_file($_FILES['picture']['tmp_name'], $file);    
+} 
+?>
+
+http://php.net/manual/ja/function.finfo-file.php
+http://php.net/manual/ja/features.file-upload.errors.php
