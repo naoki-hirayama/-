@@ -47,7 +47,6 @@
             $statement = null;
             
             header('Location: deleted.php');
-            // 変更する！
             exit;
         }
         

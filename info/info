@@ -4,6 +4,9 @@ $ mysql -u root
 
 use bbs
 
+$ git push origin master
+
+ SELECT * FROM bbs.post;
 ### 課題①
 
 * 投稿の登録と一覧表示までをやる。  

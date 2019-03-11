@@ -44,12 +44,11 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
         } else {
             // 画像処理
             $file = 'images/' . basename($_FILES['picture']['name']);
+            // ファイルを一時フォルダから指定したディレクトリに移動
             move_uploaded_file($_FILES['picture']['tmp_name'], $file);    
-        }
+        } 
         
          
-              
-        
         // 成功した場合はDBへ保存してsend.phpにリダイレクトする
         if (empty($errors)) {
             $sql = 'INSERT INTO post (name,comment,color,password,picture) VALUES(:name,:comment,:color,:password,:picture)';
@@ -63,7 +62,7 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
                 $password = $_POST['password'];
             }
             
-            // 画像が選択されない時の処理
+            // 画像が投稿されない時の処理
             if (empty($_FILES['picture']['name'])) {
                 $picture = null;
             } else {
@@ -82,7 +81,6 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
             $statement = null;
     
             header('Location: send.php');
-            // 変更する！
             exit;
         }
     // GETでアクセスされたら一覧表示用にDBから投稿を取得する
@@ -103,8 +101,3 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
      
     require_once('function/function.php');
     include('views/index.php');
-    
-    
-    
-    
-    
