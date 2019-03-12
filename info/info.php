@@ -7,6 +7,8 @@ use bbs
 $ git push origin master
 
  SELECT * FROM bbs.post;
+ DELETE FROM bbs.post;
+ var_dump($_FILES['picture']);exit;
 ### 課題①
 
 * 投稿の登録と一覧表示までをやる。  

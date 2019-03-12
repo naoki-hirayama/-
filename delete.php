@@ -14,11 +14,9 @@ $statement->execute();
 $record = $statement->fetch(PDO::FETCH_ASSOC);;
      
 if ($record === false) {
-    // 404 
     header( 'HTTP/1.1 404 Not Found' ) ;
     exit;
 } elseif (empty($record['password'])) {
-    // 400
     header('HTTP/1.1 400 Bad Request');
     exit;
 } else {
@@ -46,18 +44,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $statement->execute();
         
         $statement = null;
-        
-        unlink("images/{$record['picture']}");
+        // 投稿に画像がある時
+        if (($record['picture']) !== null) {
+            unlink("images/{$record['picture']}");
+        }
         
         header('Location: deleted.php');
         exit;
     }
         
 }
+
     
 $statement = null;
 
-$database = null;
 
 require_once('function/function.php'); 
 include('views/delete.php');

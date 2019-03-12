@@ -13,7 +13,7 @@
             <p>本文：</p>
             <textarea name="comment" rows="4" cols="20"><?php echo $_POST['comment'] ?></textarea><br />
             <p>画像：</p>
-            <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+            <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo 1024*1024 ?>" />
             <input type="file" name="picture"><br />
             <select name="color">
                 <?php foreach($select_options as $key => $value) : ?>
