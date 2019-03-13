@@ -1,32 +1,30 @@
 <?php
 //MySQLサーバ接続
-require_once('function/db_conect.php');
-
-// セレクトボックスの連想配列
-$select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
+require_once('function/db_connect.php');
+// ＊変更
+$database = db_connect();
+$picture_max_size = 1*1024*1024;  
+$select_color_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
     
 // POSTでアクセスされたら投稿処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
-    $pattern="^(\s|　)+$";
-    // バリデーション
-    if (mb_strlen($_POST['name'], 'UTF-8') === 0) {
+    // バリデーション　＊変更
+    $name = trim(mb_convert_kana($_POST['name'], 's'));
+    if (mb_strlen($name, 'UTF-8') === 0) {
         $errors[] = "名前は入力必須です。";
-    } else if (mb_strlen($_POST['name'], 'UTF-8') > 10) {
+    } else if (mb_strlen($name, 'UTF-8') > 10) {
         $errors[] = "名前は１０文字以内です。";
-    } else if (mb_ereg_match($pattern,$_POST['name'])) {
-        $errors[] = "名前を正しく記入してください。";
-    }
+    } 
     
-    if (mb_strlen($_POST['comment'], 'UTF-8') === 0) {
+    $comment = trim(mb_convert_kana($_POST['comment'], 's'));
+    if (mb_strlen($comment, 'UTF-8') === 0) {
         $errors[] = "本文は入力必須です。";
-    } else if (mb_strlen($_POST['comment'], 'UTF-8') > 100) {
+    } else if (mb_strlen($comment, 'UTF-8') > 100) {
         $errors[] = "本文は１００文字以内です。";
-    } else if (mb_ereg_match($pattern, $_POST['comment'])) {
-        $errors[] = "本文を正しく記入してください";
-    }
+    } 
     
-    if (!array_key_exists($_POST['color'], $select_options)) {
+    if (!array_key_exists($_POST['color'], $select_color_options)) {
        $errors[] = "文字色が不正です"; 
     }
     
@@ -42,33 +40,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (strlen($_FILES['picture']['name']) !== 0) {
         if ($_FILES['picture']['error'] === 2) {
-            $errors[] = "サイズが１Mを超えています。";
-        } else if ($_FILES['picture']['size'] > 1024*1024) {
+            $errors[] = "サイズが".number_format($picture_max_size)."Bを超えています。";
+        } else if ($_FILES['picture']['size'] > $picture_max_size) {
             $errors[] = "不正な操作です。";
         } else {
             // 画像ファイルのMIMEタイプチェック
-            $posted_user_img = $_FILES['picture']['tmp_name'];
+            $posted_picture = $_FILES['picture']['tmp_name'];
             $finfo = new finfo(FILEINFO_MIME_TYPE);
-            $true_picture_type = $finfo->file($posted_user_img);
+            $picture_type = $finfo->file($posted_picture);
             
-            $proper_picture_types = [
+            $vaild_picture_types = [
                 'image/png',
                 'image/gif',
                 'image/jpeg',
             ];
             
-            if (!in_array($true_picture_type, $proper_picture_types)) {
+            if (!in_array($picture_type, $vaild_picture_types)) {
                 $errors[] = "画像が不正です。";
             }
         } 
     }
     // 成功した場合はDBへ保存してsend.phpにリダイレクトする
     if (empty($errors)) {
-        // エラーがない時の画像処理
-        $specific_num = rand();
-        $rename_file = $specific_num.$_FILES['picture']['name'];
-        $rename_file_path = 'images/'. basename($rename_file);
-        // ファイルを一時フォルダから指定したディレクトリに移動
+        // エラーがない時の画像処理 ＊変更
+        $specific_num = uniqid(mt_rand()); 
+        $rename_file = $specific_num.'.'.basename($picture_type);
+        $rename_file_path = 'images/'. $rename_file;
         move_uploaded_file($_FILES['picture']['tmp_name'], $rename_file_path);
         
         //パスワードが入力されない時の処理
@@ -86,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $sql = 'INSERT INTO post (name,comment,color,password,picture) VALUES(:name,:comment,:color,:password,:picture)';
         
-        $statement = db_conect()->prepare($sql);
+        $statement = $database->prepare($sql);
         
         $statement->bindParam(':name', $_POST['name']);
         $statement->bindParam(':comment', $_POST['comment']);
@@ -103,12 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 // GETでアクセスされた時
 } else {
+    $max_pager_range = 6;   //変更したら表示できるページ幅が変わる ＊変更中
     $per_page_records = 3;
-    $stmt = db_conect()->query('SELECT COUNT(id) AS CNT FROM post');
+    $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
     $total_records = $stmt->fetchColumn();
     //合計ページ数を計算
     $total_pages = ceil($total_records / $per_page_records);
     
+    // ＊しっかり判定する２つとも！＊
     if ($_GET['page'] > $total_pages) {
         header('HTTP/1.1 404 Not Found') ;
         exit;
@@ -117,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $page = 1;
     }
-    
+    // ＊もう少ししっかり判定する＊
     if ($page > 1) {
 	    $start_page = ($page * $per_page_records) - $per_page_records;
     } else {
@@ -126,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // postテーブルから3件のデータを取得する
     $sql = 'SELECT * FROM post ORDER BY created_at DESC LIMIT :start_page, :per_page_records';
     
-    $statement = db_conect()->prepare($sql);
+    $statement = $database->prepare($sql);
     
     $statement->bindParam(':start_page', $start_page, PDO::PARAM_INT);
     $statement->bindParam(':per_page_records', $per_page_records, PDO::PARAM_INT);

@@ -13,10 +13,10 @@
             <p>本文：</p>
             <textarea name="comment" rows="4" cols="20"><?php echo $_POST['comment'] ?></textarea><br />
             <p>画像：</p>
-            <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo 1024*1024 ?>" />
+            <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $picture_max_size; ?>" />
             <input type="file" name="picture"><br />
             <select name="color">
-                <?php foreach($select_options as $key => $value) : ?>
+                <?php foreach($select_color_options as $key => $value) : ?>
                     <option value="<?php echo $key ?>"<?php echo ($key === $_POST['color']) ? 'selected' : ''; ?>>
                         <?php echo $value; ?>
                     </option>
@@ -65,11 +65,8 @@
         <a href="?page=<?php echo $page-1; ?>">前の<?php echo $per_page_records; ?>件へ</a>
         <?php endif; ?>
         
-        <?php if($page > 4) : ?>
-        <a href="?page=1">1</a>……
-        <?php endif; ?>
         
-        <?php for ($i = $page - 3; $i <= $total_pages; $i++) : ?>
+        <?php for ($i = 1; $i <= $max_pager_range; $i++) : ?>
             <?php if($i >= 1): ?>
                 <?php if($i !== $page) :?>
                 <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
@@ -79,6 +76,7 @@
                 <?php endif;?>
             <?php endif;?>
         <?php endfor; ?>
+        
         
         <?php if ($page < $total_pages) : ?>
         <a href="?page=<?php echo $page+1; ?>">次の<?php echo $per_page_records; ?>件へ</a>

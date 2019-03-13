@@ -1,10 +1,12 @@
 <?php
 //MySQLサーバ接続
-require_once('function/db_conect.php');
+require_once('function/db_connect.php');
+
+$database = db_connect();
 
 $sql = 'SELECT * FROM post WHERE id = :id';
 
-$statement = db_conect()->prepare($sql);
+$statement = $database->prepare($sql);
 
 $statement->bindParam(':id', $_GET['id']);
 
@@ -33,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $sql = 'DELETE FROM post WHERE id = :id';
         
-        $statement = db_conect()->prepare($sql);
+        $statement = $database->prepare($sql);
         
         $statement->bindParam(':id', $_GET['id']);
         
