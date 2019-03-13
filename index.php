@@ -125,10 +125,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     // postテーブルから3件のデータを取得する
     $sql = 'SELECT * FROM post ORDER BY created_at DESC LIMIT :start_page, :per_page_records';
+    
     $statement = db_conect()->prepare($sql);
+    
     $statement->bindParam(':start_page', $start_page, PDO::PARAM_INT);
     $statement->bindParam(':per_page_records', $per_page_records, PDO::PARAM_INT);
+    
     $statement->execute();
+    
     $records = $statement->fetchAll();
 }
     

@@ -3,9 +3,13 @@
 require_once('function/db_conect.php');
 
 $sql = 'SELECT * FROM post WHERE id = :id';
+
 $statement = db_conect()->prepare($sql);
+
 $statement->bindParam(':id', $_GET['id']);
+
 $statement->execute();
+
 $record = $statement->fetch(PDO::FETCH_ASSOC);;
      
 if ($record === false) {
