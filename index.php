@@ -9,20 +9,20 @@ $select_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','gr
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
     $pattern="^(\s|　)+$";
-    // バリデーションを行う
-    if (mb_strlen($_POST['name'],'UTF-8') === 0) {
+    // バリデーション
+    if (mb_strlen($_POST['name'], 'UTF-8') === 0) {
         $errors[] = "名前は入力必須です。";
-    } else if (mb_strlen($_POST['name'],'UTF-8') > 10) {
+    } else if (mb_strlen($_POST['name'], 'UTF-8') > 10) {
         $errors[] = "名前は１０文字以内です。";
     } else if (mb_ereg_match($pattern,$_POST['name'])) {
         $errors[] = "名前を正しく記入してください。";
     }
     
-    if (mb_strlen($_POST['comment'],'UTF-8') === 0) {
+    if (mb_strlen($_POST['comment'], 'UTF-8') === 0) {
         $errors[] = "本文は入力必須です。";
-    } else if (mb_strlen($_POST['comment'],'UTF-8') > 100) {
+    } else if (mb_strlen($_POST['comment'], 'UTF-8') > 100) {
         $errors[] = "本文は１００文字以内です。";
-    } else if (mb_ereg_match($pattern,$_POST['comment'])) {
+    } else if (mb_ereg_match($pattern, $_POST['comment'])) {
         $errors[] = "本文を正しく記入してください";
     }
     
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     if (strlen($_POST['password']) !== 0) {
-        if (mb_strlen($_POST['password'],'UTF-8') < 4) {
+        if (mb_strlen($_POST['password'], 'UTF-8') < 4) {
             $errors[] = " パスワードは4文字以上です。";
         }
     
@@ -62,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } 
     }
-    
     // 成功した場合はDBへ保存してsend.phpにリダイレクトする
     if (empty($errors)) {
         // エラーがない時の画像処理
@@ -95,7 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $statement->bindParam(':password', $password);
         $statement->bindParam(':picture', $picture);
         
-        
         $statement->execute();
         
         $statement = null;
@@ -103,21 +101,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: send.php');
         exit;
     }
-// GETでアクセスされたら一覧表示用にDBから投稿を取得する
+// GETでアクセスされた時
 } else {
-    $sql = 'SELECT * FROM post ORDER BY created_at DESC';
+    $per_page_records = 3;
+    $stmt = db_conect()->query('SELECT COUNT(id) AS CNT FROM post');
+    $total_records = $stmt->fetchColumn();
+    //合計ページ数を計算
+    $total_pages = ceil($total_records / $per_page_records);
     
+    if ($_GET['page'] > $total_pages) {
+        header('HTTP/1.1 404 Not Found') ;
+        exit;
+    } else if ($_GET['page'] <= $total_pages) {
+        $page = (int)$_GET['page'];
+    } else {
+        $page = 1;
+    }
+    
+    if ($page > 1) {
+	    $start_page = ($page * $per_page_records) - $per_page_records;
+    } else {
+	    $start_page = 0;
+    }
+    // postテーブルから3件のデータを取得する
+    $sql = 'SELECT * FROM post ORDER BY created_at DESC LIMIT :start_page, :per_page_records';
     $statement = db_conect()->prepare($sql);
-    
+    $statement->bindParam(':start_page', $start_page, PDO::PARAM_INT);
+    $statement->bindParam(':per_page_records', $per_page_records, PDO::PARAM_INT);
     $statement->execute();
-    
     $records = $statement->fetchAll();
 }
     
-    
 $statement = null;
-
-
  
 require_once('function/function.php');
 include('views/index.php');
