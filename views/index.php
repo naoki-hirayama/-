@@ -62,25 +62,21 @@
         <?php endif ?>
         <!--ページング処理-->
         <?php if ($page > 1) : ?>
-        <a href="?page=<?php echo $page-1; ?>">前の<?php echo $per_page_records; ?>件へ</a>
-        <?php endif; ?>
-        
-        
-        <?php for ($i = 1; $i <= $max_pager_range; $i++) : ?>
-            <?php if($i >= 1): ?>
-                <?php if($i !== $page) :?>
+        <a href="?page=<?php echo $page-1; ?>">前へ</a>
+        <?php endif ?>
+        <?php for ($i = $page - $left_range; $i <= ($page + $right_range); $i++) : ?>
+            <?php if(($i >= 1) && ($i <= $total_pages)) : ?>
+                <?php if($i !== $page) : ?>
                 <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                <?php endif;?>
-                <?php if($i === $page) :?>
+                <?php endif ?>
+                <?php if($i === $page)  : ?>
                 <a><?php echo $i; ?></a>
-                <?php endif;?>
-            <?php endif;?>
-        <?php endfor; ?>
-        
-        
+                <?php endif ?>
+            <?php endif ?>
+        <?php endfor ?>
         <?php if ($page < $total_pages) : ?>
-        <a href="?page=<?php echo $page+1; ?>">次の<?php echo $per_page_records; ?>件へ</a>
-        <?php endif; ?>
+        <a href="?page=<?php echo $page+1; ?>">次へ</a>
+        <?php endif ?>
         <!--ここまで-->
     </body>
 <?php

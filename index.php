@@ -9,7 +9,7 @@ $select_color_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'�
 // POSTでアクセスされたら投稿処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
-    // バリデーション　＊変更
+    // バリデーション
     $name = trim(mb_convert_kana($_POST['name'], 's'));
     if (mb_strlen($name, 'UTF-8') === 0) {
         $errors[] = "名前は入力必須です。";
@@ -100,24 +100,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 // GETでアクセスされた時
 } else {
-    $max_pager_range = 6;   //変更したら表示できるページ幅が変わる ＊変更中
-    $per_page_records = 3;
+    $max_pager_range = 10;   //変更したら表示できるページ幅が変わる 
+    
+    $oddeven = $max_pager_range%2;
+    
+    if ($odd_even === 1) {
+        $left_range = (int)floor($max_pager_range / 2); 
+        $right_range = (int)ceil($max_pager_range / 2);   
+    } else  {
+        $left_range = (int)floor($max_pager_range / 2) - 1; 
+        $right_range = (int)ceil($max_pager_range / 2); 
+    }
+    
+    $per_page_records = 2;
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
     $total_records = $stmt->fetchColumn();
     //合計ページ数を計算
-    $total_pages = ceil($total_records / $per_page_records);
+    $total_pages = (int)ceil($total_records / $per_page_records);
     
-    // ＊しっかり判定する２つとも！＊
     if ($_GET['page'] > $total_pages) {
-        header('HTTP/1.1 404 Not Found') ;
-        exit;
+        $page = $total_pages;
+    } else if ($_GET['page'] == 0) {
+        $page = 1; 
     } else if ($_GET['page'] <= $total_pages) {
         $page = (int)$_GET['page'];
     } else {
-        $page = 1;
+        header('HTTP/1.1 404 Not Found'); 
+        exit;    
     }
-    // ＊もう少ししっかり判定する＊
-    if ($page > 1) {
+    // オフセット
+    if (($page > 1) && ($page <= $total_pages)) {
 	    $start_page = ($page * $per_page_records) - $per_page_records;
     } else {
 	    $start_page = 0;
