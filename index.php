@@ -1,9 +1,9 @@
 <?php
 //MySQLサーバ接続
 require_once('function/db_connect.php');
-// ＊変更
+
 $database = db_connect();
-$picture_max_size = 1*1024*1024;  
+$picture_max_size = 1*1024*1024;   
 $select_color_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
     
 // POSTでアクセスされたら投稿処理を行う
@@ -100,19 +100,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 // GETでアクセスされた時
 } else {
-    $max_pager_range = 7;   //変更したら表示できるページ幅が変わる 
+    $max_pager_range = 9;   //変更したら表示できるページ幅が変わる 
     
-    $odd_even = $max_pager_range % 2;
+    $odd_even_num = $max_pager_range % 2;
     
-    if ($odd_even === 1) {
-        $left_range = (int)floor($max_pager_range / 2); 
-        $right_range = (int)ceil($max_pager_range / 2) - 1;   
-    } else if ($odd_even === 0) {
-        $left_range = (int)floor($max_pager_range / 2) - 1; 
-        $right_range = (int)ceil($max_pager_range / 2); 
+    if (($max_pager_range % 2)===1) {
+        $left_range =((int)ceil($max_pager_range - 1) / 2); 
+        $right_range = ((int)floor($max_pager_range - 1) / 2);   
+    } else {
+        $left_range = (int)ceil($max_pager_range / 2); 
+        $right_range = ((int)floor($max_pager_range - 1) / 2); 
     }
     
-    $per_page_records = 2;
+    $per_page_records = 3;
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
     $total_records = $stmt->fetchColumn();
     //合計ページ数を計算
@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $page = (int)$_GET['page'];
     } else {
         header('HTTP/1.1 404 Not Found'); 
-        exit;    
+        exit;
     }
     
     // オフセット
