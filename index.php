@@ -102,12 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     $max_pager_range = 10;   //変更したら表示できるページ幅が変わる 
     
-    $oddeven = $max_pager_range%2;
+    $odd_even = $max_pager_range % 2;
     
     if ($odd_even === 1) {
         $left_range = (int)floor($max_pager_range / 2); 
         $right_range = (int)ceil($max_pager_range / 2);   
-    } else  {
+    } else if ($odd_even === 0) {
         $left_range = (int)floor($max_pager_range / 2) - 1; 
         $right_range = (int)ceil($max_pager_range / 2); 
     }

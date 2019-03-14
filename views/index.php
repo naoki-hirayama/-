@@ -64,12 +64,12 @@
         <?php if ($page > 1) : ?>
         <a href="?page=<?php echo $page-1; ?>">前へ</a>
         <?php endif ?>
-        <?php for ($i = $page - $left_range; $i <= ($page + $right_range); $i++) : ?>
+        <?php for ($i = $page - $left_range; $i <= $page + $right_range; $i++) : ?>
             <?php if(($i >= 1) && ($i <= $total_pages)) : ?>
                 <?php if($i !== $page) : ?>
                 <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                 <?php endif ?>
-                <?php if($i === $page)  : ?>
+                <?php if($i === $page) : ?>
                 <a><?php echo $i; ?></a>
                 <?php endif ?>
             <?php endif ?>
