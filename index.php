@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } 
     
     if (!array_key_exists($_POST['color'], $select_color_options)) {
-       $errors[] = "文字色が不正です"; 
+        $errors[] = "文字色が不正です"; 
     }
     
     if (strlen($_POST['password']) !== 0) {
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // エラーがない時の画像処理 ＊変更
         $specific_num = uniqid(mt_rand()); 
         $rename_file = $specific_num.'.'.basename($picture_type);
-        $rename_file_path = 'images/'. $rename_file;
+        $rename_file_path = 'images/'.$rename_file;
         move_uploaded_file($_FILES['picture']['tmp_name'], $rename_file_path);
         
         //パスワードが入力されない時の処理
@@ -100,13 +100,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 // GETでアクセスされた時
 } else {
-    $max_pager_range = 10;   //変更したら表示できるページ幅が変わる 
+    $max_pager_range = 7;   //変更したら表示できるページ幅が変わる 
     
     $odd_even = $max_pager_range % 2;
     
     if ($odd_even === 1) {
         $left_range = (int)floor($max_pager_range / 2); 
-        $right_range = (int)ceil($max_pager_range / 2);   
+        $right_range = (int)ceil($max_pager_range / 2) - 1;   
     } else if ($odd_even === 0) {
         $left_range = (int)floor($max_pager_range / 2) - 1; 
         $right_range = (int)ceil($max_pager_range / 2); 
@@ -128,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('HTTP/1.1 404 Not Found'); 
         exit;    
     }
+    
     // オフセット
     if (($page > 1) && ($page <= $total_pages)) {
 	    $start_page = ($page * $per_page_records) - $per_page_records;
