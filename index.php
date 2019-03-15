@@ -5,7 +5,7 @@ require_once('function/db_connect.php');
 $database = db_connect();
 $picture_max_size = 1*1024*1024;   
 $select_color_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
-    
+
 // POSTでアクセスされたら投稿処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
@@ -98,16 +98,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: send.php');
         exit;
     }
-// GETでアクセスされた時
+
 } else {
-    
+    // GETでアクセスされた時
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
     $total_records = $stmt->fetchColumn();
 
     //変更したら表示できるページ幅が変わる 
     $max_pager_range = 10;
     $per_page_records = 3;
-    //合計ページ数を計算
     $total_pages = (int)ceil($total_records / $per_page_records);
     
     if (($max_pager_range % 2) === 1) {
@@ -120,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($_GET['page'] > $total_pages) {
         $page = $total_pages;
-    } else if ($_GET['page'] == 0) {
+    } else if ($_GET['page'] <= 0) {
         $page = 1; 
     } else if ($_GET['page'] <= $total_pages) {
         $page = (int)$_GET['page'];
@@ -139,21 +138,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (($page > $left_range) && ($page < $total_pages - $right_range)) {
         for ($i = $page - $left_range; $i <= $page + $right_range; $i++) {
-            $page_numbers[] = $i;
+            if ($i >= 1) {
+                $page_numbers[] = $i;
+            }
         }
     }
     
     if ($page >= $total_pages - $right_range) {
         for ($i = $total_pages - $max_pager_range + 1; $i <= $total_pages; $i++) {
-            $page_numbers[] = $i;
+            if ($i >= 1) {
+                $page_numbers[] = $i;
+            }
         }
     }
     
     // オフセット
     if (($page > 1) && ($page <= $total_pages)) {
-	    $start_page = ($page * $per_page_records) - $per_page_records;
+        $start_page = ($page * $per_page_records) - $per_page_records;
     } else {
-	    $start_page = 0;
+        $start_page = 0;
     }
     // postテーブルから3件のデータを取得する
     $sql = 'SELECT * FROM post ORDER BY created_at DESC LIMIT :start_page, :per_page_records';
