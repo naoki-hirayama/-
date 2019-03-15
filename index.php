@@ -101,9 +101,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // GETでアクセスされた時
 } else {
     //変更したら表示できるページ幅が変わる 
-    $max_pager_range = 9;   
+    $max_pager_range = 10;   
     
-    if (($max_pager_range % 2)===1) {
+    if (($max_pager_range % 2) === 1) {
         $left_range =((int)ceil($max_pager_range - 1) / 2); 
         $right_range = ((int)floor($max_pager_range - 1) / 2);   
     } else {
