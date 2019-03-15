@@ -100,22 +100,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 // GETでアクセスされた時
 } else {
+    
+    $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
+    $total_records = $stmt->fetchColumn();
+
     //変更したら表示できるページ幅が変わる 
-    $max_pager_range = 10;   
+    $max_pager_range = 10;
+    $per_page_records = 3;
+    //合計ページ数を計算
+    $total_pages = (int)ceil($total_records / $per_page_records);
     
     if (($max_pager_range % 2) === 1) {
         $left_range =((int)ceil($max_pager_range - 1) / 2); 
-        $right_range = ((int)floor($max_pager_range - 1) / 2);   
+        $right_range = ((int)floor($max_pager_range - 1) / 2);
     } else {
-        $left_range = (int)ceil($max_pager_range / 2); 
-        $right_range = ((int)floor($max_pager_range - 1) / 2); 
+        $left_range = (int)ceil($max_pager_range / 2);
+        $right_range = ((int)floor($max_pager_range - 1) / 2);
     }
-    
-    $per_page_records = 3;
-    $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
-    $total_records = $stmt->fetchColumn();
-    //合計ページ数を計算
-    $total_pages = (int)ceil($total_records / $per_page_records);
     
     if ($_GET['page'] > $total_pages) {
         $page = $total_pages;
@@ -126,6 +127,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         header('HTTP/1.1 404 Not Found'); 
         exit;
+    }
+    
+    // ページング処理
+    $page_numbers = [];
+    if ($page <= $left_range) {
+        for ($i = 1; $i <= $max_pager_range; $i++) {
+            $page_numbers[] = $i;
+        }
+    }
+    
+    if (($page > $left_range) && ($page < $total_pages - $right_range)) {
+        for ($i = $page - $left_range; $i <= $page + $right_range; $i++) {
+            $page_numbers[] = $i;
+        }
+    }
+    
+    if ($page >= $total_pages - $right_range) {
+        for ($i = $total_pages - $max_pager_range + 1; $i <= $total_pages; $i++) {
+            $page_numbers[] = $i;
+        }
     }
     
     // オフセット

@@ -66,43 +66,19 @@
             <a href="?page=<?php echo $page-1; ?>">前へ</a>
         <?php endif ?>
         
-        <?php if ($page <= $left_range) : ?>
-            <?php for ($i = 1; $i <= $max_pager_range; $i++) : ?>
-                <?php if ($i !== $page) : ?>
-                    <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                <?php endif ?>
-                <?php if ($i === $page) : ?>
-                    <a><?php echo $i; ?></a>
-                <?php endif ?>
-            <?php endfor ?>
+        <?php foreach ($page_numbers as $i) : ?>
+        <?php if ($i !== $page) : ?>
+        <a href="?page=<?php echo $i; ?>">
+            <?php echo $i; ?>
+        </a>
         <?php endif ?>
-        
-        <?php if (($page > $left_range) && ($page < $total_pages - $right_range)) : ?>
-            <?php for ($i = $page - $left_range; $i <= $page + $right_range; $i++) : ?>
-                <?php if ($i >= 1): ?>
-                    <?php if ($i !== $page) : ?>
-                        <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                    <?php endif ?>
-                    <?php if ($i === $page) : ?>
-                        <a><?php echo $i; ?></a>
-                    <?php endif ?>
-                <?php endif ?>
-            <?php endfor ?>
+        <?php if ($i === $page) : ?>
+        <a>
+            <?php echo $i; ?>
+        </a>
         <?php endif ?>
-        
-        <?php if ($page >= $total_pages - $right_range) : ?>
-            <?php for ($i = $total_pages - $max_pager_range + 1; $i <= $total_pages; $i++) : ?>
-                <?php if ($i >= 1) : ?>
-                    <?php if ($i !== $page) : ?>
-                        <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                    <?php endif ?>
-                    <?php if ($i === $page) : ?>
-                        <a><?php echo $i; ?></a>
-                    <?php endif ?>
-                <?php endif ?>
-            <?php endfor ?>
-        <?php endif ?>
-        
+        <?php endforeach ?>
+                    
         <?php if ($page < $total_pages) : ?>
             <a href="?page=<?php echo $page+1; ?>">次へ</a>
         <?php endif ?>
