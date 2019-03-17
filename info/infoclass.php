@@ -182,3 +182,6 @@ class Pager
     
     $records = $statement->fetchAll();
     
+    // ビューで使う変数は、メソッドで作成
+    // メソッド内で使う変数はクラスのプロパティにする。
+    // インスタンス生成時の引数は、index.phpで与えられた変数のみでOK.
