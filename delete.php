@@ -1,6 +1,7 @@
 <?php
 //MySQLサーバ接続
 require_once('function/db_connect.php');
+require_once('function/function.php'); 
 
 $database = db_connect();
 
@@ -54,5 +55,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $statement = null;
 
-require_once('function/function.php'); 
 include('views/delete.php');

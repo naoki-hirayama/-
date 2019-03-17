@@ -62,25 +62,25 @@
             </ul>
         <?php endif ?>
         <!--ページング処理-->
-        <?php if ($page > 1) : ?>
-            <a href="?page=<?php echo $page-1; ?>">前へ</a>
+        <?php if ($pager->getCurrentPage() > 1) : ?>
+            <a href="?page=<?php echo $pager->getCurrentPage()-1; ?>">前へ</a>
         <?php endif ?>
         
-        <?php foreach ($page_numbers as $i) : ?>
-        <?php if ($i !== $page) : ?>
+        <?php foreach ($pager->getPageNumbers() as $i) : ?>
+        <?php if ($i !== $pager->getCurrentPage()) : ?>
         <a href="?page=<?php echo $i; ?>">
             <?php echo $i; ?>
         </a>
         <?php endif ?>
-        <?php if ($i === $page) : ?>
+        <?php if ($i === $pager->getCurrentPage()) : ?>
         <a>
             <?php echo $i; ?>
         </a>
         <?php endif ?>
         <?php endforeach ?>
                     
-        <?php if ($page < $total_pages) : ?>
-            <a href="?page=<?php echo $page+1; ?>">次へ</a>
+        <?php if ($pager->getCurrentPage() < $pager->getTotalPages()) : ?>
+            <a href="?page=<?php echo $pager->getCurrentPage(); ?>">次へ</a>
         <?php endif ?>
         <!--ここまで-->
     </body>

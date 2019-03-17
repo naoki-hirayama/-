@@ -1,9 +1,10 @@
 <?php
 //MySQLサーバ接続
 require_once('function/db_connect.php');
-
+require_once('function/pager.php');
+require_once('function/function.php');
 $database = db_connect();
-$picture_max_size = 1*1024*1024;   
+$picture_max_size = 1*1024*1024; 
 $select_color_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
 
 // POSTでアクセスされたら投稿処理を行う
@@ -102,76 +103,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     // GETでアクセスされた時
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
+    
     $total_records = $stmt->fetchColumn();
-
-    //変更したら表示できるページ幅が変わる 
-    $max_pager_range = 10;
-    $per_page_records = 3;
-    $total_pages = (int)ceil($total_records / $per_page_records);
+    $max_pager_range = 9;
+    $per_page_records = 2;
+    $page = $_GET['page'];
     
-    if (($max_pager_range % 2) === 1) {
-        $left_range =((int)ceil($max_pager_range - 1) / 2); 
-        $right_range = ((int)floor($max_pager_range - 1) / 2);
-    } else {
-        $left_range = (int)ceil($max_pager_range / 2);
-        $right_range = ((int)floor($max_pager_range - 1) / 2);
-    }
-    
-    if ($_GET['page'] > $total_pages) {
-        $page = $total_pages;
-    } else if ($_GET['page'] <= 0) {
-        $page = 1; 
-    } else if ($_GET['page'] <= $total_pages) {
-        $page = (int)$_GET['page'];
-    } else {
-        header('HTTP/1.1 404 Not Found'); 
-        exit;
-    }
-    
-    // ページング処理
-    $page_numbers = [];
-    if ($page <= $left_range) {
-        for ($i = 1; $i <= $max_pager_range; $i++) {
-            $page_numbers[] = $i;
-        }
-    }
-    
-    if (($page > $left_range) && ($page < $total_pages - $right_range)) {
-        for ($i = $page - $left_range; $i <= $page + $right_range; $i++) {
-            if ($i >= 1) {
-                $page_numbers[] = $i;
-            }
-        }
-    }
-    
-    if ($page >= $total_pages - $right_range) {
-        for ($i = $total_pages - $max_pager_range + 1; $i <= $total_pages; $i++) {
-            if ($i >= 1) {
-                $page_numbers[] = $i;
-            }
-        }
-    }
-    
-    // オフセット
-    if (($page > 1) && ($page <= $total_pages)) {
-        $start_page = ($page * $per_page_records) - $per_page_records;
-    } else {
-        $start_page = 0;
-    }
-    // postテーブルから3件のデータを取得する
+    $pager = new Pager($total_records,$max_pager_range,$per_page_records);
+    $pager->setCurrentPage($page);
+   
     $sql = 'SELECT * FROM post ORDER BY created_at DESC LIMIT :start_page, :per_page_records';
-    
     $statement = $database->prepare($sql);
     
-    $statement->bindParam(':start_page', $start_page, PDO::PARAM_INT);
-    $statement->bindParam(':per_page_records', $per_page_records, PDO::PARAM_INT);
+    $statement->bindParam(':start_page', $pager->getStartPage(), PDO::PARAM_INT);
+    $statement->bindParam(':per_page_records', $pager->getPerPageRecords(), PDO::PARAM_INT);
     
     $statement->execute();
-    
     $records = $statement->fetchAll();
 }
     
 $statement = null;
  
-require_once('function/function.php');
+
 include('views/index.php');
