@@ -68,9 +68,9 @@
     
     <?php foreach ($pager->getPageNumbers() as $i) : ?>
         <?php if ($i === $pager->getCurrentPage()) : ?>
-            <a>
+            <span>
                 <?php echo $i ?>
-            </a>
+            </span>
         <?php else : ?>
             <a href="?page=<?php echo $i ?>">
                 <?php echo $i ?>

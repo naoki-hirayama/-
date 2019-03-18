@@ -1,7 +1,7 @@
 CREATE TABLE bbs.users (
     user_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     username VARCHAR(25) NOT NULL,
-    login_id VARCHAR(255) NOT NULL,
+    login_id VARCHAR(255) UNIQUE,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

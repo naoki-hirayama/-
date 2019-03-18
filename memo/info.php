@@ -4,6 +4,8 @@ $ mysql -u root
 
 use bbs
 
+source ~/environment/kadai-ibg/memo/create_table_bbs.users.sql
+
 $ git push origin master
 
  SELECT * FROM bbs.post;
@@ -106,3 +108,13 @@ http://php.net/manual/ja/function.finfo-file.php
 http://php.net/manual/ja/features.file-upload.errors.php
 
 カンマの後スペース
+
+* ユーザー登録＆ログイン・ログアウト機能を実装する
+* ユーザー情報の編集画面は後の課題でやります。
+* 項目は「ログインID」「パスワード」「名前」
+    * 項目は全部必須
+    * ログインIDはユニーク制約をつける
+    * パスワードは確認用のフォームも用意すること（一致した場合のみ通すやつ）
+    * パスワードは暗号化して保存する
+* ログイン中の場合は投稿一覧画面上部に、ログイン中のユーザー名を表示する。
+* この課題ではログインできるところまでできればOK

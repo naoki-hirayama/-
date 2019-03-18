@@ -185,3 +185,51 @@ class Pager
     // ビューで使う変数は、メソッドで作成
     // メソッド内で使う変数はクラスのプロパティにする。
     // インスタンス生成時の引数は、index.phpで与えられた変数のみでOK.
+    
+ //比べる   
+    public function getPageNumbers()
+    {
+        $range = $this->getBothRanges();
+
+        if ($this->current_page <= $range['left']) {
+            $start = 1;
+            $end   = min($this->max_pager_range, $this->getTotalPages());
+
+        } else if ($this->current_page < $this->getTotalPages() - $range['right']) {
+            $start = $this->current_page - $range['left'];
+            $end   = $this->current_page + $range['right'];
+
+        } else {
+            $start = max($this->getTotalPages() - $this->max_pager_range + 1, 1);
+            $end   = $this->getTotalPages();
+        }
+
+        $page_numbers = [];
+        for ($i = $start; $i <= $end; $i++) {
+            $page_numbers[] = $i;
+        }
+
+        return $page_numbers;
+    }
+    
+    
+    public function getPageNumbers() 
+    {
+        $page_numbers = [];
+        $range = $this->getBothRanges();
+        
+        if ($this->current_page <= $range['left']) {
+            for ($i = 1; $i <= min($this->max_pager_range, $this->getTotalPages()); $i++) {
+                $page_numbers[] = $i;
+            }
+        } else if ($this->current_page < $this->getTotalPages() - $range['right']) {
+            for ($i = $this->current_page - $range['left']; $i <= $this->current_page + $range['right']; $i++) {
+                 $page_numbers[] = $i;
+            }
+        } else {
+            for ($i = max($this->getTotalPages() - $this->max_pager_range + 1, 1); $i <= $this->getTotalPages(); $i++) {
+                    $page_numbers[] = $i;
+            }
+        }
+        return $page_numbers;
+    }

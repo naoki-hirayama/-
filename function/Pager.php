@@ -1,21 +1,16 @@
 <?php
-class Pager
+class Pager 
 {
     private $total_records;
     private $per_page_records;
     private $max_pager_range;
     private $current_page;
     
-    function __construct($total_records, $max_pager_range, $per_page_records)
+    public function __construct($total_records, $max_pager_range, $per_page_records)
     {
         $this->total_records = $total_records;
         $this->max_pager_range = $max_pager_range;
         $this->per_page_records = $per_page_records;
-    }
-    
-    private function getTotalPages()
-    {
-        return (int)ceil($this->total_records / $this->per_page_records);
     }
     
     public function setCurrentPage($page)
@@ -25,7 +20,7 @@ class Pager
         } else if ($page <= 0) {
             $this->current_page = 1; 
         } else if ($page > $this->getTotalPages()) {
-            $this->current_page = 1;
+            $this->current_page = $this->getTotalPages();
         } else {
             $this->current_page = (int)$page;
         }
@@ -46,43 +41,22 @@ class Pager
         return $this->current_page;
     }
     
-    private function getBothRanges()
-    {
-        $both_ranges = [];
-        if (($this->max_pager_range % 2) === 1) {
-            $both_ranges['left'] = ((int)ceil($this->max_pager_range - 1) / 2); 
-            $both_ranges['right'] = ((int)floor($this->max_pager_range - 1) / 2);
-            return $both_ranges; 
-        } else {
-            $both_ranges['left'] = (int)ceil($this->max_pager_range / 2);
-            $both_ranges['right'] = ((int)floor($this->max_pager_range - 1) / 2);
-            return $both_ranges;
-        }
-    }
-    
-    public function getPageNumbers()
+    public function getPageNumbers() //ここだけ復習する
     {
         $page_numbers = [];
         $range = $this->getBothRanges();
+        
         if ($this->current_page <= $range['left']) {
-            for ($i = 1; $i <= $this->max_pager_range; $i++) {
+            for ($i = 1; $i <= min($this->max_pager_range, $this->getTotalPages()); $i++) {
                 $page_numbers[] = $i;
             }
-        }
-        
-        if (($this->current_page > $range['left']) && ($this->current_page < $this->getTotalPages() - $range['right'])) {
+        } else if ($this->current_page < $this->getTotalPages() - $range['right']) {
             for ($i = $this->current_page - $range['left']; $i <= $this->current_page + $range['right']; $i++) {
-                if ($i >= 1) {
-                    $page_numbers[] = $i;
-                }
+                 $page_numbers[] = $i;
             }
-        }
-        
-        if ($this->current_page >= $this->getTotalPages() - $range['right']) {
-            for ($i = $this->getTotalPages() - $this->max_pager_range + 1; $i <= $this->getTotalPages(); $i++) {
-                if ($i >= 1) {
+        } else {
+            for ($i = max($this->getTotalPages() - $this->max_pager_range + 1, 1); $i <= $this->getTotalPages(); $i++) {
                     $page_numbers[] = $i;
-                }
             }
         }
         
@@ -91,11 +65,7 @@ class Pager
     
     public function getOffset()
     {
-        if (($this->current_page > 1) && ($this->current_page <= $this->getTotalPages())) {
-            return ($this->current_page * $this->per_page_records) - $this->per_page_records;
-        } else {
-            return 0;
-        }
+        return $this->per_page_records * ($this->current_page - 1);
     }
     
     public function hasPreviousPage()
@@ -124,5 +94,24 @@ class Pager
     public function getNextPage()
     {
         return $this->current_page + 1;
+    }
+    
+    private function getBothRanges()
+    {
+        $both_ranges = [];
+        if (($this->max_pager_range % 2) === 1) {
+            $both_ranges['left'] = ((int)ceil($this->max_pager_range - 1) / 2); 
+            $both_ranges['right'] = ((int)floor($this->max_pager_range - 1) / 2);
+            return $both_ranges; 
+        } else {
+            $both_ranges['left'] = (int)ceil($this->max_pager_range / 2);
+            $both_ranges['right'] = ((int)floor($this->max_pager_range - 1) / 2);
+            return $both_ranges;
+        }
+    }
+    
+    private function getTotalPages()
+    {
+        return (int)ceil($this->total_records / $this->per_page_records);
     }
 }

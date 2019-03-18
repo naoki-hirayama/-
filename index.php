@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $picture = $rename_file;
         }
         
-        $sql = 'INSERT INTO post (name,comment,color,password,picture) VALUES(:name,:comment,:color,:password,:picture)';
+        $sql = 'INSERT INTO post (name,comment,color,password,picture) VALUES (:name,:comment,:color,:password,:picture)';
         
         $statement = $database->prepare($sql);
         
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
     
     $total_records = $stmt->fetchColumn();
-    $max_pager_range = 9;
+    $max_pager_range = 10;
     $per_page_records = 3;
     $page = $_GET['page'];
     

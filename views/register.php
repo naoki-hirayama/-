@@ -14,7 +14,7 @@
         <p>パスワード：</p>
         <input type="password" name="password"><br />
         <p>パスワード(確認)：</p>
-        <input type="password" name="password"><br />
+        <input type="password" name="confirm_password"><br />
         <input type="submit" name="signup" value="登録する">
     </form>
 </body>
