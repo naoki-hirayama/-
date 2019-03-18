@@ -104,3 +104,5 @@ if (!(($picture_type === 'png') || ($picture_type === 'jpg') || ($picture_type =
 
 http://php.net/manual/ja/function.finfo-file.php
 http://php.net/manual/ja/features.file-upload.errors.php
+
+カンマの後スペース

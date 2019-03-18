@@ -1,5 +1,6 @@
 <?php
 // エスケープの関数
-function h($s) {
+function h($s)
+{
     return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
 }

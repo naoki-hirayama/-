@@ -6,40 +6,48 @@ class Pager
     private $max_pager_range;
     private $current_page;
     
-    function __construct($total_records,$max_pager_range,$per_page_records) {
+    function __construct($total_records, $max_pager_range, $per_page_records)
+    {
         $this->total_records = $total_records;
         $this->max_pager_range = $max_pager_range;
         $this->per_page_records = $per_page_records;
     }
     
-    public function getTotalPages() {
+    private function getTotalPages()
+    {
         return (int)ceil($this->total_records / $this->per_page_records);
     }
-    //現在のページ番号を設定
-    public function setCurrentPage($page) {
-        if ($page > $this->getTotalPages()) {
-            $this->current_page = $this->getTotalPages();
+    
+    public function setCurrentPage($page)
+    {   
+        if (!is_numeric($page)) {
+            $this->current_page = 1; 
         } else if ($page <= 0) {
             $this->current_page = 1; 
+        } else if ($page > $this->getTotalPages()) {
+            $this->current_page = 1;
         } else {
             $this->current_page = (int)$page;
         }
-            return $this->current_page;
     }
     
-    public function getTotalRecords() {
+    public function getTotalRecords()
+    {
         return $this->total_records;
     }
     
-    public function getPerPageRecords() {
+    public function getPerPageRecords()
+    {
         return $this->per_page_records;
     }
     
-    public function getCurrentPage() {
+    public function getCurrentPage()
+    {
         return $this->current_page;
     }
     
-    public function setBothRanges() {
+    private function getBothRanges()
+    {
         $both_ranges = [];
         if (($this->max_pager_range % 2) === 1) {
             $both_ranges['left'] = ((int)ceil($this->max_pager_range - 1) / 2); 
@@ -52,23 +60,25 @@ class Pager
         }
     }
     
-    public function getPageNumbers() {
+    public function getPageNumbers()
+    {
         $page_numbers = [];
-        if ($this->current_page <= $this->setBothRanges()['left']) {
+        $range = $this->getBothRanges();
+        if ($this->current_page <= $range['left']) {
             for ($i = 1; $i <= $this->max_pager_range; $i++) {
                 $page_numbers[] = $i;
             }
         }
         
-        if (($this->current_page > $this->setBothRanges()['left']) && ($this->current_page < $this->getTotalPages() - $this->setBothRanges()['right'])) {
-            for ($i = $this->current_page - $this->setBothRanges()['left']; $i <= $this->current_page + $this->setBothRanges()['right']; $i++) {
+        if (($this->current_page > $range['left']) && ($this->current_page < $this->getTotalPages() - $range['right'])) {
+            for ($i = $this->current_page - $range['left']; $i <= $this->current_page + $range['right']; $i++) {
                 if ($i >= 1) {
                     $page_numbers[] = $i;
                 }
             }
         }
         
-        if ($this->current_page >= $this->getTotalPages() - $this->setBothRanges()['right']) {
+        if ($this->current_page >= $this->getTotalPages() - $range['right']) {
             for ($i = $this->getTotalPages() - $this->max_pager_range + 1; $i <= $this->getTotalPages(); $i++) {
                 if ($i >= 1) {
                     $page_numbers[] = $i;
@@ -78,12 +88,41 @@ class Pager
         
         return $page_numbers;
     }
-
-    public function getStartPage() {
+    
+    public function getOffset()
+    {
         if (($this->current_page > 1) && ($this->current_page <= $this->getTotalPages())) {
             return ($this->current_page * $this->per_page_records) - $this->per_page_records;
         } else {
             return 0;
         }
+    }
+    
+    public function hasPreviousPage()
+    {
+        if ($this->current_page > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function hasNextPage()
+    {
+        if ($this->current_page < $this->getTotalPages()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function getPreviousPage()
+    {
+        return $this->current_page - 1;
+    }
+    
+    public function getNextPage()
+    {
+        return $this->current_page + 1;
     }
 }

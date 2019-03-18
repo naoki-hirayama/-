@@ -1,11 +1,11 @@
 <?php
 //MySQLサーバ接続
 require_once('function/db_connect.php');
-require_once('function/pager.php');
+require_once('function/Pager.php');
 require_once('function/function.php');
 $database = db_connect();
 $picture_max_size = 1*1024*1024; 
-$select_color_options = ['black'=>'黒','red'=>'赤','blue'=>'青','yellow'=>'黄','green'=>'緑'];
+$select_color_options = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
 
 // POSTでアクセスされたら投稿処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $vaild_picture_types = [
                 'image/png',
                 'image/gif',
-                'image/jpeg',
+                'image/jpeg'
             ];
             
             if (!in_array($picture_type, $vaild_picture_types)) {
@@ -109,13 +109,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $per_page_records = 3;
     $page = $_GET['page'];
     
-    $pager = new Pager($total_records,$max_pager_range,$per_page_records);
+    $pager = new Pager($total_records, $max_pager_range, $per_page_records);
     $pager->setCurrentPage($page);
    
     $sql = 'SELECT * FROM post ORDER BY created_at DESC LIMIT :start_page, :per_page_records';
     $statement = $database->prepare($sql);
     
-    $statement->bindParam(':start_page', $pager->getStartPage(), PDO::PARAM_INT);
+    $statement->bindParam(':start_page', $pager->getOffset(), PDO::PARAM_INT);
     $statement->bindParam(':per_page_records', $pager->getPerPageRecords(), PDO::PARAM_INT);
     
     $statement->execute();

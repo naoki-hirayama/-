@@ -14,7 +14,7 @@ $statement->bindParam(':id', $_GET['id']);
 $statement->execute();
 
 $record = $statement->fetch(PDO::FETCH_ASSOC);;
-     
+
 if ($record === false) {
     header('HTTP/1.1 404 Not Found') ;
     exit;
