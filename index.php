@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $total_records = $stmt->fetchColumn();
     $max_pager_range = 9;
-    $per_page_records = 2;
+    $per_page_records = 3;
     $page = $_GET['page'];
     
     $pager = new Pager($total_records,$max_pager_range,$per_page_records);
@@ -124,5 +124,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 $statement = null;
  
-
 include('views/index.php');

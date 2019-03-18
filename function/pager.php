@@ -42,7 +42,7 @@ class Pager
     public function setBothRanges() {
         $both_ranges = [];
         if (($this->max_pager_range % 2) === 1) {
-            $both_ranges['left'] =((int)ceil($this->max_pager_range - 1) / 2); 
+            $both_ranges['left'] = ((int)ceil($this->max_pager_range - 1) / 2); 
             $both_ranges['right'] = ((int)floor($this->max_pager_range - 1) / 2);
             return $both_ranges; 
         } else {
@@ -75,6 +75,7 @@ class Pager
                 }
             }
         }
+        
         return $page_numbers;
     }
 
