@@ -13,12 +13,15 @@ if (isset($_POST['signup'])) {
     $exist_login_id = $statement->fetch();
     
     $errors = [];
-    $username = trim(mb_convert_kana($_POST['username'], 's'));
-    if (mb_strlen($username, 'UTF-8') === 0) {
-        $errors[] = "名前は入力必須です。";
-    } else if (mb_strlen($username, 'UTF-8') > 10) {
-        $errors[] = "名前は１０文字以内です。";
+    
+    if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['username'])) {
+        $errors[] = "名前は半角英数字です。";
+    } else if (mb_strlen($_POST['login_id'], 'UTF-8') < 4) {
+        $errors[] = "名前は4文字以上です。";
+    } else if (mb_strlen($_POST['login_id'], 'UTF-8') > 12) {
+        $errors[] = "名前は12文字以内です。";
     }
+    
     
     if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['login_id'])) {
         $errors[] = "ログインIDは半角英数字です。";
