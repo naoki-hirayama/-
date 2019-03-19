@@ -16,12 +16,11 @@ if (isset($_POST['signup'])) {
     
     if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['username'])) {
         $errors[] = "名前は半角英数字です。";
-    } else if (mb_strlen($_POST['login_id'], 'UTF-8') < 4) {
+    } else if (mb_strlen($_POST['username'], 'UTF-8') < 4) {
         $errors[] = "名前は4文字以上です。";
-    } else if (mb_strlen($_POST['login_id'], 'UTF-8') > 12) {
+    } else if (mb_strlen($_POST['username'], 'UTF-8') > 12) {
         $errors[] = "名前は12文字以内です。";
     }
-    
     
     if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['login_id'])) {
         $errors[] = "ログインIDは半角英数字です。";
