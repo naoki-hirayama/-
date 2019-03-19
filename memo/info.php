@@ -3,6 +3,7 @@ $ sudo service mysqld start
 $ mysql -u root
 
 use bbs
+SELECT * FROM bbs.users;  
 
 source ~/environment/kadai-ibg/memo/create_table_bbs.users.sql
 

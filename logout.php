@@ -1,8 +1,7 @@
 <?php
-
 session_start();
 
-if (isset($_GET['logout'])) {
+if (isset($_SESSION['login_id'], $_SESSION['username'])) {
     session_destroy();
     
     unset($_SESSION['login_id']);

@@ -56,7 +56,7 @@
                             <input type="hidden" name="id" value="<?php echo $record['id'] ?>">
                             <input type="submit" value="削除"/><br />
                         </form>
-                        <?php endif ?>    
+                        <?php endif ?>
                         <!--　ここまで　-->
                     
                         ---------------------------------------------<br />

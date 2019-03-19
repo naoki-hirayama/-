@@ -1,6 +1,6 @@
 <?php
 session_start();
-//MySQLサーバ接続
+
 require_once('function/db_connect.php');
 require_once('function/function.php');
 $database = db_connect();
@@ -27,9 +27,7 @@ if (isset($_POST['login'])) {
     
     if (!password_verify($_POST['password'], $hashed_password)) {
         $errors[] = "パスワードまたはログインidが間違っています。";    
-    } else if ($login_id !== $_POST['login_id']) {
-        $errors[] = "パスワードまたはログインidが間違っています。";
-    }
+    } 
     
     if (empty($errors)) {
        
