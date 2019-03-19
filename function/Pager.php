@@ -41,23 +41,28 @@ class Pager
         return $this->current_page;
     }
     
-    public function getPageNumbers() //ここだけ復習する
+    public function getPageNumbers()
     {
-        $page_numbers = [];
         $range = $this->getBothRanges();
         
         if ($this->current_page <= $range['left']) {
-            for ($i = 1; $i <= min($this->max_pager_range, $this->getTotalPages()); $i++) {
-                $page_numbers[] = $i;
-            }
+            $start = 1;
+            $end = min($this->max_pager_range, $this->getTotalPages());
+            
         } else if ($this->current_page < $this->getTotalPages() - $range['right']) {
-            for ($i = $this->current_page - $range['left']; $i <= $this->current_page + $range['right']; $i++) {
-                 $page_numbers[] = $i;
-            }
+            $start = $this->current_page - $range['left'];
+            $end   = $this->current_page + $range['right'];
+            
+            
         } else {
-            for ($i = max($this->getTotalPages() - $this->max_pager_range + 1, 1); $i <= $this->getTotalPages(); $i++) {
-                    $page_numbers[] = $i;
-            }
+            $start = max($this->getTotalPages() - $this->max_pager_range + 1, 1);
+            $end   = $this->getTotalPages();
+            
+        }
+        
+        $page_numbers = [];
+        for ($i = $start; $i <= $end; $i++) {
+            $page_numbers[] = $i;
         }
         
         return $page_numbers;
