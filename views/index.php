@@ -3,6 +3,10 @@
     include('views/layouts/header.php');
 ?>
 <body>
+    <form action="logout.php" method="get" >
+        <input type="submit" name="logout" value="ログアウト">
+    </form>
+    <p>ようこそ！<?php echo $_SESSION['username'] ?>さん</p>
     <h1>投稿画面</h1>
     <!-- エラーメッセージ -->
     <?php  include('views/layouts/errormessage.php') ?>

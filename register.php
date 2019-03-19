@@ -1,14 +1,11 @@
 <?php
-//MySQLサーバ接続
+session_start();
 require_once('function/db_connect.php');
 require_once('function/function.php');
 $database = db_connect();
 
-
-
 if (isset($_POST['signup'])) {
     $errors = [];
-    // バリデーション　　パスワードにnullが入らないようにする
     
     $username = trim(mb_convert_kana($_POST['username'], 's'));
     if (mb_strlen($username, 'UTF-8') === 0) {
@@ -25,14 +22,30 @@ if (isset($_POST['signup'])) {
         $errors[] = "ログインIDは半角英数字です。";
     }
     
-    if (mb_strlen($_POST['password'], 'UTF-8') < 4) {
-        $errors[] = "パスワードは4文字以上です";
-    } else if (mb_strlen($_POST['password'], 'UTF-8') > 30) {
-        $errors[] = "パスワードが不正です。";
-    } else if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['password'])) {
-            $errors[] = " パスワードは半角英数字です。";
+    $sql = 'SELECT * FROM users WHERE login_id = :login_id';
+    
+    $statement = $database->prepare($sql);
+    
+    $statement->bindParam(':login_id', $_POST['login_id']);
+    
+    $statement->execute();
+    $exist_login_id = $statement->fetch();
+    
+    if ($exist_login_id !== false) {
+        $errors[] = "このログインIDはすでに存在します。";
     }
     
+    if (mb_strlen($_POST['password'], 'UTF-8') < 4) {
+        $errors[] = "パスワードは4文字以上です";
+    } else if (mb_strlen($_POST['password'], 'UTF-8') >= 30) {
+        $errors[] = "パスワードが長すぎます。";
+    } else if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['password'])) {
+            $errors[] = " パスワードは半角英数字です。";
+    } else if ($_POST['password'] === null) {
+        $errors[] = "パスワードが不正です。";
+    }
+    
+    //入力されたパスワードと確認パスワード が一致したら
     if ($_POST['password'] !== $_POST['confirm_password']) {
         $errors[] = "パスワードが一致しません。";
     } else {
@@ -42,7 +55,7 @@ if (isset($_POST['signup'])) {
     // var_dump($password_hash);exit;
     if (empty($errors)) {
         // エラーがなっかたら登録　try catchもしユーザーidが被ってたらエラーを返す　トランザクション
-        // インサート文
+        
         $sql = 'INSERT INTO users (username,login_id,password) VALUES (:username,:login_id,:password)';
             
         $statement = $database->prepare($sql);
@@ -54,14 +67,13 @@ if (isset($_POST['signup'])) {
         $statement->execute();
         
         $statement = null;
-    
-        header('Location: index.php');
-        exit;    
+        
+        $_SESSION['login_id'] = $_POST['login_id'];
+        $_SESSION['username'] = $_POST['username'];
+        
+        header('Location: registered.php');
+        exit;
     }
-    
-    
-    
-    
 }
     
 include('views/register.php');

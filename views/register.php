@@ -17,6 +17,7 @@
         <input type="password" name="confirm_password"><br />
         <input type="submit" name="signup" value="登録する">
     </form>
+    <a href="login.php"　class="btn btn-primary">すでに登録済みの方はこちらへ</a>
 </body>
 <?php
     include('views/layouts/footer.php');

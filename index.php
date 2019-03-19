@@ -1,8 +1,15 @@
 <?php
-//MySQLサーバ接続
+
+session_start();
+
+if (!isset($_SESSION['login_id'])) {
+    header("Location: login.php");
+}
+
 require_once('function/db_connect.php');
 require_once('function/Pager.php');
 require_once('function/function.php');
+
 $database = db_connect();
 $picture_max_size = 1*1024*1024; 
 $select_color_options = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];

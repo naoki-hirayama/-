@@ -2,6 +2,7 @@
     $header_title = 'ログイン画面';
     include('views/layouts/header.php');
 ?>
+
 <body>
     <h1>ログイン画面</h1>
     <!-- エラーメッセージ -->
@@ -13,7 +14,9 @@
         <input type="password" name="password"><br />
         <input type="submit" name="login" value="ログインする">
     </form>
+    <a href="register.php"　class="btn btn-primary"> 未登録の方はこちらへ</a>
 </body>
+
 <?php
     include('views/layouts/footer.php');
 ?>
