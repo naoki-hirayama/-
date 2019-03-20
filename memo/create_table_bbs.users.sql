@@ -9,3 +9,4 @@ CREATE TABLE bbs.users (
 );
 
 ALTER TABLE users CHANGE COLUMN login_id login_id VARCHAR(255)　UNIQUE
+ALTER TABLE users CHANGE COLUMN password password  VARCHAR(255) NOT NULL binary;

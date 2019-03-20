@@ -7,7 +7,7 @@ $database = db_connect();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $sql = 'SELECT * FROM users WHERE login_id = :login_id';
+    $sql = 'SELECT * FROM users WHERE login_id = BINARY :login_id';
     $statement = $database->prepare($sql);
     
     $statement->bindParam(':login_id', $_POST['login_id']);

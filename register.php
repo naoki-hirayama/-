@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if (mb_strlen($login_id, 'UTF-8') > 15) {
         $errors[] = "ログインIDは15文字以内です。";
     } else {
-        $sql = 'SELECT * FROM users WHERE login_id = :login_id';
+        $sql = 'SELECT * FROM users WHERE login_id = BINARY :login_id';
         $statement = $database->prepare($sql);
         $statement->bindParam(':login_id', $login_id);
         $statement->execute();
