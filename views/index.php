@@ -89,8 +89,8 @@
         <?php if ($pager->hasNextPage()) : ?>           
             <a href="?page=<?php echo $pager->getNextPage() ?>">次へ</a>
         <?php endif ?>
+        <!--ここまで-->
     <?php endif ?>
-    <!--ここまで-->
 </body>
 <?php
     include('views/layouts/footer.php');
