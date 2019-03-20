@@ -8,7 +8,7 @@
     <?php  include('views/layouts/errormessage.php'); ?>
     <form action="register.php" method="post" >
         <p>名前：</p>
-        <input type="text" name="username" value=""><br />
+        <input type="text" name="name" value=""><br />
         <p>ログインID：</p>
         <input type="text" name="login_id" value=""><br />
         <p>パスワード：</p>

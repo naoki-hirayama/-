@@ -1,12 +1,9 @@
 <?php
 session_start();
 
-if (isset($_SESSION['login_id'], $_SESSION['username'])) {
+if (isset($_SESSION['login_id'], $_SESSION['name'])) {
     session_destroy();
-    
-    unset($_SESSION['login_id']);
-    unset($_SESSION['username']);
-  
+
     $header_title = 'ログアウトしました。';
     include('views/layouts/header.php');
     include('views/logout.php');
@@ -14,6 +11,7 @@ if (isset($_SESSION['login_id'], $_SESSION['username'])) {
     
 } else {
     header("Location: login.php");
+    exit;
 }
 
 

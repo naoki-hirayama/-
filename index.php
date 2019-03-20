@@ -1,10 +1,6 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['login_id'], $_SESSION['username'])) {
-    header("Location: login.php");
-}
-
 require_once('function/db_connect.php');
 require_once('function/Pager.php');
 require_once('function/function.php');
@@ -109,7 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     // GETでアクセスされた時
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
-    
     $total_records = $stmt->fetchColumn();
     $max_pager_range = 10;
     $per_page_records = 3;
@@ -125,9 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $statement->bindParam(':per_page_records', $pager->getPerPageRecords(), PDO::PARAM_INT);
     
     $statement->execute();
-    $records = $statement->fetchAll();
+    $posts = $statement->fetchAll();
 }
     
 $statement = null;
- 
 include('views/index.php');

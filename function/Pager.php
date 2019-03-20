@@ -75,7 +75,7 @@ class Pager
     
     public function hasPreviousPage()
     {
-        if ($this->current_page > 1) {
+        if ($this->getCurrentPage() > 1) {
             return true;
         } else {
             return false;
