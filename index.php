@@ -26,17 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if (mb_strlen($comment, 'UTF-8') > 100) {
         $errors[] = "本文は１００文字以内です。";
     } 
-    
-    if (!array_key_exists($_POST['color'], $select_color_options)) {
+    $color = $_POST['color'];
+    if (!array_key_exists($color, $select_color_options)) {
         $errors[] = "文字色が不正です"; 
     }
-    
-    if (strlen($_POST['password']) !== 0) {
-        if (mb_strlen($_POST['password'], 'UTF-8') < 4) {
+    $_password = $_POST['password'];
+    if (strlen($_password) !== 0) {
+        if (mb_strlen($_password, 'UTF-8') < 4) {
             $errors[] = " パスワードは4文字以上です。";
         }
     
-        if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['password'])) {
+        if (!preg_match("/^[a-zA-Z0-9]+$/", $_password)) {
             $errors[] = " パスワードは半角英数字です。";
         }
     }
@@ -73,10 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             move_uploaded_file($_FILES['picture']['tmp_name'], $rename_file_path);
         }
         //パスワードが入力されない時の処理
-        if (strlen($_POST['password']) === 0) {
+        if (strlen($_password) === 0) {
             $password = null;
         } else {
-            $password = $_POST['password'];
+            $password = $_password;
         }
         // 画像が投稿されない時の処理
         if (strlen($_FILES['picture']['name']) === 0) {
@@ -89,9 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $statement = $database->prepare($sql);
         
-        $statement->bindParam(':name', $_POST['name']);
-        $statement->bindParam(':comment', $_POST['comment']);
-        $statement->bindParam(':color', $_POST['color']);
+        $statement->bindParam(':name', $name);
+        $statement->bindParam(':comment', $comment);
+        $statement->bindParam(':color', $color);
         $statement->bindParam(':password', $password);
         $statement->bindParam(':picture', $picture);
         

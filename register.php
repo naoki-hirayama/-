@@ -62,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
         $statement = $database->prepare($sql);
         
-        $statement->bindParam(':name', $_POST['name']);
-        $statement->bindParam(':login_id', $_POST['login_id']);
+        $statement->bindParam(':name', $name);
+        $statement->bindParam(':login_id', $login_id);
         $statement->bindParam(':password', $password_hash);
         
         $statement->execute();
