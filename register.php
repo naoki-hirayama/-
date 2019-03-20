@@ -70,12 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $statement = null;
         
-        $_SESSION['login_id'] =  $login_id;
+        $_SESSION['login_id'] = $login_id;
         $_SESSION['name'] = $name;
         
         header('Location: registered.php');
         exit;
     }
 }
-    
+
 include('views/register.php');

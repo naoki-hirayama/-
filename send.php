@@ -1,7 +1,5 @@
 <?php
-
-include('views/layouts/header.php');
-
+$header_title = '投稿成功';
 include('views/send.php');
 
-include('views/layouts/footer.php');
+

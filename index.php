@@ -65,12 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     // 成功した場合はDBへ保存してsend.phpにリダイレクトする
     if (empty($errors)) {
-        // エラーがない時の画像処理 ＊変更
-        $specific_num = uniqid(mt_rand()); 
-        $rename_file = $specific_num.'.'.basename($picture_type);
-        $rename_file_path = 'images/'.$rename_file;
-        move_uploaded_file($_FILES['picture']['tmp_name'], $rename_file_path);
-        
+        if (!empty($_FILES['picture']['tmp_name'])) {
+            // エラーがなくて画像が投稿された時の画像処理 
+            $specific_num = uniqid(mt_rand()); 
+            $rename_file = $specific_num.'.'.basename($picture_type);
+            $rename_file_path = 'images/'.$rename_file;
+            move_uploaded_file($_FILES['picture']['tmp_name'], $rename_file_path);
+        }
         //パスワードが入力されない時の処理
         if (strlen($_POST['password']) === 0) {
             $password = null;
@@ -108,7 +109,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total_records = $stmt->fetchColumn();
     $max_pager_range = 10;
     $per_page_records = 3;
-    $page = $_GET['page'];
+    if (!empty($_GET['page'])) {
+        $page = $_GET['page'];
+    } else {
+        $page = 1;
+    }
     
     $pager = new Pager($total_records, $max_pager_range, $per_page_records);
     $pager->setCurrentPage($page);
