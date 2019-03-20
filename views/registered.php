@@ -5,7 +5,7 @@
 
 <body>
     <h1>登録完了</h1>
-    <a href="index.php"　class="btn btn-primary">さあ始めよう</a>
+    <a href="login.php"　class="btn btn-primary">さあ始めよう</a>
 </body>
 
 <?php

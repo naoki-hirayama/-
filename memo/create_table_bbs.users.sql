@@ -7,6 +7,6 @@ CREATE TABLE bbs.users (
     
     
 );
-
-ALTER TABLE users CHANGE COLUMN login_id login_id VARCHAR(255)　UNIQUE
+ALTER TABLE post modify user_id text after picture;     
+ALTER TABLE post CHANGE COLUMN user_id user_id int(11);
 ALTER TABLE users CHANGE COLUMN password password  VARCHAR(255) NOT NULL binary;

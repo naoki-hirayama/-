@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors = [];
         
         if ($tmp_user !== false) { 
-        $errors[] = "このログインIDはすでに存在します。";
+            $errors[] = "このログインIDはすでに存在します。";
         }
     }
     
@@ -70,8 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $statement = null;
         
-        $_SESSION['login_id'] = $login_id;
-        $_SESSION['name'] = $name;
+        $_SESSION['username'] = $name;
+        
         
         header('Location: registered.php');
         exit;

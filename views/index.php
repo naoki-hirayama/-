@@ -6,7 +6,7 @@
     <form action="logout.php" method="get" >
         <input type="submit" name="logout" value="ログアウト">
     </form>
-    <p>ようこそ！<?php echo !empty($_SESSION['name']) ? $_SESSION['name'] : 'ゲスト'; ?>さん</p>
+    <p>ようこそ！<?php echo !empty($_SESSION['username']) ? $_SESSION['username'] : 'ゲスト'; ?>さん</p>
     <h1>投稿画面</h1>
     <!-- エラーメッセージ -->
     <?php  include('views/layouts/errormessage.php') ?>
