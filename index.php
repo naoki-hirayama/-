@@ -117,12 +117,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $pager = new Pager($total_records, $max_pager_range, $per_page_records);
     $pager->setCurrentPage($page);
+    $offset = $pager->getOffset();
+    $per_page_records = $pager->getPerPageRecords();
    
     $sql = 'SELECT * FROM post ORDER BY created_at DESC LIMIT :start_page, :per_page_records';
     $statement = $database->prepare($sql);
     
-    $statement->bindParam(':start_page', $pager->getOffset(), PDO::PARAM_INT);
-    $statement->bindParam(':per_page_records', $pager->getPerPageRecords(), PDO::PARAM_INT);
+    $statement->bindParam(':start_page', $offset, PDO::PARAM_INT);
+    $statement->bindParam(':per_page_records', $per_page_records, PDO::PARAM_INT);
     
     $statement->execute();
     $posts = $statement->fetchAll();
