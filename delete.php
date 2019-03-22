@@ -13,10 +13,10 @@ $statement->bindParam(':id', $_GET['id']);
 
 $statement->execute();
 
-$post = $statement->fetch(PDO::FETCH_ASSOC);;
+$post = $statement->fetch(PDO::FETCH_ASSOC);
 
 if ($post === false) {
-    header('HTTP/1.1 404 Not Found') ;
+    header('HTTP/1.1 404 Not Found');
     exit;//よく考える
 } else if (empty($post['password']) && empty($post['user_id'])) {
     header('HTTP/1.1 400 Bad Request');
@@ -31,6 +31,7 @@ if ($post === false) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //パスワードが一致しない、不正時のエラー処理　user_idが存在していたら
     $errors = [];
+    
     if (empty($post['user_id'])) { 
         if ($origin_password !== $_POST['password_input']) {
             $errors[] = "パスワードが違います";

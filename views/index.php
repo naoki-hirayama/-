@@ -39,7 +39,7 @@
                 </option>
             <?php endforeach ?>
         </select><br />
-        <?php if (!isset($_SESSION['user_id'])) : ?>
+        <?php if (empty($_SESSION['user_id'])) : ?>
         <p>削除パスワード:</p>
         <input type="password" name="password"><br />
         <?php else : ?>
@@ -55,7 +55,12 @@
                 <?php foreach ($posts as $post) : ?>
                     <li>
                         ID : <?php echo $post['id'] ?><br />
-                        名前：<?php echo h($post['name']) ?><br />
+                        名前：
+                        <?php if (isset($post['user_id'])) : ?>
+                        <a href="profile.php?id=<?php echo $post['user_id'] ?>"><?php echo h($post['name']) ?></a><br />
+                        <?php else : ?>
+                        <?php echo h($post['name']) ?><br />
+                        <?php endif ?>
                         本文：<font color="<?php echo $post['color'] ?>">
                                   <?php echo h($post['comment']) ?>
                               </font><br />
@@ -66,7 +71,6 @@
                                 なし<br />
                             <?php endif ?>
                         時間：<?php echo $post['created_at'] ?><br />
-                         
                         <!--if文でパスワードが設定されていなかったら非表示   -->
                         <?php if (isset($post['password']) && !empty($post['password'])) : ?>
                         <form action="delete.php" method="get">

@@ -6,7 +6,7 @@ use bbs
 SELECT * FROM bbs.users;  
 
 source ~/environment/kadai-ibg/memo/create_table_bbs.users.sql
-
+<?php var_dump($post['password']);exit; ?>
 $ git push origin master
 
  SELECT * FROM bbs.post;
