@@ -1,5 +1,5 @@
 <?php
-//MySQLサーバ接続
+session_start();
 require_once('function/db_connect.php');
 require_once('function/function.php'); 
 
@@ -17,8 +17,11 @@ $post = $statement->fetch(PDO::FETCH_ASSOC);;
 
 if ($post === false) {
     header('HTTP/1.1 404 Not Found') ;
-    exit;
+    exit;//よく考える
 } else if (empty($post['password']) && empty($post['user_id'])) {
+    header('HTTP/1.1 400 Bad Request');
+    exit;
+} else if (($post['user_id'] !== $_SESSION['user_id']) && (!empty($post['user_id']))) {
     header('HTTP/1.1 400 Bad Request');
     exit;
 } else {
@@ -28,7 +31,7 @@ if ($post === false) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //パスワードが一致しない、不正時のエラー処理　user_idが存在していたら
     $errors = [];
-    if ($post['user_id'] === null) { 
+    if (empty($post['user_id'])) { 
         if ($origin_password !== $_POST['password_input']) {
             $errors[] = "パスワードが違います";
         }

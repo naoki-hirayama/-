@@ -72,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rename_file_path = 'images/'.$rename_file;
             move_uploaded_file($_FILES['picture']['tmp_name'], $rename_file_path);
         }
-        // var_dump($_password);exit;
         //パスワードが入力されない時の処理
         if (strlen($_password) === 0) {
             $password = null;
@@ -91,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $picture = $rename_file;
         }
-       
+        
         $sql = 'INSERT INTO post (name,comment,color,password,picture,user_id) VALUES (:name,:comment,:color,:password,:picture,:user_id)';
         
         $statement = $database->prepare($sql);

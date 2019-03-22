@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit;
+}
 
 require_once('function/db_connect.php');
 require_once('function/function.php');
@@ -65,10 +69,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $statement->bindParam(':password', $password_hash);
         
         $statement->execute();
-        
+        $user_id = $database->lastInsertId();
         $statement = null;
-        
+
         $_SESSION['username'] = $name;
+        $_SESSION['user_id'] = $user_id;
         
         header('Location: registered.php');
         exit;

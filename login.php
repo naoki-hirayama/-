@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit;
+}
 
 require_once('function/db_connect.php');
 require_once('function/function.php');
@@ -25,11 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     if (empty($errors)) {
-        $name = $user['name'];
-        $id = $user['id'];
-    
-        $_SESSION['username'] = $name;
-        $_SESSION['user_id'] = $id;
+        $_SESSION['username'] = $user['name'];
+        $_SESSION['user_id'] = $user['id'];
         header('Location: index.php');
         exit;
     }

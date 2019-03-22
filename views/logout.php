@@ -5,7 +5,7 @@
 
 <body>
     <h1>ログアウトしました。</h1>　
-    <a href="login.php"　class="btn btn-primary">トップへ</a>
+    <a href="index.php"　class="btn btn-primary">トップへ</a>
 </body>
 
 <?php

@@ -8,8 +8,8 @@
         <input type="submit" name="logout" value="ログアウト">
     </form>
     <?php else : ?>
-    <a href = 'register.php'>登録はこちらから</a><br />
-    <a href = 'login.php'>ログインはこちらから</a>
+    <a href="register.php">登録はこちらから</a><br />
+    <a href="login.php">ログインはこちらから</a>
     <?php endif ?>
     <p>ようこそ！<?php echo !empty($_SESSION['username']) ? $_SESSION['username'] : 'ゲスト'; ?>さん</p>
     <h1>投稿画面</h1>
@@ -68,15 +68,15 @@
                         時間：<?php echo $post['created_at'] ?><br />
                          
                         <!--if文でパスワードが設定されていなかったら非表示   -->
-                        <?php if (isset($post['password']) && $post['password'] !== null) : ?>
-                        <form action="delete.php" method ="get">
-                            <input type ="hidden" name ="id" value ="<?php echo $post['id'] ?>">
-                            <input type ="submit" value ="削除"/><br />
+                        <?php if (isset($post['password']) && !empty($post['password'])) : ?>
+                        <form action="delete.php" method="get">
+                            <input type="hidden" name="id" value="<?php echo $post['id'] ?>">
+                            <input type="submit" value="削除"/><br />
                         </form>
                         <?php elseif (isset($post['user_id']) && $post['user_id'] == $_SESSION['user_id']) : ?>
-                        <form action ="delete.php" method ="get">
-                            <input type ="hidden" name ="id" value ="<?php echo $post['id'] ?>">
-                            <input type ="submit" value ="ユーザー削除"/><br />
+                        <form action="delete.php" method ="get">
+                            <input type="hidden" name="id" value="<?php echo $post['id'] ?>">
+                            <input type="submit" value="ユーザー削除"/><br />
                         </form>
                         <?php endif ?>
                         <!--　ここまで　-->
