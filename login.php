@@ -26,10 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (empty($errors)) {
         $name = $user['name'];
-        $user_id = $user['id'];
+        $id = $user['id'];
     
         $_SESSION['username'] = $name;
-        $_SESSION['user_id'] = $user_id;
+        $_SESSION['user_id'] = $id;
         header('Location: index.php');
         exit;
     }

@@ -72,11 +72,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rename_file_path = 'images/'.$rename_file;
             move_uploaded_file($_FILES['picture']['tmp_name'], $rename_file_path);
         }
+        // var_dump($_password);exit;
         //パスワードが入力されない時の処理
         if (strlen($_password) === 0) {
             $password = null;
         } else {
             $password = $_password;
+        }
+        //ログインユーザーが投稿した時
+        if (isset($_SESSION['user_id'])) {
+            $user_id = $_SESSION['user_id'];
+        } else {
+            $user_id = null;
         }
         // 画像が投稿されない時の処理
         if (strlen($_FILES['picture']['name']) === 0) {
@@ -84,8 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $picture = $rename_file;
         }
-        
-        $sql = 'INSERT INTO post (name,comment,color,password,picture) VALUES (:name,:comment,:color,:password,:picture)';
+       
+        $sql = 'INSERT INTO post (name,comment,color,password,picture,user_id) VALUES (:name,:comment,:color,:password,:picture,:user_id)';
         
         $statement = $database->prepare($sql);
         
@@ -94,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $statement->bindParam(':color', $color);
         $statement->bindParam(':password', $password);
         $statement->bindParam(':picture', $picture);
+        $statement->bindParam(':user_id', $user_id);
         
         $statement->execute();
         
@@ -108,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
     $total_records = $stmt->fetchColumn();
     $max_pager_range = 10;
-    $per_page_records = 3;
+    $per_page_records = 6;
     if (!empty($_GET['page'])) {
         $page = $_GET['page'];
     } else {

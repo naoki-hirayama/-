@@ -13,23 +13,25 @@ $statement->bindParam(':id', $_GET['id']);
 
 $statement->execute();
 
-$record = $statement->fetch(PDO::FETCH_ASSOC);;
+$post = $statement->fetch(PDO::FETCH_ASSOC);;
 
-if ($record === false) {
+if ($post === false) {
     header('HTTP/1.1 404 Not Found') ;
     exit;
-} elseif (empty($record['password'])) {
+} else if (empty($post['password']) && empty($post['user_id'])) {
     header('HTTP/1.1 400 Bad Request');
     exit;
 } else {
-    $origin_password = $record['password'];
+    $origin_password = $post['password'];
 }
 // delete.phpからPOST送信された
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //パスワードが一致しない、不正時のエラー処理
+    //パスワードが一致しない、不正時のエラー処理　user_idが存在していたら
     $errors = [];
-    if ($origin_password !== $_POST['password_input']) {
-        $errors[] = "パスワードが違います";
+    if ($post['user_id'] === null) { 
+        if ($origin_password !== $_POST['password_input']) {
+            $errors[] = "パスワードが違います";
+        }
     }
     //パスワードが一致した時 
     if (empty($errors)) {
@@ -44,8 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $statement = null;
         // 投稿に画像がある時
-        if (($record['picture']) !== null) {
-            unlink("images/{$record['picture']}");
+        if (($post['picture']) !== null) {
+            unlink("images/{$post['picture']}");
         }
         
         header('Location: deleted.php');

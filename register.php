@@ -10,8 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim(mb_convert_kana($_POST['name'], 's'));
     if (mb_strlen($name, 'UTF-8') === 0) {
         $errors[] = "名前は入力必須です。";
-    } else if (mb_strlen($name, 'UTF-8') < 4) {
-        $errors[] = "名前は4文字以上です。";
     } else if (mb_strlen($name, 'UTF-8') > 10) {
         $errors[] = "名前は１０文字以内です。";
     }
@@ -71,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $statement = null;
         
         $_SESSION['username'] = $name;
-        
         
         header('Location: registered.php');
         exit;
