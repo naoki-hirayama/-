@@ -17,7 +17,7 @@ $post = $statement->fetch(PDO::FETCH_ASSOC);
 
 if ($post === false) {
     header('HTTP/1.1 404 Not Found');
-    exit;//よく考える
+    exit;
 } else if (empty($post['password']) && empty($post['user_id'])) {
     header('HTTP/1.1 400 Bad Request');
     exit;

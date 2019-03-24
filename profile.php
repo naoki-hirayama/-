@@ -13,8 +13,6 @@ $statement->bindParam(':id', $_GET['id']);
 $statement->execute();
 
 $user = $statement->fetch(PDO::FETCH_ASSOC);
-//getで送られてきたuseridをもとにプロフィールを表示
-//user['picture'] $userに入れる
 if ($user === false) {
     header('HTTP/1.1 404 Not Found');
     exit;

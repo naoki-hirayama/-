@@ -1,7 +1,7 @@
 $ sudo service mysqld start
 
 $ mysql -u root
-
+TRUNCATE table users; 
 use bbs
 SELECT * FROM bbs.users;  
 
@@ -10,6 +10,7 @@ source ~/environment/kadai-ibg/memo/create_table_bbs.users.sql
 $ git push origin master
 
  SELECT * FROM bbs.post;
+ SELECT * FROM bbs.users;
  DELETE FROM bbs.post;
  
 var_dump($count_records);exit;
@@ -119,3 +120,14 @@ http://php.net/manual/ja/features.file-upload.errors.php
     * パスワードは暗号化して保存する
 * ログイン中の場合は投稿一覧画面上部に、ログイン中のユーザー名を表示する。
 * この課題ではログインできるところまでできればOK
+
+// SQL
+        // SELECT * FROM table;
+        // INSERT INTO table ()  values (), (), ..., ();
+        // UPDATE table SET column = '', ... WHERE id = ?;
+        // DELETE FROM table WHERE id = ?;
+        // テーブルを追加
+        // CREATE TABLE table;
+        
+        // テーブルを変更
+        // ALTER TABLE table modify(change)
