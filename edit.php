@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $statement = null;
         
-        header('Location: index.php');
+        header('Location: profile.php?id='.$_GET['id'].'');
         exit;
     }    
 }
