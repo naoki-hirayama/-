@@ -4,7 +4,6 @@ if (isset($_SESSION['username'])) {
     header("Location: index.php");
     exit;
 }
-
 require_once('function/db_connect.php');
 require_once('function/function.php');
 $database = db_connect();
@@ -17,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if (mb_strlen($name, 'UTF-8') > 10) {
         $errors[] = "名前は１０文字以内です。";
     }
-    
     $login_id = trim(mb_convert_kana($_POST['login_id'], 's'));
     if (mb_strlen($login_id, 'UTF-8') === 0) {
         $errors[] = "ログインIDは入力必須です。";
@@ -39,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = "このログインIDはすでに存在します。";
         }
     }
-    
     $password = trim(mb_convert_kana($_POST['password'], 's'));
     if (mb_strlen($password, 'UTF-8') === 0) {
         $errors[] = "パスワードは入力必須です。";
@@ -50,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if (mb_strlen($password, 'UTF-8') > 30) {
         $errors[] = "パスワードが長すぎます。";
     }
-    
     //入力されたパスワードと確認パスワードが一致したら
     if ($password !== $_POST['confirm_password']) {
         $errors[] = "パスワードが一致しません。";
@@ -61,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         
         $sql = 'INSERT INTO users (name,login_id,password) VALUES (:name,:login_id,:password)';
-            
+
         $statement = $database->prepare($sql);
         
         $statement->bindParam(':name', $name);
