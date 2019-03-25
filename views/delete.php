@@ -24,15 +24,15 @@
             時間：<?php echo $post['created_at'] ?><br />
             ---------------------------------------------<br />
             <form action="delete.php?id=<?php echo h($post['id']) ?>" method="post">
-                <?php if (isset($post['password']) && $post['password'] !== null) : ?>
-                    <p>削除パスワード:</p>
-                    <input type="password" name="password_input"><br />
-                    <input type="submit" value="削除"/><br />
-                <?php else : ?>
-                    <input type="hidden" name="password_input">
-                    <input type="submit" value="ユーザー削除"/><br />
-                <?php endif ?>
-                <a href="index.php">戻る</a>
+            <?php if (isset($post['password']) && $post['password'] !== null) : ?>
+                <p>削除パスワード:</p>
+                <input type="password" name="password_input"><br />
+                <input type="submit" value="削除"/><br />
+            <?php else : ?>
+                <input type="hidden" name="password_input">
+                <input type="submit" value="ユーザー削除"/><br />
+            <?php endif ?>
+            <a href="index.php">戻る</a>
             </form>        
         </li>
     </ul>

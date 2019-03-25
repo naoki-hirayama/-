@@ -45,7 +45,7 @@
         <?php else : ?>
             <input type="hidden" name="password">
         <?php endif ?>
-            <input type="submit" name="submit" value="投稿">
+        <input type="submit" name="submit" value="投稿">
     </form>
     <?php if (empty($errors)) : ?>
         <h2>投稿一覧</h2>
