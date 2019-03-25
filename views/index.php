@@ -16,6 +16,7 @@
     <h1>投稿画面</h1>
     <!-- エラーメッセージ -->
     <?php  include('views/layouts/errormessage.php') ?>
+    
     <form action="index.php" method="post" enctype="multipart/form-data">
         <p>名前：<?php echo !empty($_SESSION['username']) ? h($_SESSION['username']) : ''; ?></p>
         <?php if (!empty($_SESSION['username'])) : ?>

@@ -140,9 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $statement = $database->prepare($sql);
     $statement->execute();
     $users = $statement->fetchAll();
-    // foreach ($users as $user) {
-    //     echo $user['name'];
-    // }
+    
 }
     
 $statement = null;
