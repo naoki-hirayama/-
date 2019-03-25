@@ -8,7 +8,7 @@
     <?php  include('views/layouts/loginuserinfo.php') ?>
     <!--エラーメッセージ-->
     <?php  include('views/layouts/errormessage.php'); ?>
-    <!-- ここまで -->
+
     <ul>
         <li>
             名前：<?php echo h($post['name']); ?><br />

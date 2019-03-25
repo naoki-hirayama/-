@@ -69,14 +69,14 @@
                               <?php echo h($post['comment']) ?>
                           </font><br />
                     画像：
-                        <?php if (isset($post['picture']) && $post['picture'] !== null) : ?>
+                        <?php if (!empty($post['picture'])) : ?>
                             <img src="images/<?php echo $post['picture'] ?>" width="300" height="200"><br />
                         <?php else : ?>
                             なし<br />
                         <?php endif ?>
                     時間：<?php echo $post['created_at'] ?><br />
                     <!--if文でパスワードが設定されていなかったら非表示   -->
-                    <?php if (isset($post['password']) && !empty($post['password'])) : ?>
+                    <?php if (!empty($post['password'])) : ?>
                         <form action="delete.php" method="get">
                             <input type="hidden" name="id" value="<?php echo $post['id'] ?>">
                             <input type="submit" value="削除"/><br />

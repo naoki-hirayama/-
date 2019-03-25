@@ -4,7 +4,6 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit;
 }
-
 require_once('function/db_connect.php');
 require_once('function/function.php');
 $database = db_connect();
@@ -73,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } 
     }
-    
     $comment = $_POST['comment'];
     if (strlen($comment) !== 0) {
         $_comment = trim(mb_convert_kana($comment, 's'));
@@ -133,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         header('Location: profile.php?id='.$user['id'].'');
         exit;
-    }    
+    }
 }
 
 include('views/edit.php');

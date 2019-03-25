@@ -6,6 +6,7 @@
     <h1>ユーザー登録画面</h1>
     <!-- エラーメッセージ -->
     <?php  include('views/layouts/errormessage.php'); ?>
+    
     <form action="register.php" method="post" >
         <p>名前：</p>
         <input type="text" name="name" value="<?php echo !empty($_POST['name']) ? $_POST['name'] : '' ?>"><br />

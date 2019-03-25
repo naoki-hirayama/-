@@ -8,7 +8,7 @@
     <?php  include('views/layouts/loginuserinfo.php') ?>
     <!-- エラーメッセージ -->
     <?php  include('views/layouts/errormessage.php') ?>
-    <!-- ここまで -->
+    
     <form action="edit.php" method="post" enctype="multipart/form-data">
         <p>ログインID：</p>
         <input type="text" name="login_id" value="<?php echo h($user['login_id']) ?>">
