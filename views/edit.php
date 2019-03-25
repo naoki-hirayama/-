@@ -4,10 +4,12 @@
 ?>
 <body>
     <h1>プロフィール編集ぺージ</h1>
+    <!--ログイン情報-->
+    <?php  include('views/layouts/loginuserinfo.php') ?>
     <!-- エラーメッセージ -->
     <?php  include('views/layouts/errormessage.php') ?>
     <!-- ここまで -->
-    <form action="edit.php?id=<?php echo h($user['id']) ?>" method="post" enctype="multipart/form-data">
+    <form action="edit.php" method="post" enctype="multipart/form-data">
         <p>ログインID：</p>
         <input type="text" name="login_id" value="<?php echo h($user['login_id']) ?>">
         <p>名前：</p>
@@ -28,7 +30,7 @@
         <?php endif ?>
         <input type="submit" name="submit" value="編集する">
     </form>
-    <a href="password.php?id=<?php echo h($user['id']) ?>">パスワードを変える</a>    
+    <a href="password.php">パスワードを変える</a><br />    
     <a href="profile.php?id=<?php echo h($user['id']) ?>">戻る</a>
 </body>
 <?php

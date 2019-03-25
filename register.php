@@ -74,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $_SESSION['username'] = $name;
         $_SESSION['user_id'] = $user_id;
+        $_SESSION['login_id'] = $login_id;
         
         header('Location: registered.php');
         exit;

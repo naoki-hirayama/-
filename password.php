@@ -3,12 +3,8 @@ session_start();
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit;
-} else if ($_SESSION['user_id'] !== $_GET['id']) {
-    header("Location: index.php"); 
-    exit;
-}
+} 
 
-//パラメーターがない時どうする？
 require_once('function/db_connect.php');
 require_once('function/function.php');
 $database = db_connect();
@@ -17,7 +13,7 @@ $sql = 'SELECT * FROM users WHERE id = :id';
 
 $statement = $database->prepare($sql);
 
-$statement->bindParam(':id', $_GET['id']);
+$statement->bindParam(':id', $_SESSION['user_id']);
 
 $statement->execute();
 
@@ -28,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!password_verify($_POST['current_password'],$user['password'])) {
         $errors[] = "パスワードが間違っています。";
     }
-    
-    
     
     $new_password = trim(mb_convert_kana($_POST['new_password'], 's'));
     if (mb_strlen($new_password, 'UTF-8') === 0) {
@@ -54,14 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
         $statement = $database->prepare($sql);
         
-        $statement->bindParam(':id', $_GET['id']);
+        $statement->bindParam(':id', $_SESSION['user_id']);
         $statement->bindParam(':password', $password_hash);
         
         $statement->execute();
        
         $statement = null;
         
-        header('Location: edit.php?id='.$_GET['id'].'');
+        header('Location: edit.php');
         exit;
     }
 }

@@ -18,6 +18,4 @@ if ($user === false) {
     exit;
 }
 
-
-
 include('views/profile.php');

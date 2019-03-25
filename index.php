@@ -135,6 +135,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $statement->execute();
     $posts = $statement->fetchAll();
+    
+    $sql = 'SELECT * FROM users';
+    $statement = $database->prepare($sql);
+    $statement->execute();
+    $users = $statement->fetchAll();
+    // foreach ($users as $user) {
+    //     echo $user['name'];
+    // }
 }
     
 $statement = null;

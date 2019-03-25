@@ -8,9 +8,9 @@
     <?php  include('views/layouts/errormessage.php'); ?>
     <form action="register.php" method="post" >
         <p>名前：</p>
-        <input type="text" name="name" value=""><br />
+        <input type="text" name="name" value="<?php echo !empty($_POST['name']) ? $_POST['name'] : '' ?>"><br />
         <p>ログインID：</p>
-        <input type="text" name="login_id" value=""><br />
+        <input type="text" name="login_id" value="<?php echo !empty($_POST['login_id']) ? $_POST['login_id'] : '' ?>"><br />
         <p>パスワード：</p>
         <input type="password" name="password"><br />
         <p>パスワード(確認)：</p>

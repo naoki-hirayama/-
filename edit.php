@@ -1,16 +1,8 @@
 <?php
 session_start();
-// ログインしているか無いとログアウト時アクセスできる
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit;
-}
-// 他の人のページを見てないか
-if (isset($_SESSION['user_id'])) {
-    if ($_SESSION['user_id'] !== $_GET['id']) {
-        header("Location: index.php");
-        exit;
-    }    
 }
 
 require_once('function/db_connect.php');
@@ -22,7 +14,7 @@ $sql = 'SELECT * FROM users WHERE id = :id';
 
 $statement = $database->prepare($sql);
 
-$statement->bindParam(':id', $_GET['id']);
+$statement->bindParam(':id', $_SESSION['user_id']);
 
 $statement->execute();
 
@@ -87,8 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_comment = trim(mb_convert_kana($comment, 's'));
         if (mb_strlen($_comment, 'UTF-8') === 0) {
             $errors[] = "本文を正しく入力してください。";
-        } else if (mb_strlen($_comment, 'UTF-8') > 40) {
-            $errors[] = "本文は40文字以内です。";
+        } else if (mb_strlen($_comment, 'UTF-8') > 50) {
+            $errors[] = "本文は50文字以内です。";
         } 
     }
     // 成功した場合はDBへ保存してprofile.phpにリダイレクトする
@@ -122,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $statement = $database->prepare($sql);
         
-        $statement->bindParam(':id', $_GET['id']);
+        $statement->bindParam(':id', $_SESSION['user_id']);
         $statement->bindParam(':name', $name);
         $statement->bindParam(':login_id', $login_id);
         $statement->bindParam(':picture', $picture);
@@ -133,23 +125,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         unset($_SESSION['username']);
         $_SESSION['username'] = $name;
         
-        $statement = null;
-        
-        $sql = 'UPDATE post SET name = :name WHERE user_id = :user_id';
-        
-        $statement = $database->prepare($sql);
-        
-        $statement->bindParam(':user_id', $_GET['id']);
-        $statement->bindParam(':name', $name);
-        
-        $statement->execute();
+        if ($picture !== null) {
+            $_SESSION['picture'] = $picture;
+        }
         
         $statement = null;
         
-        header('Location: profile.php?id='.$_GET['id'].'');
+        header('Location: profile.php?id='.$user['id'].'');
         exit;
     }    
 }
-
 
 include('views/edit.php');
