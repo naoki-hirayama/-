@@ -115,6 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total_records = $stmt->fetchColumn();
     $max_pager_range = 10;
     $per_page_records = 5;
+    
     if (!empty($_GET['page'])) {
         $page = $_GET['page'];
     } else {

@@ -4,7 +4,7 @@ function h($s)
 {
     return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
 }
-//ユーザーテーブルから一件のレコード取得
+//ユーザーテーブルから一件のレコードを取得
 function fetch_user_by_id($id, $database)
 {
     $sql = 'SELECT * FROM users WHERE id = :id';
@@ -17,7 +17,7 @@ function fetch_user_by_id($id, $database)
     
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
-//ポストテーブルから一件のレコード取得
+//ポストテーブルから一件のレコードを取得
 function fetch_post_by_id($id, $database)
 {
     $sql = 'SELECT * FROM posts WHERE id = :id';
@@ -29,4 +29,9 @@ function fetch_post_by_id($id, $database)
     $statement->execute();
     
     return $statement->fetch(PDO::FETCH_ASSOC);
+}
+
+function dd($s)
+{
+    return var_dump($s);
 }

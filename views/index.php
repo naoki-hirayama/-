@@ -59,7 +59,7 @@
                     名前：
                     <?php if (isset($post['user_id'])) : ?>
                         <?php foreach ($users as $user) : ?>
-                            <?php if ($post['user_id'] == $user['id']) : ?>
+                            <?php if ($post['user_id'] === $user['id']) : ?>
                                 <a href="profile.php?id=<?php echo $user['id'] ?>"><?php echo h($user['name']) ?></a><br />
                             <?php endif ?>
                         <?php endforeach ?>
@@ -77,12 +77,12 @@
                         <?php endif ?>
                     時間：<?php echo $post['created_at'] ?><br />
                     <!--if文でパスワードが設定されていなかったら非表示   -->
-                    <?php if (!empty($post['password'])) : ?>
+                    <?php if (!empty($post['password'] )) : ?>
                         <form action="delete.php" method="get">
                             <input type="hidden" name="id" value="<?php echo $post['id'] ?>">
                             <input type="submit" value="削除"/><br />
                         </form>
-                    <?php elseif (isset($post['user_id']) && $post['user_id'] === $_SESSION['user_id']) : ?>
+                    <?php elseif ($post['user_id'] === $_SESSION['user_id']) : ?>
                         <form action="delete.php" method ="get">
                             <input type="hidden" name="id" value="<?php echo $post['id'] ?>">
                             <input type="submit" value="ユーザー削除"/><br />
