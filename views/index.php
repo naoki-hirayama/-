@@ -71,7 +71,7 @@
                           </font><br />
                     画像：
                         <?php if (!empty($post['picture'])) : ?>
-                            <img src="images/<?php echo $post['picture'] ?>" width="300" height="200"><br />
+                            <img src="images/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
                         <?php else : ?>
                             なし<br />
                         <?php endif ?>

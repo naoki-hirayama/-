@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if (mb_strlen($name, 'UTF-8') > 10) {
         $errors[] = "名前は１０文字以内です。";
     } 
-    
     $comment = trim(mb_convert_kana($_POST['comment'], 's'));
     if (mb_strlen($comment, 'UTF-8') === 0) {
         $errors[] = "本文は入力必須です。";
@@ -115,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM posts');
     $total_records = $stmt->fetchColumn();
     $max_pager_range = 10;
-    $per_page_records = 6;
+    $per_page_records = 5;
     if (!empty($_GET['page'])) {
         $page = $_GET['page'];
     } else {
@@ -143,13 +142,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
-    $ids = implode(',',$user_ids);
+    $ids = implode(',', $user_ids);
     
     $sql = 'SELECT * FROM users WHERE id IN ('.$ids.')';
     $statement = $database->prepare($sql);
     $statement->execute();
     $users = $statement->fetchAll();
 }
-    
+
 $statement = null;
 include('views/index.php');

@@ -21,9 +21,9 @@
                 <?php else : ?>
                     なし<br />
                 <?php endif ?>
-            時間：<?php echo $post['created_at'] ?><br />
+            時間：<?php echo h($post['created_at']) ?><br />
             ---------------------------------------------<br />
-            <form action="delete.php?id=<?php echo h($post['id']) ?>" method="post">
+            <form action="delete.php?id=<?php echo $post['id'] ?>" method="post">
             <?php if (isset($post['password']) && $post['password'] !== null) : ?>
                 <p>削除パスワード:</p>
                 <input type="password" name="password_input"><br />
