@@ -1,26 +1,17 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
 } 
 require_once('function/db_connect.php');
 require_once('function/function.php');
 $database = db_connect();
-
-$sql = 'SELECT * FROM users WHERE id = :id';
-
-$statement = $database->prepare($sql);
-
-$statement->bindParam(':id', $_SESSION['user_id']);
-
-$statement->execute();
-
-$user = $statement->fetch(PDO::FETCH_ASSOC);
+$user_info = select_users($_SESSION['user_id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
-    if (!password_verify($_POST['current_password'],$user['password'])) {
+    if (!password_verify($_POST['current_password'],$user_info['password'])) {
         $errors[] = "パスワードが間違っています。";
     }
     $new_password = trim(mb_convert_kana($_POST['new_password'], 's'));

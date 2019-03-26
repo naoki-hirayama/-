@@ -1,23 +1,15 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
 }
 require_once('function/db_connect.php');
 require_once('function/function.php');
 $database = db_connect();
+$user_info = select_users($_SESSION['user_id']);
+
 $picture_max_size = 1*1024*1024; 
-
-$sql = 'SELECT * FROM users WHERE id = :id';
-
-$statement = $database->prepare($sql);
-
-$statement->bindParam(':id', $_SESSION['user_id']);
-
-$statement->execute();
-
-$user = $statement->fetch(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
@@ -28,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "名前は１０文字以内です。";
     }
     $login_id = trim(mb_convert_kana($_POST['login_id'], 's'));
-    if ($user['login_id'] !== $login_id) {    
+    if ($user_info['login_id'] !== $login_id) {    
         if (mb_strlen($login_id, 'UTF-8') === 0) {
             $errors[] = "ログインIDは入力必須です。";
         } else if (!preg_match("/^[a-zA-Z0-9]+$/", $login_id)) {
@@ -91,15 +83,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             move_uploaded_file($_FILES['picture']['tmp_name'], $rename_file_path);
         }
         // 画像が投稿されない時の処理
-        if (strlen($_FILES['picture']['name']) === 0 && empty($user['picture'])) {
+        if (strlen($_FILES['picture']['name']) === 0 && empty($user_info['picture'])) {
             $picture = null;
-        } else if (strlen($_FILES['picture']['name']) !== 0 && empty($user['picture'])) {
+        } else if (strlen($_FILES['picture']['name']) !== 0 && empty($user_info['picture'])) {
             $picture = $rename_file;
-        } else if (strlen($_FILES['picture']['name']) !== 0 && !empty($user['picture'])) {
+        } else if (strlen($_FILES['picture']['name']) !== 0 && !empty($user_info['picture'])) {
             $picture = $rename_file;
-            unlink("userimages/{$user['picture']}");
+            unlink("userimages/{$user_info['picture']}");
         } else {
-            $picture = $user['picture'];
+            $picture = $user_info['picture'];
         }
         //一言コメントが入力されない時の処理
         if (strlen($_comment) === 0) {
@@ -120,16 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $statement->execute();
         
-        unset($_SESSION['username']);
-        $_SESSION['username'] = $name;
-        
-        if ($picture !== null) {
-            $_SESSION['picture'] = $picture;
-        }
-        
         $statement = null;
         
-        header('Location: profile.php?id='.$user['id'].'');
+        header('Location: profile.php?id='.$user_info['id'].'');
         exit;
     }
 }

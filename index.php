@@ -1,14 +1,15 @@
 <?php
 session_start();
-
 require_once('function/db_connect.php');
 require_once('function/Pager.php');
 require_once('function/function.php');
-
 $database = db_connect();
 $picture_max_size = 1*1024*1024; 
 $select_color_options = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
 
+if (isset($_SESSION['user_id'])) {
+    $user_info = select_users($_SESSION['user_id']);
+}
 // POSTでアクセスされたら投稿処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
@@ -136,11 +137,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $statement->execute();
     $posts = $statement->fetchAll();
     
-    $sql = 'SELECT * FROM users';
+    $user_ids = [];
+    foreach ($posts as $post) {
+        if (isset($post['user_id'])) {
+            $user_ids[] = $post['user_id'];
+        }
+    }
+    
+    $ids = implode(',',$user_ids);
+    
+    $sql = 'SELECT * FROM users WHERE id IN ('.$ids.')';
     $statement = $database->prepare($sql);
     $statement->execute();
     $users = $statement->fetchAll();
-    
 }
     
 $statement = null;

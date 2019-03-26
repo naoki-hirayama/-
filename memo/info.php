@@ -131,3 +131,4 @@ http://php.net/manual/ja/features.file-upload.errors.php
         
         // テーブルを変更
         // ALTER TABLE table modify(change)
+select p.*, u.name from post p left join user u on p.user_id = u.id order by created_at desc limit :start_page, :per_page_records;

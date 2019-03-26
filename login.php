@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['username'])) {
+if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
 }
@@ -10,7 +10,7 @@ require_once('function/function.php');
 $database = db_connect();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //if文で書く修正 
+    
     $sql = 'SELECT * FROM users WHERE login_id = BINARY :login_id';
     $statement = $database->prepare($sql);
     
@@ -29,12 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     if (empty($errors)) {
-        $_SESSION['username'] = $user['name'];
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['login_id'] = $user['login_id'];
-        if (isset($user['picture'])) {
-            $_SESSION['picture'] = $user['picture'];
-        }
         header('Location: index.php');
         exit;
     }

@@ -3,7 +3,7 @@
     include('views/layouts/header.php');
 ?>
 <body>
-    <?php if (!empty($_SESSION['username'])) : ?>
+    <?php if (!empty($_SESSION['user_id'])) : ?>
     <form action="logout.php" method="get" >
         <input type="submit" name="logout" value="ログアウト">
     </form>
@@ -18,9 +18,9 @@
     <?php  include('views/layouts/errormessage.php') ?>
     
     <form action="index.php" method="post" enctype="multipart/form-data">
-        <p>名前：<?php echo !empty($_SESSION['username']) ? h($_SESSION['username']) : ''; ?></p>
-        <?php if (!empty($_SESSION['username'])) : ?>
-            <input type="hidden" name="name" value="<?php echo h($_SESSION['username']) ?>">
+        <p>名前：<?php echo !empty($_SESSION['user_id']) ? h($user_info['name']) : ''; ?></p>
+        <?php if (!empty($_SESSION['user_id'])) : ?>
+            <input type="hidden" name="name" value="<?php echo h($user_info['name']) ?>">
         <?php else : ?>
             <input type="text" name="name" value="<?php echo !empty($_POST['name']) ? $_POST['name'] : '' ?>">
         <?php endif ?>

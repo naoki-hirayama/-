@@ -1,8 +1,8 @@
-<?php if (isset($_SESSION['picture'])) : ?>
-    <img src="userimages/<?php echo $_SESSION['picture'] ?>" width="50" height="50"><br />
+<?php if (isset($user_info['picture'])) : ?>
+    <img src="userimages/<?php echo h($user_info['picture']) ?>" width="50" height="50"><br />
 <?php endif ?>
-<?php if (isset($_SESSION['username'])) : ?>
-    <P>ようこそ！<?php echo $_SESSION['username'] ?>さん(<?php echo $_SESSION['login_id'] ?>)</P>
+<?php if (isset($_SESSION['user_id'])) : ?>
+    <P>ようこそ！<?php echo h($user_info['name']) ?>さん(<?php echo h($user_info['login_id']) ?>)</P>
 <?php else : ?>
     <P>ようこそ!ゲストさん</P>
 <?php endif ?>

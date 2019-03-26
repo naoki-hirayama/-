@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['username'])) {
+if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
 }
@@ -68,9 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user_id = $database->lastInsertId();
         $statement = null;
 
-        $_SESSION['username'] = $name;
         $_SESSION['user_id'] = $user_id;
-        $_SESSION['login_id'] = $login_id;
         
         header('Location: registered.php');
         exit;

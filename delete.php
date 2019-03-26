@@ -2,18 +2,12 @@
 session_start();
 require_once('function/db_connect.php');
 require_once('function/function.php'); 
-
 $database = db_connect();
 
-$sql = 'SELECT * FROM post WHERE id = :id';
-
-$statement = $database->prepare($sql);
-
-$statement->bindParam(':id', $_GET['id']);
-
-$statement->execute();
-
-$post = $statement->fetch(PDO::FETCH_ASSOC);
+$post = select_post($_GET['id']);
+if (isset($_SESSION['user_id'])) {
+    $user_info = select_users($_SESSION['user_id']);
+}
 
 if ($post === false) {
     header('HTTP/1.1 404 Not Found');
