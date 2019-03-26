@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM posts');
     $total_records = $stmt->fetchColumn();
     $max_pager_range = 10;
-    $per_page_records = 5;
+    $per_page_records = 2;
     
     if (!empty($_GET['page'])) {
         $page = $_GET['page'];
@@ -144,11 +144,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     $ids = implode(',', $user_ids);
-    
-    $sql = 'SELECT * FROM users WHERE id IN ('.$ids.')';
-    $statement = $database->prepare($sql);
-    $statement->execute();
-    $users = $statement->fetchAll();
+
+    if (!empty($ids)) {
+        $sql = 'SELECT * FROM users WHERE id IN ('.$ids.')';
+        $statement = $database->prepare($sql);
+        $statement->execute();
+        $users = $statement->fetchAll();
+    } else {
+        $users = null;
+    }
 }
 
 $statement = null;
