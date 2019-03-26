@@ -57,7 +57,7 @@
                 <li>
                     ID : <?php echo $post['id'] ?><br />
                     名前：
-                    <?php if (isset($post['user_id']) && isset($users)) : ?>
+                    <?php if (isset($post['user_id'])) : ?>
                         <?php foreach ($users as $user) : ?>
                             <?php if ($post['user_id'] === $user['id']) : ?>
                                 <a href="profile.php?id=<?php echo $user['id'] ?>"><?php echo h($user['name']) ?></a><br />
