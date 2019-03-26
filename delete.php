@@ -4,9 +4,9 @@ require_once('function/db_connect.php');
 require_once('function/function.php'); 
 $database = db_connect();
 
-$post = select_post($_GET['id']);
+$post = fetch_post_by_id($_GET['id'], $database);
 if (isset($_SESSION['user_id'])) {
-    $user_info = select_users($_SESSION['user_id']);
+    $user_info = fetch_user_by_id($_SESSION['user_id'], $database);
 }
 
 if ($post === false) {
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //パスワードが一致した時 
     if (empty($errors)) {
         
-        $sql = 'DELETE FROM post WHERE id = :id';
+        $sql = 'DELETE FROM posts WHERE id = :id';
         
         $statement = $database->prepare($sql);
         

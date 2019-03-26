@@ -7,6 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 require_once('function/db_connect.php');
 require_once('function/function.php');
 $database = db_connect();
-$user_info = select_users($_SESSION['user_id']);
+$user_info = fetch_user_by_id($_SESSION['user_id'], $database);
 
 include('views/registered.php');

@@ -5,9 +5,10 @@ require_once('function/function.php');
 $database = db_connect();
 
 if (isset($_SESSION['user_id'])) {
-    $user_info = select_users($_SESSION['user_id']);
+    $user_info = fetch_user_by_id($_SESSION['user_id'], $database);
 }
-$user = select_users($_GET['id']);
+
+$user = fetch_user_by_id($_GET['id'], $database);
 
 if ($user === false) {
     header('HTTP/1.1 404 Not Found');

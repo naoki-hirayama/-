@@ -5,10 +5,8 @@ function h($s)
     return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
 }
 //ユーザーテーブルから一件のレコード取得
-function select_users($id)
+function fetch_user_by_id($id,$database)
 {
-    $database = db_connect();
-    
     $sql = 'SELECT * FROM users WHERE id = :id';
     
     $statement = $database->prepare($sql);
@@ -20,11 +18,9 @@ function select_users($id)
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
 //ポストテーブルから一件のレコード取得
-function select_post($id)
+function fetch_post_by_id($id,$database)
 {
-    $database = db_connect();
-    
-    $sql = 'SELECT * FROM post WHERE id = :id';
+    $sql = 'SELECT * FROM posts WHERE id = :id';
     
     $statement = $database->prepare($sql);
     

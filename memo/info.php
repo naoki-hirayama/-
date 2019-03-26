@@ -9,9 +9,9 @@ source ~/environment/kadai-ibg/memo/create_table_bbs.users.sql
 <?php var_dump($post['password']);exit; ?>
 $ git push origin master
 
- SELECT * FROM bbs.post;
+ SELECT * FROM bbs.posts;
  SELECT * FROM bbs.users;
- DELETE FROM bbs.post;
+ DELETE FROM bbs.posts;
  
 var_dump($count_records);exit;
  

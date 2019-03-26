@@ -8,7 +8,7 @@ $picture_max_size = 1*1024*1024;
 $select_color_options = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
 
 if (isset($_SESSION['user_id'])) {
-    $user_info = select_users($_SESSION['user_id']);
+    $user_info = fetch_user_by_id($_SESSION['user_id'], $database);
 }
 // POSTでアクセスされたら投稿処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = " パスワードは半角英数字です。";
         }
     }
-
     if (strlen($_FILES['picture']['name']) !== 0) {
         if ($_FILES['picture']['error'] === 2) {
             $errors[] = "サイズが".number_format($picture_max_size)."Bを超えています。";
@@ -92,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $picture = $rename_file;
         }
         
-        $sql = 'INSERT INTO post (name,comment,color,password,picture,user_id) VALUES (:name,:comment,:color,:password,:picture,:user_id)';
+        $sql = 'INSERT INTO posts (name,comment,color,password,picture,user_id) VALUES (:name,:comment,:color,:password,:picture,:user_id)';
         
         $statement = $database->prepare($sql);
         
@@ -113,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 } else {
     // GETでアクセスされた時
-    $stmt = $database->query('SELECT COUNT(id) AS CNT FROM post');
+    $stmt = $database->query('SELECT COUNT(id) AS CNT FROM posts');
     $total_records = $stmt->fetchColumn();
     $max_pager_range = 10;
     $per_page_records = 6;
@@ -128,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $offset = $pager->getOffset();
     $per_page_records = $pager->getPerPageRecords();
    
-    $sql = 'SELECT * FROM post ORDER BY created_at DESC LIMIT :start_page, :per_page_records';
+    $sql = 'SELECT * FROM posts ORDER BY created_at DESC LIMIT :start_page, :per_page_records';
     $statement = $database->prepare($sql);
     
     $statement->bindParam(':start_page', $offset, PDO::PARAM_INT);
