@@ -6,7 +6,9 @@ if (!isset($_SESSION['user_id'])) {
 }
 require_once('function/db_connect.php');
 require_once('function/function.php');
+require_once('function/UserRepository.php');
 $database = db_connect();
-$user_info = fetch_user_by_id($_SESSION['user_id'], $database);
+$user_repository = new UserRepository($database);
+$user_info = $user_repository->getUserDetailByUserId($_SESSION['user_id']);
 
 include('views/registered.php');

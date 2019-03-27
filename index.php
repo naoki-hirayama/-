@@ -3,13 +3,17 @@ session_start();
 require_once('function/db_connect.php');
 require_once('function/Pager.php');
 require_once('function/function.php');
+require_once('function/UserRepository.php');
+
 $database = db_connect();
+$user_repository = new UserRepository($database);
+if (isset($_SESSION['user_id'])) {
+    $user_info = $user_repository->getUserDetailByUserId($_SESSION['user_id']);
+}
 $picture_max_size = 1*1024*1024; 
 $select_color_options = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
 
-if (isset($_SESSION['user_id'])) {
-    $user_info = fetch_user_by_id($_SESSION['user_id'], $database);
-}
+
 // POSTでアクセスされたら投稿処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
@@ -114,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $database->query('SELECT COUNT(id) AS CNT FROM posts');
     $total_records = $stmt->fetchColumn();
     $max_pager_range = 10;
-    $per_page_records = 2;
+    $per_page_records = 5;
     
     if (!empty($_GET['page'])) {
         $page = $_GET['page'];
@@ -143,13 +147,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
-    $ids = implode(',', $user_ids);
-
-    if (!empty($ids)) {
-        $sql = 'SELECT * FROM users WHERE id IN ('.$ids.')';
-        $statement = $database->prepare($sql);
-        $statement->execute();
-        $users = $statement->fetchAll();
+    if (!empty($user_ids)) {
+        $ids = implode(',', $user_ids);
+        $users = $user_repository->getPerPageUsersDetails($ids);
     } else {
         $users = null;
     }

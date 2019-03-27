@@ -7,31 +7,19 @@ if (isset($_SESSION['user_id'])) {
 
 require_once('function/db_connect.php');
 require_once('function/function.php');
+require_once('function/UserRepository.php');
 $database = db_connect();
+$user_repository = new UserRepository($database);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $login_result = $user_repository->login($_POST['login_id'], $_POST['password']);
     
-    $sql = 'SELECT * FROM users WHERE login_id = BINARY :login_id';
-    $statement = $database->prepare($sql);
-    
-    $statement->bindParam(':login_id', $_POST['login_id']);
-    
-    $statement->execute();
-    $user = $statement->fetch();
-    
-    $statement = null;  
-    
-    $errors = [];
-    if ($user === false) {
-        $errors[] = "パスワードまたはログインidが間違っています。";
-    } else if (!password_verify($_POST['password'], $user['password'])) {
-        $errors[] = "パスワードまたはログインidが間違っています。";
-    }
-    
-    if (empty($errors)) {
-        $_SESSION['user_id'] = $user['id'];
+    if (is_numeric($login_result)) {
+        $_SESSION['user_id'] = $login_result;
         header('Location: index.php');
         exit;
+    } else {
+        $errors[] = $login_result;
     }
 } 
 

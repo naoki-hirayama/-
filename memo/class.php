@@ -13,46 +13,44 @@ class UserRepository
     {
         $sql = 'INSERT INTO users (name,login_id,password) VALUES (:name,:login_id,:password)';
 
-        $statement = $database->prepare($sql);
+        $statement = $this->database->prepare($sql);
         
-        $statement->bindParam(':name', $name);
-        $statement->bindParam(':login_id', $login_id);
-        $statement->bindParam(':password', $password_hash);
+        $statement->bindParam(':name', $this->name);
+        $statement->bindParam(':login_id', $this->login_id);
+        $statement->bindParam(':password', $this->password_hash);
         
         $statement->execute();
-        $user_id = $database->lastInsertId();
-        $statement = null;
+        return $this->database->lastInsertId();
     }
     
     public function edit()
     {
         $sql = 'UPDATE users SET name = :name, login_id = :login_id, picture = :picture, comment = :comment WHERE id = :id';
         
-        $statement = $database->prepare($sql);
+        $statement = $this->database->prepare($sql);
         
-        $statement->bindParam(':id', $_SESSION['user_id']);
-        $statement->bindParam(':name', $name);
-        $statement->bindParam(':login_id', $login_id);
-        $statement->bindParam(':picture', $picture);
-        $statement->bindParam(':comment', $comment);
+        $statement->bindParam(':id', $this->id);
+        $statement->bindParam(':name', $this->name);
+        $statement->bindParam(':login_id', $this->login_id);
+        $statement->bindParam(':picture', $this->picture);
+        $statement->bindParam(':comment', $this->comment);
         
-        $statement->execute();
+        return $statement->execute();
         
-        $statement = null;
     }
     
     //追加　セレクト
-    public function show()
+    function fetch_user_by_id($id, $database)
     {
-        $sql = 'SELECT * FROM users WHERE login_id = BINARY :login_id';
+        $sql = 'SELECT * FROM users WHERE id = :id';
+        
         $statement = $database->prepare($sql);
         
-        $statement->bindParam(':login_id', $_POST['login_id']);
+        $statement->bindParam(':id', $id);
         
         $statement->execute();
-        $user = $statement->fetch();
         
-        $statement = null;  
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
     
     public function validate()
