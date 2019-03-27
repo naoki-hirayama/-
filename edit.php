@@ -15,7 +15,7 @@ $user_info = $user_repository->getUserDetailByUserId($_SESSION['user_id']);
 $picture_max_size = 1*1024*1024; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    dd($_FILES['picture']['name']);
+    
     $validate_result = $user_repository->validateEdit($_POST['name'], $_POST['login_id'], $_FILES['picture']['name'], $_POST['comment'], $_SESSION['user_id']);
     
     if (empty($validate_result)) {
@@ -52,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         header('Location: profile.php?id='.$user_info['id'].'');
         exit;
+    } else {
+        $errors = $validate_result;
     }
 }
 
