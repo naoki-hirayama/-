@@ -48,23 +48,18 @@ class Pager
         if ($this->current_page <= $range['left']) {
             $start = 1;
             $end = min($this->max_pager_range, $this->getTotalPages());
-            
         } else if ($this->current_page < $this->getTotalPages() - $range['right']) {
             $start = $this->current_page - $range['left'];
             $end   = $this->current_page + $range['right'];
-            
-            
         } else {
             $start = max($this->getTotalPages() - $this->max_pager_range + 1, 1);
             $end   = $this->getTotalPages();
-            
         }
         
         $page_numbers = [];
         for ($i = $start; $i <= $end; $i++) {
             $page_numbers[] = $i;
         }
-        
         return $page_numbers;
     }
     

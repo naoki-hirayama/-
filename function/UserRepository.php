@@ -2,6 +2,7 @@
 class UserRepository
 {
     protected $database;
+    private $picture_max_size = 1*1024*1024;
     
     public function __construct($database)
     {
@@ -63,7 +64,6 @@ class UserRepository
         } else {
             return password_hash($trim_new_password, PASSWORD_DEFAULT);
         }
-            
     }
     
     public function editPassword($id, $password_hash)
@@ -207,8 +207,8 @@ class UserRepository
         }
         if (strlen($_FILES['picture']['name']) !== 0) {
             if ($_FILES['picture']['error'] === 2) {
-                $errors[] = "サイズが1MBを超えています。";
-            } else if ($_FILES['picture']['size'] > 1*1024*1024) {
+                $errors[] = "サイズが".number_format($this->getaxPictureSize())."MBを超えています。";
+            } else if ($_FILES['picture']['size'] > $this->getmaxPictureSize()) {
                 $errors[] = "不正な操作です。";
             } else {
                 // 画像ファイルのMIMEタイプチェック
@@ -238,4 +238,13 @@ class UserRepository
         return $errors;
     }
     
+    public function setMaxPictureSize($picture_max_size)
+    {
+        $this->picture_max_size = $picture_max_size;
+    }
+    
+    public function getMaxPictureSize()
+    {
+        return $this->picture_max_size;
+    }
 }
