@@ -207,8 +207,8 @@ class UserRepository
         }
         if (strlen($_FILES['picture']['name']) !== 0) {
             if ($_FILES['picture']['error'] === 2) {
-                $errors[] = "サイズが".number_format($picture_max_size)."Bを超えています。";
-            } else if ($_FILES['picture']['size'] > $picture_max_size) {
+                $errors[] = "サイズが1MBを超えています。";
+            } else if ($_FILES['picture']['size'] > 1*1024*1024) {
                 $errors[] = "不正な操作です。";
             } else {
                 // 画像ファイルのMIMEタイプチェック

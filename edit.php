@@ -15,12 +15,16 @@ $user_info = $user_repository->getUserDetailByUserId($_SESSION['user_id']);
 $picture_max_size = 1*1024*1024; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
+    dd($_FILES['picture']['name']);
     $validate_result = $user_repository->validateEdit($_POST['name'], $_POST['login_id'], $_FILES['picture']['name'], $_POST['comment'], $_SESSION['user_id']);
     
     if (empty($validate_result)) {
         if (!empty($_FILES['picture']['tmp_name'])) {
             // エラーがなくて画像が投稿された時の画像処理 
+            $posted_picture = $_FILES['picture']['tmp_name'];
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $picture_type = $finfo->file($posted_picture);
+            
             $specific_num = uniqid(mt_rand()); 
             $rename_file = $specific_num.'.'.basename($picture_type);
             $rename_file_path = 'userimages/'.$rename_file;
