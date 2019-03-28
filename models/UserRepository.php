@@ -38,7 +38,7 @@ class UserRepository
     public function edit($id, $values)
     {
         $values = $this->trimValues($values);
-        //投稿がある時
+        
         if ($values['picture']['error'] !== UPLOAD_ERR_NO_FILE) {
          
             $posted_picture = $values['picture']['tmp_name'];
@@ -55,7 +55,7 @@ class UserRepository
             
             move_uploaded_file($values['picture']['tmp_name'], $rename_file_path);
         }  
-        //postされた時（）
+        
         $user = $this->fetchById($id);
         if ($values['picture']['error'] === UPLOAD_ERR_OK && empty($user['picture'])) {
             $values['picture']['name'] = $rename_file;
@@ -163,7 +163,7 @@ class UserRepository
         
         $statement->execute();
     
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        return $statement->fetch();
     }
     
     public function validate($values, $id = null)
