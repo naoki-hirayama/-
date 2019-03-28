@@ -10,7 +10,7 @@ $user_repository = new UserRepository($database);
 if (isset($_SESSION['user_id'])) {
     $user_info = $user_repository->fetchById($_SESSION['user_id']);
 }
-$picture_max_size = $user_repository->getMaxPictureSize();
+$picture_max_size = $user_repository::MAX_PICTURE_SIZE;
 $select_color_options = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
 // POSTでアクセスされたら投稿処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
