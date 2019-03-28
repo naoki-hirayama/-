@@ -18,6 +18,7 @@
             $errors[] = "名前は入力必須です。";
         } else if (mb_strlen($name, 'UTF-8') > 10) {
             $errors[] = "名前は１０文字以内です。";
+            
         }
         
         $login_id = trim(mb_convert_kana($user['login_id'], 's'));
@@ -49,14 +50,13 @@
             $errors[] = "パスワードが一致しません。";
         }
         if ($_files === 0) {
-            if (strlen($_FILES['picture']['name']) !== 0) {
-                if ($_FILES['picture']['error'] === 2) {
+                if ($file['picture']['error'] === 2) {
                     $errors[] = "サイズが".number_format($this->getaxPictureSize())."MBを超えています。";
                 } else if ($_FILES['picture']['size'] > $this->getmaxPictureSize()) {
                     $errors[] = "不正な操作です。";
                 } else {
                     // 画像ファイルのMIMEタイプチェック
-                    $posted_picture = $_FILES['picture']['tmp_name'];
+                    $posted_picture = $file['picture']['tmp_name'];
                     $finfo = new finfo(FILEINFO_MIME_TYPE);
                     $picture_type = $finfo->file($posted_picture);
                     
@@ -70,7 +70,6 @@
                         $errors[] = "画像が不正です。";
                     }
                 } 
-            }
         }
         if (strlen($comment) !== 0) {
             $_comment = trim(mb_convert_kana($comment, 's'));

@@ -6,19 +6,19 @@ if (!isset($_SESSION['user_id'])) {
 } 
 require_once('function/db_connect.php');
 require_once('function/function.php');
-require_once('function/UserRepository.php');
+require_once('models/UserRepository.php');
 
 $database = db_connect();
 $user_repository = new UserRepository($database);
-$user_info = $user_repository->getUserDetailByUserId($_SESSION['user_id']);
+$user_info = $user_repository->fetchById($_SESSION['user_id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $validate_result = $user_repository->validatePassword($_SESSION['user_id'], $_POST['current_password'], $_POST['new_password'], $_POST['confirm_password']);
+    $validate_result = $user_repository->validateChangePassword($_SESSION['user_id'], $_POST);
     
-    if (!is_array($validate_result)) {
+    if (empty($validate_result)) {
         
-        $user_repository->editPassword($_SESSION['user_id'], $validate_result);
+        $user_repository->changePassword($_SESSION['user_id'], $_POST);
         
         header('Location: edit.php');
         exit;

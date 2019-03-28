@@ -1,6 +1,8 @@
 <?php
+
 class UserRepository
-{   //同じ処理を書かない　一回の変更で済むように！
+{   
+    //同じ処理を書かない　一回の変更で済むように！
     protected $database;
     protected $password_lengthes = ['max' => 30, 'min' => 4];
     protected $name_lengthes = ['max' => 10, 'min' => 1];
@@ -14,8 +16,9 @@ class UserRepository
         $this->database = $database;
     }
     
-    public function register($name, $login_id, $password_hash)
+    public function register($name, $login_id, $password_hash )//$values 
     {
+        //インサートされたuseridを返す
         $sql = 'INSERT INTO users (name,login_id,password) VALUES (:name,:login_id,:password)';
 
         $statement = $this->database->prepare($sql);
@@ -29,8 +32,9 @@ class UserRepository
         return $this->database->lastInsertId();
     }
     
-    public function edit($id, $name, $login_id, $picture, $comment)
+    public function edit($id, //$values $name, $login_id, $picture, $comment)
     {
+        //$valies['picture'] = $_FILES['picture'];
         $sql = 'UPDATE users SET name = :name, login_id = :login_id, picture = :picture, comment = :comment WHERE id = :id';
         
         $statement = $this->database->prepare($sql);
@@ -41,10 +45,10 @@ class UserRepository
         $statement->bindParam(':picture', $picture);
         $statement->bindParam(':comment', $comment);
         
-        return $statement->execute();
+        //$statement->execute();引数なし
     }
     //password.phpのバリデーション
-    public function validatePassword($id, $current_password, $new_password, $confirm_password)
+    public function validateChangePassword($id, $current_password, $new_password, $confirm_password)
     {
         $user = $this->getUserDetailByUserId($id);
         
@@ -66,24 +70,24 @@ class UserRepository
         }
         if (!empty($errors)) {
             return $errors;
-        } else {
-            return password_hash($trim_new_password, PASSWORD_DEFAULT);
         }
+        //     return password_hash($trim_new_password, PASSWORD_DEFAULT);
+        // }
     }
     
-    public function editPassword($id, $password_hash)
-    {
-        $sql = 'UPDATE users SET password = :password WHERE id = :id';
+    // public function editPassword($id, $password_hash)
+    // {
+    //     $sql = 'UPDATE users SET password = :password WHERE id = :id';
             
-        $statement = $this->database->prepare($sql);
+    //     $statement = $this->database->prepare($sql);
         
-        $statement->bindParam(':id', $id);
-        $statement->bindParam(':password', $password_hash);
+    //     $statement->bindParam(':id', $id);
+    //     $statement->bindParam(':password', $password_hash);
         
-        return $statement->execute();
-    }
+    //     return $statement->execute();
+    // }
     
-    public function login($login_id, $password)
+    public function fetchby($login_id, $password)
     {
         $sql = 'SELECT * FROM users WHERE login_id = BINARY :login_id';
         
@@ -254,9 +258,10 @@ class UserRepository
     }
     //パスワードの長さ
     public function setPasswordSize($max_password, $min_password)
-    {   $password_lengthes = [];
+    {   
+        $password_lengthes = [];
         $password_lengthes['max'] = $max_password;
-        $password_lengthes['min'] = $min_password;
+        $password_lengthes['min'] = $min_password；
     }
     public function getPasswordLengthes()
     {

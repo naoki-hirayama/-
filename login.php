@@ -7,19 +7,18 @@ if (isset($_SESSION['user_id'])) {
 
 require_once('function/db_connect.php');
 require_once('function/function.php');
-require_once('function/UserRepository.php');
+require_once('models/UserRepository.php');
 $database = db_connect();
 $user_repository = new UserRepository($database);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $login_result = $user_repository->login($_POST['login_id'], $_POST['password']);
-    
-    if (is_numeric($login_result)) {
-        $_SESSION['user_id'] = $login_result;
-        header('Location: index.php');
-        exit;
+    $user = $user_repository->fetchByLoginIdAndPassword($_POST['login_id'], $_POST['password']);
+    if ($user === false) {
+        $errors[] = 'ログインIDまたはパスワードに誤りがあります';
     } else {
-        $errors[] = $login_result;
+        $_SESSION['user_id'] = $user['id'];
+        header('index.php');
+        exit;
     }
 } 
 
