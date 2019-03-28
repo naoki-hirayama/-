@@ -16,6 +16,27 @@ $ git push origin master
 var_dump($count_records);exit;
  
  var_dump($_FILES['picture']);exit;
+ 
+array (size=2)
+  'max' => int 30
+  'min' => int 4
+/home/ec2-user/environment/kadai-ibg/function/function.php:36:
+array (size=6)
+  'name' => string 'テスト101101' (length=15)
+  'comment' => string 'ww' (length=2)
+  'MAX_FILE_SIZE' => string '1048576' (length=7)
+  'color' => string 'black' (length=5)
+  'password' => string '' (length=0)
+  'submit' => string '投稿' (length=6)
+/home/ec2-user/environment/kadai-ibg/function/function.php:36:
+array (size=1)
+  'picture' => 
+    array (size=5)
+      'name' => string '' (length=0)
+      'type' => string '' (length=0)
+      'tmp_name' => string '' (length=0)
+      'error' => int 4
+      'size' => int 0
 ### 課題①
 
 * 投稿の登録と一覧表示までをやる。  

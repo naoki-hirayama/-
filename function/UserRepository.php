@@ -1,8 +1,13 @@
 <?php
 class UserRepository
-{
+{   //同じ処理を書かない　一回の変更で済むように！
     protected $database;
+    protected $password_lengthes = ['max' => 30, 'min' => 4];
+    protected $name_lengthes = ['max' => 10, 'min' => 1];
+    protected $login_id_lengthes = ['max' => 15, 'min' => 4];
+    protected $comment_lengthes = ['max' => 50, 'min' => 0];
     private $picture_max_size = 1*1024*1024;
+    
     
     public function __construct($database)
     {
@@ -237,7 +242,7 @@ class UserRepository
         }
         return $errors;
     }
-    
+    //画像ファイルの大きさ
     public function setMaxPictureSize($picture_max_size)
     {
         $this->picture_max_size = $picture_max_size;
@@ -247,4 +252,49 @@ class UserRepository
     {
         return $this->picture_max_size;
     }
+    //パスワードの長さ
+    public function setPasswordSize($max_password, $min_password)
+    {   $password_lengthes = [];
+        $password_lengthes['max'] = $max_password;
+        $password_lengthes['min'] = $min_password;
+    }
+    public function getPasswordLengthes()
+    {
+        return $this->password_lengthes;
+    }
+    //名前の長さ
+    public function setNameLengthes($max_name, $min_name)
+    {
+        $name_lengthes = [];
+        $name_lengthes['max'] = $max_name;
+        $name_lengthes['min'] = $min_name;
+    }
+    public function getNameLengthes()
+    {
+        return $this->name_lengthes;
+    }
+    //login_idの長さ
+    public function setLoginIdLengthes($max_login_id, $min_login_id)
+    {
+        $login_id_lengthes = [];
+        $login_id_lengthes['max'] = $max_login_id;
+        $login_id_lengthes['min'] = $min_login_id;
+    }
+    public function getLoginIdLengthes()
+    {
+        return $this->login_id_lengthes;
+    }
+    //一言コメントの長さ
+    public function getCommentLengthes($max_comment, $min_comment)
+    {
+        $comment_lengthes = [];
+        $comment_lengthes['max'] = $max_comment;
+        $comment_lengthes['min'] = $min_comment;
+    }
+    public function setCommentLengthes()
+    {
+        return $this->comment_lengthes;
+    }
+    
+    
 }
