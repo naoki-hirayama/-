@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors =  $user_repository->validate($_POST, $_SESSION['user_id']);
     
     if(empty($errors)) {
-        dd($_POST['picture']);
         $user_repository->edit($_SESSION['user_id'], $_POST);
         header('Location: profile.php?id='.$user_info['id'].'');
         exit;
