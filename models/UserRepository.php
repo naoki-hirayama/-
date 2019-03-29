@@ -69,7 +69,7 @@ class UserRepository
         }
     
         
-        if (!isset($values['comment'])) {
+        if (empty($values['comment'])) {
             $values['comment'] = null;
         }
         
