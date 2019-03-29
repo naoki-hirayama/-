@@ -82,7 +82,7 @@
                             <input type="hidden" name="id" value="<?php echo $post['id'] ?>">
                             <input type="submit" value="削除"/><br />
                         </form>
-                    <?php elseif ($post['user_id'] === $_SESSION['user_id']) : ?>
+                    <?php elseif (!empty($post['user_id']) && $post['user_id'] === $_SESSION['user_id']) : ?>
                         <form action="delete.php" method ="get">
                             <input type="hidden" name="id" value="<?php echo $post['id'] ?>">
                             <input type="submit" value="ユーザー削除"/><br />
