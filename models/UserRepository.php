@@ -130,7 +130,7 @@ class UserRepository
     }
     
     public function fetchByLoginIdAndPassword($login_id, $password)
-    {
+    {   //トリムするべきか？
         $user = $this->fetchByLoginId($login_id);
         
         if ($user !== false) {

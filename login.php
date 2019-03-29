@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'ログインIDまたはパスワードに誤りがあります';
     } else {
         $_SESSION['user_id'] = $user['id'];
-        header('index.php');
+        header('Location: index.php');
         exit;
     }
 } 
