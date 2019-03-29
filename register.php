@@ -12,6 +12,7 @@ $user_repository = new UserRepository($database);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = $user_repository->validate($_POST);
+    
     if (empty($errors)) {
         
         $user_id = $user_repository->register($_POST);

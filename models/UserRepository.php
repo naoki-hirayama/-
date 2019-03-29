@@ -168,67 +168,77 @@ class UserRepository
         if (isset($values['name'])) {
             if (mb_strlen($values['name'], 'UTF-8') === 0) {
                 $errors[] = "名前は入力必須です。";
-            } else if (mb_strlen($values['name'], 'UTF-8') > self::MAX_NAME_LENGTH) {
-                $errors[] = "名前は".self::MAX_NAME_LENGTH."文字以内です。";
-            }
+            } else {
+                if (mb_strlen($values['name'], 'UTF-8') > self::MAX_NAME_LENGTH) {
+                    $errors[] = "名前は".self::MAX_NAME_LENGTH."文字以内です。";
+                }
+            }    
         }
 
         if (isset($values['login_id'])) {
-            $tmp_user = $this->fetchByLoginId($values['login_id']);
             if (mb_strlen($values['login_id'], 'UTF-8') === 0) {
                 $errors[] = "ログインIDは入力必須です。";
-            } else if (!preg_match("/^[a-zA-Z0-9]+$/", $values['login_id'])) {
-                $errors[] = "ログインIDは半角英数字です。";
-            } else if (mb_strlen($values['login_id'], 'UTF-8') < self::MIN_LOGIN_ID_LENGTH) {
-                $errors[] = "ログインIDは".self::MIN_LOGIN_ID_LENGTH."文字以上です。";
-            } else if (mb_strlen($values['login_id'], 'UTF-8') > self::MAX_LOGIN_ID_LENGTH) {
-                $errors[] = "ログインIDは".self::MAX_LOGIN_ID_LENGTH."文字以内です。";
             } else {
-                if ($tmp_user !== false) {
-                    if (is_null($id)) {
-                        $errors[] = "このログインIDはすでに存在します。";
-                    } else if ($tmp_user['id'] !== $id) {
-                        $errors[] = "このログインIDはすでに存在します。";
-                    }
-                } 
+                if (!preg_match("/^[a-zA-Z0-9]+$/", $values['login_id'])) {
+                    $errors[] = "ログインIDは半角英数字です。";
+                } else if (mb_strlen($values['login_id'], 'UTF-8') < self::MIN_LOGIN_ID_LENGTH) {
+                    $errors[] = "ログインIDは".self::MIN_LOGIN_ID_LENGTH."文字以上です。";
+                } else if (mb_strlen($values['login_id'], 'UTF-8') > self::MAX_LOGIN_ID_LENGTH) {
+                    $errors[] = "ログインIDは".self::MAX_LOGIN_ID_LENGTH."文字以内です。";
+                } else {
+                    $tmp_user = $this->fetchByLoginId($values['login_id']);
+                    if ($tmp_user !== false) {
+                        if (is_null($id)) {
+                            $errors[] = "このログインIDはすでに存在します。";
+                        } else if ($tmp_user['id'] !== $id) {
+                            $errors[] = "このログインIDはすでに存在します。";
+                        }
+                    } 
+                }
             }
         }
         
         if (isset($values['password'])) {
             if (mb_strlen($values['password'], 'UTF-8') === 0) {
                 $errors[] = "パスワードは入力必須です。";
-            } else if (!preg_match("/^[a-zA-Z0-9]+$/", $values['password'])) {
-                $errors[] = "パスワードは半角英数字です。";
-            } else if (mb_strlen($values['password'], 'UTF-8') < self::MIN_PASSWORD_LENGTH) {
-                $errors[] = "パスワードは".self::MIN_PASSWORD_LENGTH."文字以上です。";
-            } else if (mb_strlen($values['password'], 'UTF-8') > self::MAX_PASSWORD_LENGTH) {
-                $errors[] = "パスワードが長すぎます。";
-            } else if ($values['password'] !== $values['confirm_password']) {
-                $errors[] = "パスワードが一致しません。";
-            } 
+            } else {
+                if (!preg_match("/^[a-zA-Z0-9]+$/", $values['password'])) {
+                    $errors[] = "パスワードは半角英数字です。";
+                } else if (mb_strlen($values['password'], 'UTF-8') < self::MIN_PASSWORD_LENGTH) {
+                    $errors[] = "パスワードは".self::MIN_PASSWORD_LENGTH."文字以上です。";
+                } else if (mb_strlen($values['password'], 'UTF-8') > self::MAX_PASSWORD_LENGTH) {
+                    $errors[] = "パスワードが長すぎます。";
+                } else if ($values['password'] !== $values['confirm_password']) {
+                    $errors[] = "パスワードが一致しません。";
+                }
+            }
         }
         
         if (isset($values['picture'])) {
-            if ($values['picture']['error'] === UPLOAD_ERR_FORM_SIZE) {
-                $errors[] = "サイズが".number_format(self::MAX_PICTURE_SIZE)."MBを超えています。";
-            } else if ($values['picture']['size'] > self::MAX_PICTURE_SIZE) {
-                $errors[] = "不正な操作です。";
-            } else {
-                // 画像ファイルのMIMEタイプチェック
-                $posted_picture = $values['picture']['tmp_name'];
-                $finfo = new finfo(FILEINFO_MIME_TYPE);
-                $picture_type = $finfo->file($posted_picture);
-                
-                $vaild_picture_types = [
-                    'image/png',
-                    'image/gif',
-                    'image/jpeg'
-                ];
-               
-                if (!in_array($picture_type, $vaild_picture_types)) {
-                    $errors[] = "画像が不正です。";
+            if (strlen($values['picture']['name']) > 0) {
+                if ($values['picture']['error'] === UPLOAD_ERR_FORM_SIZE) {
+                    $errors[] = "サイズが".number_format(self::MAX_PICTURE_SIZE)."MBを超えています。";
+                } else if ($values['picture']['size'] > self::MAX_PICTURE_SIZE) {
+                    $errors[] = "不正な操作です。";
+                } else {
+                    // 画像ファイルのMIMEタイプチェック
+                    $posted_picture = $values['picture']['tmp_name'];
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $picture_type = $finfo->file($posted_picture);
+                    
+                    $vaild_picture_types = [
+                        'image/png',
+                        'image/gif',
+                        'image/jpeg'
+                    ];
+                   
+                    if (!in_array($picture_type, $vaild_picture_types)) {
+                        $errors[] = "画像が不正です。";
+                    }
                 }
             }
+        } else if (!is_null($id)) {
+            $errors[] = "サイズが".number_format(self::MAX_PICTURE_SIZE)."MBを超えています。";
         }
         
         if (isset($values['comment'])) {
