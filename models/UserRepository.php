@@ -1,5 +1,6 @@
 <?php
 
+
 class UserRepository
 {   
     protected $database;
@@ -38,36 +39,28 @@ class UserRepository
     public function edit($id, $values)
     {
         $values = $this->trimValues($values);
+        $user = $this->fetchById($id);
         
-        if ($values['picture']['error'] !== UPLOAD_ERR_NO_FILE) {
+        if ($values['picture']['error'] === UPLOAD_ERR_OK) {
          
             $posted_picture = $values['picture']['tmp_name'];
-            
             $finfo = new finfo(FILEINFO_MIME_TYPE);
-            
             $picture_type = $finfo->file($posted_picture);
-            
             $specific_num = uniqid(mt_rand()); 
-            
             $rename_file = $specific_num.'.'.basename($picture_type);
-            
             $rename_file_path = 'userimages/'.$rename_file;
-            
             move_uploaded_file($values['picture']['tmp_name'], $rename_file_path);
-        }  
-        
-        $user = $this->fetchById($id);
-        if ($values['picture']['error'] === UPLOAD_ERR_OK && empty($user['picture'])) {
-            $values['picture']['name'] = $rename_file;
-        } else if ($values['picture']['error'] === UPLOAD_ERR_OK && !empty($user['picture'])) {
-            $values['picture']['name'] = $rename_file;
-            unlink("userimages/{$user['picture']}");
-        } else if ($user['picture']) {
-            $values['picture']['name'] = $user['picture'];
-        } else{
-            $values['picture']['name'] = null;
+            
+            if (empty($user['picture'])) {
+                $values['picture']['name'] = $rename_file;
+            } else {
+               $values['picture']['name'] = $rename_file;
+                unlink("userimages/{$user['picture']}"); 
+            }
+            
+        } else {
+            $values['picture']['name'] = isset($user['picture']) ? $user['picture'] : null;
         }
-    
         
         if (empty($values['comment'])) {
             $values['comment'] = null;
@@ -130,7 +123,7 @@ class UserRepository
     }
     
     public function fetchByLoginIdAndPassword($login_id, $password)
-    {   //トリムするべきか？
+    {   
         $user = $this->fetchByLoginId($login_id);
         
         if ($user !== false) {
@@ -167,7 +160,7 @@ class UserRepository
     }
     
     public function validate($values, $id = null)
-    {
+    {   
         $values = $this->trimValues($values);
         
         $errors = [];
@@ -181,7 +174,6 @@ class UserRepository
         }
 
         if (isset($values['login_id'])) {
-            $user = $this->fetchById($id);
             $tmp_user = $this->fetchByLoginId($values['login_id']);
             if (mb_strlen($values['login_id'], 'UTF-8') === 0) {
                 $errors[] = "ログインIDは入力必須です。";
@@ -191,10 +183,14 @@ class UserRepository
                 $errors[] = "ログインIDは".self::MIN_LOGIN_ID_LENGTH."文字以上です。";
             } else if (mb_strlen($values['login_id'], 'UTF-8') > self::MAX_LOGIN_ID_LENGTH) {
                 $errors[] = "ログインIDは".self::MAX_LOGIN_ID_LENGTH."文字以内です。";
-            } else if ($tmp_user !== false && is_null($id)) {
-                $errors[] = "このログインIDはすでに存在します。";
-            } else if ($user['login_id'] !== $tmp_user['login_id'] && $tmp_user['login_id'] === $values['login_id']) {
-                $errors[] = "このログインIDはすでに存在します。";
+            } else {
+                if ($tmp_user !== false) {
+                    if (is_null($id)) {
+                        $errors[] = "このログインIDはすでに存在します。";
+                    } else if ($tmp_user['id'] !== $id) {
+                        $errors[] = "このログインIDはすでに存在します。";
+                    }
+                } 
             }
         }
         
@@ -212,27 +208,27 @@ class UserRepository
             } 
         }
         
-        if (isset($values['picture']) && $values['picture']['error'] !== UPLOAD_ERR_NO_FILE) {
-           if ($values['picture']['error'] === UPLOAD_ERR_FORM_SIZE) {
-               $errors[] = "サイズが".number_format(self::MAX_PICTURE_SIZE)."MBを超えています。";
-           } else if ($values['picture']['size'] > self::MAX_PICTURE_SIZE) {
-               $errors[] = "不正な操作です。";
-           } else {
-               // 画像ファイルのMIMEタイプチェック
-               $posted_picture = $values['picture']['tmp_name'];
-               $finfo = new finfo(FILEINFO_MIME_TYPE);
-               $picture_type = $finfo->file($posted_picture);
+        if (isset($values['picture'])) {
+            if ($values['picture']['error'] === UPLOAD_ERR_FORM_SIZE) {
+                $errors[] = "サイズが".number_format(self::MAX_PICTURE_SIZE)."MBを超えています。";
+            } else if ($values['picture']['size'] > self::MAX_PICTURE_SIZE) {
+                $errors[] = "不正な操作です。";
+            } else {
+                // 画像ファイルのMIMEタイプチェック
+                $posted_picture = $values['picture']['tmp_name'];
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $picture_type = $finfo->file($posted_picture);
+                
+                $vaild_picture_types = [
+                    'image/png',
+                    'image/gif',
+                    'image/jpeg'
+                ];
                
-               $vaild_picture_types = [
-                   'image/png',
-                   'image/gif',
-                   'image/jpeg'
-               ];
-               
-               if (!in_array($picture_type, $vaild_picture_types)) {
-                   $errors[] = "画像が不正です。";
-               }
-           }
+                if (!in_array($picture_type, $vaild_picture_types)) {
+                    $errors[] = "画像が不正です。";
+                }
+            }
         }
         
         if (isset($values['comment'])) {
