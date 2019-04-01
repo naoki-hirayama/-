@@ -1,4 +1,5 @@
 <?php
+
 require_once('BaseRepository.php');
 
 class UserRepository extends BaseRepository
@@ -29,9 +30,9 @@ class UserRepository extends BaseRepository
         if ($values['picture']['error'] === UPLOAD_ERR_OK) {
          
             if (empty($user['picture'])) {
-                $values['picture']['name'] = $this->reNameFileAndMoveUpLoadFile($values);
+                $values['picture']['name'] = $this->renameFileAndMoveUpLoadFile($values);
             } else {
-                $values['picture']['name'] = $this->reNameFileAndMoveUpLoadFile($values);
+                $values['picture']['name'] = $this->renameFileAndMoveUpLoadFile($values);
                 unlink("userimages/{$user['picture']}"); 
             }
             

@@ -141,7 +141,7 @@ class BaseRepository
         return $errors;
     }
     
-    protected function reNameFileAndMoveUpLoadFile($values)
+    protected function renameFileAndMoveUpLoadFile($values)
     {
         $posted_picture = $values['picture']['tmp_name'];
         $finfo = new finfo(FILEINFO_MIME_TYPE);

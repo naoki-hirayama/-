@@ -8,12 +8,10 @@ class PostRepository extends BaseRepository
     {   
         $values = $this->trimValues($values);
         if ($values['picture']['error'] === UPLOAD_ERR_OK) {
-            
-            $values['picture']['name'] = $this->reNameFileAndMoveUpLoadFile($values);
+            $values['picture']['name'] = $this->renameFileAndMoveUpLoadFile($values);
         } else {
             $values['picture']['name'] = null;
         }
-        
         //パスワードが入力されない時の処理
         if (strlen($values['delete_password']) === 0) {
             $values['delete_password'] = null;
