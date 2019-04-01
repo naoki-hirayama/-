@@ -16,14 +16,14 @@
                         なし<br />
                     <?php endif ?>
             一言コメント：
-                    <?php if (!empty($user['profile_comment'])) : ?>
-                        <?php echo h($user['profile_comment']) ?><br />
+                    <?php if (!empty($user['comment'])) : ?>
+                        <?php echo h($user['comment']) ?><br />
                     <?php else : ?>
                         なし<br />
                     <?php endif ?>
         </li>
     </ul>
-    <?php if ($user['id'] === $_SESSION['user_id']) : ?>
+    <?php if (isset($_SESSION['user_id']) && $user['id'] === $_SESSION['user_id']) : ?>
         <a href="edit.php">編集する</a><br />
         <a href="index.php">戻る</a>
     <?php else : ?>

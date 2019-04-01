@@ -9,7 +9,8 @@ $database = db_connect();
 $post_repository = new PostRepository($database);
 
 if (isset($_SESSION['user_id'])) {
-    $user_repository = new UserRepository($database);
+    $table_name = 'users';
+    $user_repository = new UserRepository($database, $table_name);
     $user_info = $user_repository->fetchById($_SESSION['user_id']);
 }
 $post = $post_repository->fetchById($_GET['id']);
@@ -17,15 +18,15 @@ $post = $post_repository->fetchById($_GET['id']);
 if ($post === false) {
     header('HTTP/1.1 404 Not Found');
     exit;
-} else if (!isset($post['delete_password']) && !isset($post['user_id'])) {
+} else if (!isset($post['password']) && !isset($post['user_id'])) {
     header('HTTP/1.1 400 Bad Request');
     exit;
 } else if (isset($post['user_id']) && $post['user_id'] !== $_SESSION['user_id']) {
     header('HTTP/1.1 400 Bad Request');
     exit;
 } else {
-    if (isset($post['delete_password'])) {
-        $origin_password = $post['delete_password'];
+    if (isset($post['password'])) {
+        $origin_password = $post['password'];
     }
 }
 

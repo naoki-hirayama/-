@@ -4,8 +4,9 @@ require_once('function/db_connect.php');
 require_once('function/function.php');
 require_once('models/UserRepository.php');
 $database = db_connect();
+$table_name = 'users';
 if (isset($_SESSION['user_id'])) {
-    $user_repository = new UserRepository($database);
+    $user_repository = new UserRepository($database, $table_name);
     $user_info = $user_repository->fetchById($_SESSION['user_id']);
 }
 $header_title = '投稿成功';

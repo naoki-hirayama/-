@@ -42,9 +42,9 @@
         </select><br />
         <?php if (empty($_SESSION['user_id'])) : ?>
             <p>削除パスワード:</p>
-            <input type="password" name="delete_password"><br />
+            <input type="password" name="password"><br />
         <?php else : ?>
-            <input type="hidden" name="delete_password">
+            <input type="hidden" name="password">
         <?php endif ?>
         <input type="submit" name="submit" value="投稿">
     </form>
@@ -77,7 +77,7 @@
                         <?php endif ?>
                     時間：<?php echo $post['created_at'] ?><br />
                     <!--if文でパスワードが設定されていなかったら非表示   -->
-                    <?php if (!empty($post['delete_password'] )) : ?>
+                    <?php if (!empty($post['password'] )) : ?>
                         <form action="delete.php" method="get">
                             <input type="hidden" name="id" value="<?php echo $post['id'] ?>">
                             <input type="submit" value="削除"/><br />

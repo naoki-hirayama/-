@@ -9,7 +9,8 @@ require_once('function/db_connect.php');
 require_once('function/function.php');
 require_once('models/UserRepository.php');
 $database = db_connect();
-$user_repository = new UserRepository($database);
+$table_name = 'users';
+$user_repository = new UserRepository($database, $table_name);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $user_repository->fetchByLoginIdAndPassword($_POST['login_id'], $_POST['password']);
