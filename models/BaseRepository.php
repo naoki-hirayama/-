@@ -141,6 +141,23 @@ class BaseRepository
         return $errors;
     }
     
+    protected function reNameFileAndMoveUpLoadFile($values)
+    {
+        $posted_picture = $values['picture']['tmp_name'];
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $picture_type = $finfo->file($posted_picture);
+        $specific_num = uniqid(mt_rand()); 
+        $rename_file = $specific_num.'.'.basename($picture_type);
+        if (isset($values['delete_password'])) {
+            $rename_file_path = 'images/'.$rename_file;
+        } else {
+            $rename_file_path = 'userimages/'.$rename_file;
+        }
+        move_uploaded_file($values['picture']['tmp_name'], $rename_file_path);
+        
+        return $rename_file;   
+    }
+    
     protected function trimValues($values)
     {   
         if (isset($values['name'])) {
