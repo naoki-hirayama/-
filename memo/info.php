@@ -3,7 +3,7 @@ $ sudo service mysqld start
 $ mysql -u root
 TRUNCATE table users; 
 use bbs
-SELECT * FROM bbs.users;  
+d  
 
 source ~/environment/kadai-ibg/memo/create_table_bbs.users.sql
 <?php var_dump($post['password']);exit; ?>

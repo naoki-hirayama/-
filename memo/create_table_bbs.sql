@@ -3,7 +3,7 @@ CREATE TABLE bbs.post (
     name VARCHAR(10),
     comment VARCHAR(100),
     color VARCHAR(6),
-    password VARCHAR(100),
+    delete_password VARCHAR(100),
     picture  VARCHAR(100),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

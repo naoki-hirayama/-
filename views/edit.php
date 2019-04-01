@@ -23,10 +23,10 @@
         <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $picture_max_size ?>">
         <input type="file" name="picture"><br />
         <p>一言コメント：</p>
-        <?php if (!empty($user_info['comment'])) : ?>
-             <input type="text" name="comment" value="<?php echo h($user_info['comment']) ?>"><br />
+        <?php if (!empty($user_info['profile_comment'])) : ?>
+             <input type="text" name="profile_comment" value="<?php echo h($user_info['profile_comment']) ?>"><br />
         <?php else : ?>
-            <input type="text" name="comment" ><br />
+            <input type="text" name="profile_comment" ><br />
         <?php endif ?>
         <input type="submit" name="submit" value="編集する">
     </form>

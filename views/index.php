@@ -42,9 +42,9 @@
         </select><br />
         <?php if (empty($_SESSION['user_id'])) : ?>
             <p>削除パスワード:</p>
-            <input type="password" name="password"><br />
+            <input type="password" name="delete_password"><br />
         <?php else : ?>
-            <input type="hidden" name="password">
+            <input type="hidden" name="delete_password">
         <?php endif ?>
         <input type="submit" name="submit" value="投稿">
     </form>

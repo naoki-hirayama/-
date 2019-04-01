@@ -16,8 +16,8 @@
                         なし<br />
                     <?php endif ?>
             一言コメント：
-                    <?php if (!empty($user['comment'])) : ?>
-                        <?php echo h($user['comment']) ?><br />
+                    <?php if (!empty($user['profile_comment'])) : ?>
+                        <?php echo h($user['profile_comment']) ?><br />
                     <?php else : ?>
                         なし<br />
                     <?php endif ?>

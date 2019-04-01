@@ -14,11 +14,10 @@ $user_info = $user_repository->fetchById($_SESSION['user_id']);
 $picture_max_size = $user_repository::MAX_PICTURE_SIZE;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $errors = [];
     
     if (isset($_FILES['picture'])) {
         $_POST['picture'] = $_FILES['picture'];
-    } else {
-        $_POST['picture'] = null;
     }
     
     $errors =  $user_repository->validate($_POST, $_SESSION['user_id']);
