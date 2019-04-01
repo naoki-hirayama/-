@@ -17,14 +17,16 @@ $post = $post_repository->fetchById($_GET['id']);
 if ($post === false) {
     header('HTTP/1.1 404 Not Found');
     exit;
-} else if (empty($post['password']) && empty($post['user_id'])) {
+} else if (!isset($post['delete_password']) && !isset($post['user_id'])) {
     header('HTTP/1.1 400 Bad Request');
     exit;
-} else if (($post['user_id'] !== $_SESSION['user_id']) && (!empty($post['user_id']))) {
+} else if (isset($post['user_id']) && $post['user_id'] !== $_SESSION['user_id']) {
     header('HTTP/1.1 400 Bad Request');
     exit;
 } else {
-    $origin_password = $post['password'];
+    if (isset($post['delete_password'])) {
+        $origin_password = $post['delete_password'];
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -9,6 +9,9 @@ class PostRepository extends BaseRepository
         $values = $this->trimValues($values);
         if ($values['picture']['error'] === UPLOAD_ERR_OK) {
             
+            $posted_picture = $values['picture']['tmp_name'];
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $picture_type = $finfo->file($posted_picture);
             $specific_num = uniqid(mt_rand()); 
             $rename_file = $specific_num.'.'.basename($picture_type);
             $rename_file_path = 'images/'.$rename_file;
