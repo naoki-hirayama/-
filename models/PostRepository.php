@@ -15,11 +15,11 @@ class PostRepository extends BaseRepository
             $specific_num = uniqid(mt_rand()); 
             $rename_file = $specific_num.'.'.basename($picture_type);
             $rename_file_path = 'images/'.$rename_file;
-            move_uploaded_file($_FILES['picture']['tmp_name'], $rename_file_path);
+            move_uploaded_file($values['picture']['tmp_name'], $rename_file_path);
             
-            $values['picture'] = $rename_file;
+            $values['picture']['name'] = $rename_file;
         } else {
-            $values['picture'] = null;
+            $values['picture']['name'] = null;
         }
         
         //パスワードが入力されない時の処理
@@ -37,7 +37,7 @@ class PostRepository extends BaseRepository
         $statement->bindParam(':comment', $values['comment']);
         $statement->bindParam(':color', $values['color']);
         $statement->bindParam(':delete_password', $values['delete_password']);
-        $statement->bindParam(':picture', $values['picture']);
+        $statement->bindParam(':picture', $values['picture']['name']);
         $statement->bindParam(':user_id', $values['user_id']);
         
         $statement->execute();
