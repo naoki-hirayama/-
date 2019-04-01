@@ -31,7 +31,7 @@ class UserRepository extends BaseRepository
             if (empty($user['picture'])) {
                 $values['picture']['name'] = $this->reNameFileAndMoveUpLoadFile($values);
             } else {
-               $values['picture']['name'] = $this->reNameFileAndMoveUpLoadFile($values);
+                $values['picture']['name'] = $this->reNameFileAndMoveUpLoadFile($values);
                 unlink("userimages/{$user['picture']}"); 
             }
             
