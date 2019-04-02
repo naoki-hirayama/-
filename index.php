@@ -9,7 +9,7 @@ $database = db_connect();
 $user_repository = new UserRepository($database);
 $post_repository = new PostRepository($database);
 $picture_max_size = $user_repository::MAX_PICTURE_SIZE;
-$select_color_options = $post_repository::SELECT_COLOR_OPTIONS;
+$select_color_options = PostRepository::getSelectColorOptions();
 
 if (isset($_SESSION['user_id'])) {
     $user_info = $user_repository->fetchById($_SESSION['user_id']);
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pager->setCurrentPage($page);
     $offset = $pager->getOffset();
     $per_page_records = $pager->getPerPageRecords();
-    $posts = $post_repository->fetchByOffSetAndPerPageRecords($offset, $per_page_records);
+    $posts = $post_repository->fetchByOffSetAndLimit($offset, $per_page_records);
     
     $user_ids = [];
     foreach ($posts as $post) {
@@ -55,8 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     if (!empty($user_ids)) {
-        $ids = implode(',', $user_ids);
-        $users = $user_repository->fetchByIds($ids);
+        $users = $user_repository->fetchByIds($user_ids);
     }
 }
 

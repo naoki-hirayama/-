@@ -1,46 +1,59 @@
-<?php 
+<?php
 
-class Base 
+class Product
 {
-    protected $add;
-    
-    public function add($n)
+    protected $price;
+
+    // 価格取得
+    public function getPrice()
     {
-        return 1 + $n;
+        return $this->price;
     }
-    
-    public function add2($m)
+
+    // 価格設定
+    public function setPrice($price)
     {
-        return 1 + $m;
+        $this->price = $price;
     }
 }
 
-class Add extends Base
+class FoodProduct extends Product
 {
-    protected $hoge;
-    
-    public function add($id)
-    {   
-         parent::add($id);
-         echo 1 + $this->add($id);
+    private $expire = 15;
+
+    // 残りの賞味期限を取得
+    public function getExpire()
+    {
+        return $this->expire;
     }
+
+    // 残りの賞味期限を1減らす
+    public function decrementExpire()
+    {
+        $this->expire--;
+        return $this->getExpire();
+    }
+
+    // 価格取得のオーバーライド
+    public function getPrice()
+    {
+        $price = $this->price;        
+        if ($this->expire <= 10) {
+            // 残り賞味期限が10日以下になったら半額
+            $price = $price / 2;
+        }
+        return $price;
+    }
+
 }
 
-$base = new Base();
-var_dump($base->add(2));
+$prd = new FoodProduct();
+// 価格を100に設定
+$prd->setPrice(100);
 
-$add = new Add();
-var_dump($add->add(5));
-
-// $base = new Base();
-// echo $base->base();
-
-// public function delete($id)
-//     {   
-//         $post = $this->fetchById($id);
-//         parent::delete($id);
-//         // 投稿に画像がある時
-//         if (isset($post['picture'])) {
-//             unlink("images/{$post['picture']}");
-//         }
-//     }
+// 賞味期限残日数が0になるまで繰り返し
+$expire = $prd->getExpire();
+while ($expire > 0) {
+    echo '賞味期限残：' . $expire . '日 価格：' . $prd->getPrice();
+    $expire = $prd->decrementExpire();
+}

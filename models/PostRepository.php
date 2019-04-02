@@ -6,15 +6,18 @@ class PostRepository extends BaseRepository
 {   
     protected $table_name = 'posts';
     
-    const SELECT_COLOR_OPTIONS = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
     const MAX_PASSWORD_LENGTH  = 15;
     const MIN_PASSWORD_LENGTH  = 4;
     const MAX_NAME_LENGTH      = 10;
     const MAX_COMMENT_LENGTH   = 100;
     const MAX_PICTURE_SIZE     = 1*1024*1024;
     
+    public static function getSelectColorOptions()
+    {
+        return $colors = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
+    }
     
-    public function create($values, $id = null)
+    public function create($values, $user_id = null)
     {   
         $values = $this->trimValues($values);
         if ($values['picture']['error'] === UPLOAD_ERR_OK) {
@@ -36,7 +39,7 @@ class PostRepository extends BaseRepository
             $values['password'] = null;
         }
         
-        $values['user_id'] = $id;
+        $values['user_id'] = $user_id;
         
         $sql = 'INSERT INTO posts (name,comment,color,password,picture,user_id) VALUES (:name,:comment,:color,:password,:picture,:user_id)';
         
@@ -62,18 +65,6 @@ class PostRepository extends BaseRepository
         }
     }
     
-    public function fetchByOffSetAndPerPageRecords($offset, $per_page_records)
-    {
-        $sql = 'SELECT * FROM posts ORDER BY created_at DESC LIMIT :offset, :per_page_records';
-        $statement = $this->database->prepare($sql);
-        
-        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $statement->bindParam(':per_page_records', $per_page_records, PDO::PARAM_INT);
-        
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
-    
     public function validate($values)
     {   
         $errors = [];
@@ -82,10 +73,10 @@ class PostRepository extends BaseRepository
         } else {
             $values = $this->trimValues($values);
             if (isset($values['name'])) {
-                if (mb_strlen($values['name'], 'UTF-8') === 0) {
+                if ($this->getStringLength($values['name']) === 0) {
                     $errors[] = "名前は入力必須です。";
                 } else {
-                    if (mb_strlen($values['name'], 'UTF-8') > self::MAX_NAME_LENGTH) {
+                    if ($this->getStringLength($values['name']) > self::MAX_NAME_LENGTH) {
                         $errors[] = "名前は".self::MAX_NAME_LENGTH."文字以内です。";
                     }
                 }    
@@ -117,30 +108,30 @@ class PostRepository extends BaseRepository
             }
             
             if (isset($values['color'])) {
-                if (!array_key_exists($values['color'], self::SELECT_COLOR_OPTIONS)) {
+                if (!array_key_exists($values['color'], self::getSelectColorOptions())) {
                     $errors[] = "文字色が不正です"; 
                 }
             }
                 
             if (isset($values['password'])) {
-                if (strlen($values['password']) !== 0) {
-                    if (!preg_match("/^[a-zA-Z0-9]+$/", $values['password'])) {
+                if ($this->getStringLength($values['password']) !== 0) {
+                    if (!$this->validateAlphaNumeric($values['password'])) {
                         $errors[] = " パスワードは半角英数字です。";
                     }
-                    if (mb_strlen($values['password'], 'UTF-8') < self::MIN_PASSWORD_LENGTH) {
+                    if ($this->getStringLength($values['password']) < self::MIN_PASSWORD_LENGTH) {
                         $errors[] = " パスワードは".self::MIN_PASSWORD_LENGTH."文字以上です。";
                     }
-                    if (mb_strlen($values['password'], 'UTF-8') > self::MAX_PASSWORD_LENGTH) {
+                    if ($this->getStringLength($values['password']) > self::MAX_PASSWORD_LENGTH) {
                         $errors[] = "パスワードが長すぎます。";
-                    }    
+                    }
                 }
             }
             
             if (isset($values['comment'])) {
-                if (mb_strlen($values['comment'], 'UTF-8') === 0) {
+                if ($this->getStringLength($values['comment']) === 0) {
                     $errors[] = "本文は入力必須です。";
                 } else {
-                    if (mb_strlen($values['comment'], 'UTF-8') > self::MAX_COMMENT_LENGTH) {
+                    if ($this->getStringLength($values['comment']) > self::MAX_COMMENT_LENGTH) {
                         $errors[] = "本文は".self:: MAX_COMMENT_LENGTH."文字以内です。";
                     }    
                 } 
@@ -152,15 +143,15 @@ class PostRepository extends BaseRepository
     protected function trimValues($values)
     {
         if (isset($values['name'])) {
-            $values['name'] = trim(mb_convert_kana($values['name'], 's'));
+            $values['name'] = $this->trimString($values['name']);
         }
         
         if (isset($values['password'])) {
-            $values['password'] = trim(mb_convert_kana($values['password'], 's'));
+            $values['password'] = $this->trimString($values['password']);
         }
         
         if (isset($values['comment'])) {
-            $values['comment'] = trim(mb_convert_kana($values['comment'], 's'));
+            $values['comment'] = $this->trimString($values['comment']);
         }
         
         return $values;

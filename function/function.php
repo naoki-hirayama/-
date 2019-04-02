@@ -7,5 +7,6 @@ function h($s)
 
 function dd($s)
 {
-    return var_dump($s);
+    var_dump($s);
 }
+

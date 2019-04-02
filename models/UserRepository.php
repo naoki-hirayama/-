@@ -97,14 +97,14 @@ class UserRepository extends BaseRepository
         if (!password_verify($values['current_password'], $user['password'])) {
             $errors[] = "パスワードが間違っています。";
         } else {
-            if (mb_strlen($values['new_password'], 'UTF-8') === 0) {
+            if ($this->getStringLength($values['current_password']) === 0) {
                 $errors[] = "パスワードは入力必須です。";
             } else {
-                if (!preg_match("/^[a-zA-Z0-9]+$/", $values['new_password'])) {
+                if (!$this->validateAlphaNumeric($values['new_password'])) {
                     $errors[] = "パスワードは半角英数字です。";
-                } else if (mb_strlen($values['new_password'], 'UTF-8') < self::MIN_PASSWORD_LENGTH) {
+                } else if ($this->getStringLength($values['new_password']) < self::MIN_PASSWORD_LENGTH) {
                     $errors[] = "パスワードは" . self::MIN_PASSWORD_LENGTH . "文字以上です。";
-                } else if (mb_strlen($values['new_password'], 'UTF-8') > self::MAX_PASSWORD_LENGTH) {
+                } else if ($this->getStringLength($values['new_password']) > self::MAX_PASSWORD_LENGTH) {
                     $errors[] = "パスワードが長すぎます。";
                 } else if ($values['new_password'] !== $values['confirm_password']) {
                     $errors[] = "確認用パスワードが一致しません。";
@@ -137,24 +137,24 @@ class UserRepository extends BaseRepository
         } else {
             $values = $this->trimValues($values);
             if (isset($values['name'])) {
-                if (mb_strlen($values['name'], 'UTF-8') === 0) {
+                if ($this->getStringLength($values['name']) === 0) {
                     $errors[] = "名前は入力必須です。";
                 } else {
-                    if (mb_strlen($values['name'], 'UTF-8') > self::MAX_NAME_LENGTH) {
+                    if ($this->getStringLength($values['name']) > self::MAX_NAME_LENGTH) {
                         $errors[] = "名前は".self::MAX_NAME_LENGTH."文字以内です。";
                     }
                 }    
             }
     
             if (isset($values['login_id'])) {
-                if (mb_strlen($values['login_id'], 'UTF-8') === 0) {
+                if ($this->getStringLength($values['login_id']) === 0) {
                     $errors[] = "ログインIDは入力必須です。";
                 } else {
-                    if (!preg_match("/^[a-zA-Z0-9]+$/", $values['login_id'])) {
+                    if (!$this->validateAlphaNumeric($values['login_id'])) {
                         $errors[] = "ログインIDは半角英数字です。";
-                    } else if (mb_strlen($values['login_id'], 'UTF-8') < self::MIN_LOGIN_ID_LENGTH) {
+                    } else if ($this->getStringLength($values['login_id']) < self::MIN_LOGIN_ID_LENGTH) {
                         $errors[] = "ログインIDは".self::MIN_LOGIN_ID_LENGTH."文字以上です。";
-                    } else if (mb_strlen($values['login_id'], 'UTF-8') > self::MAX_LOGIN_ID_LENGTH) {
+                    } else if ($this->getStringLength($values['login_id']) > self::MAX_LOGIN_ID_LENGTH) {
                         $errors[] = "ログインIDは".self::MAX_LOGIN_ID_LENGTH."文字以内です。";
                     } else {
                         $tmp_user = $this->fetchByLoginId($values['login_id']);
@@ -170,14 +170,14 @@ class UserRepository extends BaseRepository
             }
             
             if (isset($values['password'])) {
-                if (mb_strlen($values['password'], 'UTF-8') === 0) {
+                if ($this->getStringLength($values['password']) === 0) {
                     $errors[] = "パスワードは入力必須です。";
                 } else {
-                    if (!preg_match("/^[a-zA-Z0-9]+$/", $values['password'])) {
+                    if (!$this->validateAlphaNumeric($values['password'])) {
                         $errors[] = "パスワードは半角英数字です。";
-                    } else if (mb_strlen($values['password'], 'UTF-8') < self::MIN_PASSWORD_LENGTH) {
+                    } else if ($this->getStringLength($values['password']) < self::MIN_PASSWORD_LENGTH) {
                         $errors[] = "パスワードは".self::MIN_PASSWORD_LENGTH."文字以上です。";
-                    } else if (mb_strlen($values['password'], 'UTF-8') > self::MAX_PASSWORD_LENGTH) {
+                    } else if ($this->getStringLength($values['password']) > self::MAX_PASSWORD_LENGTH) {
                         $errors[] = "パスワードが長すぎます。";
                     } else if ($values['password'] !== $values['confirm_password']) {
                         $errors[] = "パスワードが一致しません。";
@@ -211,7 +211,7 @@ class UserRepository extends BaseRepository
             }
             
             if (isset($values['comment'])) {
-                if (mb_strlen($values['comment'], 'UTF-8') > self::MAX_COMMENT_LENGTH) {
+                if ($this->getStringLength($values['comment']) > self::MAX_COMMENT_LENGTH) {
                     $errors[] = "本文は".self::MAX_COMMENT_LENGTH."文字以内です。";
                 }
             }
@@ -222,31 +222,31 @@ class UserRepository extends BaseRepository
     protected function trimValues($values)
     {   
         if (isset($values['name'])) {
-            $values['name'] = trim(mb_convert_kana($values['name'], 's'));
+            $values['name'] = $this->trimString($values['name']);
         }
         
         if (isset($values['login_id'])) {
-            $values['login_id'] = trim(mb_convert_kana($values['login_id'], 's'));
+            $values['login_id'] = $this->trimString($values['login_id']);
         }
         
         if (isset($values['password'])) {
-            $values['password'] = trim(mb_convert_kana($values['password'], 's'));
+            $values['password'] = $this->trimString($values['password']);
         }
         
         if (isset($values['new_password'])) {
-            $values['new_password'] = trim(mb_convert_kana($values['new_password'], 's'));
+            $values['new_password'] = $this->trimString($values['new_password']);
         }
         
         if (isset($values['confirm_password'])) {
-            $values['confirm_password'] = trim(mb_convert_kana($values['confirm_password'], 's'));
+            $values['confirm_password'] = $this->trimString($values['confirm_password']);
         }
         
         if (isset($values['current_password'])) {
-           $values['current_password'] = trim(mb_convert_kana($values['current_password'], 's'));
+           $values['current_password'] = $this->trimString($values['current_password']);
         }
         
         if (isset($values['comment'])) {
-            $values['comment'] = trim(mb_convert_kana($values['comment'], 's'));
+            $values['comment'] = $this->trimString($values['comment']);
         }
         return $values;
     }
