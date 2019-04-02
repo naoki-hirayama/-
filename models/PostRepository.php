@@ -3,12 +3,14 @@
 require_once('BaseRepository.php');
 
 class PostRepository extends BaseRepository
-{
+{   
+    protected $table_name = 'posts';
+    
     const SELECT_COLOR_OPTIONS = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
     const MAX_PASSWORD_LENGTH  = 15;
     const MIN_PASSWORD_LENGTH  = 4;
     const MAX_NAME_LENGTH      = 10;
-    const MAX_COMMENT_LENGTH    = 100;
+    const MAX_COMMENT_LENGTH   = 100;
     const MAX_PICTURE_SIZE     = 1*1024*1024;
     
     
@@ -52,6 +54,7 @@ class PostRepository extends BaseRepository
     
     public function delete($id)
     {   
+        $post = $this->fetchById($id);
         parent::delete($id);
         // 投稿に画像がある時
         if (isset($post['picture'])) {

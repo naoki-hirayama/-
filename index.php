@@ -6,8 +6,7 @@ require_once('function/function.php');
 require_once('models/UserRepository.php');
 require_once('models/PostRepository.php');
 $database = db_connect();
-$table_name = 'users';
-$user_repository = new UserRepository($database, $table_name);
+$user_repository = new UserRepository($database);
 $post_repository = new PostRepository($database);
 $picture_max_size = $user_repository::MAX_PICTURE_SIZE;
 $select_color_options = $post_repository::SELECT_COLOR_OPTIONS;
@@ -33,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else {
     // GETでアクセスされた時
-    $total_records = $post_repository->fetchCountRecordsById();
+    $total_records = $post_repository->fetchCount();
     $max_pager_range = 10;
     $per_page_records = 5;
     

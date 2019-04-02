@@ -4,6 +4,8 @@ require_once('BaseRepository.php');
 
 class UserRepository extends BaseRepository
 {   
+    protected $table_name = 'users';
+    
     const MAX_PASSWORD_LENGTH        = 30;
     const MIN_PASSWORD_LENGTH        = 4;
     const MAX_NAME_LENGTH            = 10;

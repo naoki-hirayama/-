@@ -5,16 +5,13 @@ class BaseRepository
     protected $database;
     protected $table_name;
     
-    public function __construct($database, $table_name = 'posts')
+    public function __construct($database)
     {
         $this->database = $database;
-        $this->table_name = $table_name;
     }
     
     public function delete($id)
     {   
-        $post = $this->fetchById($id);
-        
         $sql = "DELETE FROM`{$this->table_name}`WHERE id = :id";
         
         $statement = $this->database->prepare($sql);
@@ -22,12 +19,11 @@ class BaseRepository
         $statement->bindParam(':id', $id);
         
         $statement->execute();
-        
     }
     
-    public function fetchCountRecordsById()
+    public function fetchCount()
     {   
-        $sql = "SELECT COUNT(id) AS CNT FROM`{$this->table_name}`";
+        $sql = "SELECT COUNT(*) AS CNT FROM `{$this->table_name}`";
         $statement = $this->database->query($sql);
         return $statement->fetchColumn();
     }

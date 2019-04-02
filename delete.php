@@ -9,8 +9,7 @@ $database = db_connect();
 $post_repository = new PostRepository($database);
 
 if (isset($_SESSION['user_id'])) {
-    $table_name = 'users';
-    $user_repository = new UserRepository($database, $table_name);
+    $user_repository = new UserRepository($database);
     $user_info = $user_repository->fetchById($_SESSION['user_id']);
 }
 $post = $post_repository->fetchById($_GET['id']);

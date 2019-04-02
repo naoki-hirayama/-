@@ -1,3 +1,4 @@
+
 $ sudo service mysqld start
 
 $ mysql -u root
