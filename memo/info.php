@@ -154,3 +154,9 @@ http://php.net/manual/ja/features.file-upload.errors.php
         // テーブルを変更
         // ALTER TABLE table modify(change)
 select p.*, u.name from post p left join user u on p.user_id = u.id order by created_at desc limit :start_page, :per_page_records;
+名前：
+                    <?php if (isset($reply_post['user_id'])) : ?>
+                        <a href="profile.php?id=<?php echo $reply_post['user_id'] ?>"><?php echo h($reply_post['name']) ?></a><br />
+                    <?php else : ?>
+                        <?php echo h($reply_post['name']) ?><br />
+                    <?php endif ?>

@@ -66,17 +66,22 @@
                     <?php else : ?>
                         <?php echo h($post['name']) ?><br />
                     <?php endif ?>
-                    本文：<font color="<?php echo $post['color'] ?>">
-                              <?php echo h($post['comment']) ?>
-                          </font><br />
+                    本文：
+                    <font color="<?php echo $post['color'] ?>">
+                        <?php echo h($post['comment']) ?>
+                    </font><br />
                     画像：
-                        <?php if (!empty($post['picture'])) : ?>
-                            <img src="images/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
-                        <?php else : ?>
-                            なし<br />
-                        <?php endif ?>
-                    時間：<?php echo $post['created_at'] ?><br />
-                    レス :(<a href="reply.php?id=<?php echo $post['id'] ?>">< 3 >件</a>)<br />
+                    <?php if (!empty($post['picture'])) : ?>
+                        <img src="images/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
+                    <?php else : ?>
+                        なし<br />
+                    <?php endif ?>
+                    時間：
+                    <?php echo $post['created_at'] ?><br />
+                    レス :
+                    <a href="reply.php?id=<?php echo $post['id'] ?>">
+                        <?php echo $reply_repository->fetchCountByPostId($post['id']) ?>件
+                    </a><br />
                     <!--if文でパスワードが設定されていなかったら非表示   -->
                     <?php if (!empty($post['password'] )) : ?>
                         <form action="delete.php" method="get">

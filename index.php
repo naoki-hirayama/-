@@ -5,9 +5,11 @@ require_once('function/Pager.php');
 require_once('function/function.php');
 require_once('models/UserRepository.php');
 require_once('models/PostRepository.php');
+require_once('models/ReplyRepository.php');
 $database = db_connect();
 $user_repository = new UserRepository($database);
 $post_repository = new PostRepository($database);
+$reply_repository = new ReplyRepository($database);
 $picture_max_size = $user_repository::MAX_PICTURE_SIZE;
 $select_color_options = PostRepository::getSelectColorOptions();
 
@@ -21,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['picture'])) {
         $values['picture'] = $_FILES['picture'];
     }
-    $errors = $post_repository->validate($_POST);
+    $errors = $post_repository->validate($values);
     // 成功した場合はDBへ保存してsend.phpにリダイレクトする
     if (empty($errors)) {
         if (isset($_SESSION['user_id'])) {
@@ -56,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_ids[] = $post['user_id'];
         }
     }
-    
+
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
     }
