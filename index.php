@@ -16,16 +16,18 @@ if (isset($_SESSION['user_id'])) {
 }
 // POSTでアクセスされたら投稿処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $values = $_POST;
+    
     if (isset($_FILES['picture'])) {
-        $_POST['picture'] = $_FILES['picture'];
+        $values['picture'] = $_FILES['picture'];
     }
     $errors = $post_repository->validate($_POST);
     // 成功した場合はDBへ保存してsend.phpにリダイレクトする
     if (empty($errors)) {
         if (isset($_SESSION['user_id'])) {
-            $post_repository->create($_POST, $_SESSION['user_id']);
+            $post_repository->create($values, $_SESSION['user_id']);
         } else {
-            $post_repository->create($_POST);
+            $post_repository->create($values);
         }
         header('Location: send.php');
         exit;
@@ -54,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_ids[] = $post['user_id'];
         }
     }
+    
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
     }

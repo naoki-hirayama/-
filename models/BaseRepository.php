@@ -44,7 +44,7 @@ class BaseRepository
     public function fetchByIds($ids)
     {   
         $sanitized_ids = [];
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $sanitized_ids[] = (int)$id;  
         }
         $sql = "SELECT * FROM `{$this->table_name}` WHERE id IN (".implode(',', $sanitized_ids).")";

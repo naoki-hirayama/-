@@ -14,3 +14,14 @@ INSERT INTO bbs.post (id,name,comment,color,password,picture,user_id,created_at)
 ALTER TABLE users ADD picture VARCHAR(100) AFTER password;
 ALTER TABLE users ADD comment VARCHAR(50) AFTER picture;
 ALTER TABLE users CHANGE profile_comment comment VARCHAR(60);
+
+
+CREATE TABLE bbs.replies (
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    name VARCHAR(25) NOT NULL,
+    user_id INT(11),
+    post_id INT(11) NOT NULL,
+    comment VARCHAR(255) NOT NULL,
+    password VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

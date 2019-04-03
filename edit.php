@@ -15,15 +15,15 @@ $picture_max_size = $user_repository::MAX_PICTURE_SIZE;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
-    
+    $values = $_POST;
     if (isset($_FILES['picture'])) {
-        $_POST['picture'] = $_FILES['picture'];
+        $values['picture'] = $_FILES['picture'];
     }
     
-    $errors =  $user_repository->validate($_POST, $_SESSION['user_id']);
+    $errors =  $user_repository->validate($values, $_SESSION['user_id']);
     
     if (empty($errors)) {
-        $user_repository->edit($_SESSION['user_id'], $_POST);
+        $user_repository->edit($_SESSION['user_id'], $values);
         header('Location: profile.php?id='.$user_info['id'].'');
         exit;
     }

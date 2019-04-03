@@ -14,7 +14,7 @@ class PostRepository extends BaseRepository
     
     public static function getSelectColorOptions()
     {
-        return $colors = ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
+        return ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
     }
     
     public function create($values, $user_id = null)
@@ -69,7 +69,7 @@ class PostRepository extends BaseRepository
     {   
         $errors = [];
         if (empty($values)) {
-            $errors [] = 'エラーが発生しました。画像が大きすぎます。';
+            $errors [] = "エラーが発生しました。画像が大きすぎます。";
         } else {
             $values = $this->trimValues($values);
             if (isset($values['name'])) {
@@ -81,7 +81,7 @@ class PostRepository extends BaseRepository
                     }
                 }    
             }
-        
+            
             if (isset($values['picture'])) {
                 if (strlen($values['picture']['name']) > 0) {
                     if ($values['picture']['error'] === UPLOAD_ERR_FORM_SIZE) {
@@ -99,7 +99,7 @@ class PostRepository extends BaseRepository
                             'image/gif',
                             'image/jpeg'
                         ];
-                       
+                        
                         if (!in_array($picture_type, $vaild_picture_types)) {
                             $errors[] = "画像が不正です。";
                         }
@@ -116,10 +116,10 @@ class PostRepository extends BaseRepository
             if (isset($values['password'])) {
                 if ($this->getStringLength($values['password']) !== 0) {
                     if (!$this->validateAlphaNumeric($values['password'])) {
-                        $errors[] = " パスワードは半角英数字です。";
+                        $errors[] = "パスワードは半角英数字です。";
                     }
                     if ($this->getStringLength($values['password']) < self::MIN_PASSWORD_LENGTH) {
-                        $errors[] = " パスワードは".self::MIN_PASSWORD_LENGTH."文字以上です。";
+                        $errors[] = "パスワードは".self::MIN_PASSWORD_LENGTH."文字以上です。";
                     }
                     if ($this->getStringLength($values['password']) > self::MAX_PASSWORD_LENGTH) {
                         $errors[] = "パスワードが長すぎます。";

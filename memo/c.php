@@ -15,7 +15,7 @@ class Base
     public function Id($id)
     {
         $i = $id;
-        $i;
+        echo $i;
     }
 }
 
@@ -39,11 +39,17 @@ class Hoge extends Base
 
 $hoge = new Hoge();
 $hoge->setName('hoge');
+$hoge->Id(6);
 
-
-$string = 'jjjほ';
+$string = 'jjj';
+var_dump(!preg_match("/^[a-zA-Z0-9]+$/", $string));
 var_dump($hoge->validateAlphaNumeric($string));
 
-$base = new Base();
-echo $base->getName();
-var_dump($base->Id(10));
+// $base = new Base();
+// echo $base->getName();
+// var_dump($base->Id(10));
+if (($s = 10) ===10) {
+    echo "true";
+} else {
+    echo "false";
+}
