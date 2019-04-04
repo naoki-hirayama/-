@@ -10,5 +10,3 @@ if (isset($_SESSION['user_id'])) {
 }
 $header_title = '投稿成功';
 include('views/send.php');
-
-

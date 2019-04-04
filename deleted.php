@@ -13,6 +13,3 @@ if (isset($_SESSION['user_id'])) {
 $header_title = '削除しました。';
 
 include('views/deleted.php');
-
-
-
