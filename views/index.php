@@ -80,17 +80,17 @@
                     時間：
                     <?php echo $post['created_at'] ?><br />
                     レス :
-                    <?php if (isset($reply_cnts)) : ?>
+                    <?php if (array_search($post['id'], $have_cnt_id)): ?>
                         <?php foreach ($reply_cnts as $reply_cnt) : ?>
                             <?php if ($post['id'] === $reply_cnt['post_id']) : ?>
                                 <a href="reply.php?id=<?php echo $post['id'] ?>">
-                                    レス<?php echo $reply_cnt['cnt'] ?>件
+                                    <?php echo $reply_cnt['cnt'] ?>件
                                 </a><br />
-                            <?php endif ?>
+                            <?php endif ?>   
                         <?php endforeach ?>
-                    <?php else : ?>
+                    <?php else : ?>  
                         <a href="reply.php?id=<?php echo $post['id'] ?>">
-                            レス0件
+                            0件
                         </a><br />
                     <?php endif ?>
                     <!--if文でパスワードが設定されていなかったら非表示   -->
