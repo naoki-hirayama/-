@@ -58,8 +58,9 @@ class PostRepository extends BaseRepository
     public function delete($id)
     {   
         $post = $this->fetchById($id);
+         
         parent::delete($id);
-        // 投稿に画像がある時
+        
         if (isset($post['picture'])) {
             unlink("images/{$post['picture']}");
         }

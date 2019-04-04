@@ -16,7 +16,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $reply_post = $reply_repository->fetchById($_GET['id']);
-//他の投稿のレスの時
+
 if ($reply_post === false) {
     header('HTTP/1.1 404 Not Found');
     exit;

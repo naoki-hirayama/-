@@ -13,6 +13,7 @@ $picture_max_size = $reply_repository::MAX_PICTURE_SIZE;
 $select_color_options = ReplyRepository::getSelectColorOptions();
 
 $post = $post_repository->fetchById($_GET['id']);
+$current_user_name = $user_repository->fetchById($_GET['id']);
 if ($post === false) {
     header('HTTP/1.1 404 Not Found');
     exit;

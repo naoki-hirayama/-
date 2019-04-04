@@ -78,7 +78,7 @@ class ReplyRepository extends BaseRepository
         $statement->execute();
     }
     
-    public function fetchCountByPostId($post_id)
+    public function fetchCountByPostId($post_id)//バインド
     {   
         $sql = "SELECT COUNT(*) AS CNT FROM replies WHERE post_id = {$post_id}";
         

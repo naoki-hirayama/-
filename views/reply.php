@@ -12,7 +12,7 @@
             名前：
                 <?php if (!empty($post['user_id'])) : ?>
                     <a href="profile.php?id=<?php echo $post['user_id'] ?>">
-                        <?php echo h($post['name']); ?>
+                        <?php echo h($current_user_name['name']); ?>
                     </a><br />
                 <?php else : ?>
                     <?php echo h($post['name']); ?><br />
