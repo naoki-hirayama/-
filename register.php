@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (empty($errors)) {
         
-        $user_id = $user_repository->register($_POST);
+        $user_id = $user_repository->create($_POST);
 
         $_SESSION['user_id'] = $user_id;
         

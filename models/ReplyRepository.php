@@ -17,7 +17,7 @@ class ReplyRepository extends BaseRepository
         return ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
     }
     
-    public function create($values, $user_id = null)
+    public function create($post_id, $values, $user_id = null)
     {   
         $values = $this->trimValues($values);
         if ($values['picture']['error'] === UPLOAD_ERR_OK) {
@@ -35,7 +35,7 @@ class ReplyRepository extends BaseRepository
             $values['picture']['name'] = null;
         }
         //パスワードが入力されない時の処理
-        if (strlen($values['password']) === 0) {
+        if ($this->getStringLength($values['password']) === 0) {
             $values['password'] = null;
         }
         
@@ -51,36 +51,49 @@ class ReplyRepository extends BaseRepository
         $statement->bindParam(':password', $values['password']);
         $statement->bindParam(':picture', $values['picture']['name']);
         $statement->bindParam(':user_id', $values['user_id']);
-        $statement->bindParam(':post_id', $values['post_id']);
-        
-        $statement->execute();
-    }
-    
-    public function delete($id)
-    {   
-        $post = $this->fetchById($id);
-        
-        parent::delete($id);
-        
-        if (isset($post['picture'])) {
-            unlink("replyimages/{$post['picture']}");
-        }
-    }
-    
-    public function deleteByPostId($post_id)
-    {
-        $sql = "DELETE FROM replies WHERE post_id = :post_id";
-        
-        $statement = $this->database->prepare($sql);
-        
         $statement->bindParam(':post_id', $post_id);
         
         $statement->execute();
     }
     
-    public function fetchCountByPostId($post_id)//バインド
+    public function delete($reply_id)
     {   
-        $sql = "SELECT COUNT(*) AS CNT FROM replies WHERE post_id = {$post_id}";
+        $reply_post = $this->fetchById($reply_id);
+        
+        parent::delete($reply_id);
+        
+        if (isset($reply_post['picture'])) {
+            unlink("replyimages/{$reply_post['picture']}");
+        }
+    }
+    
+    public function deleteByPostId($post_id)
+    {   
+        $replies = $this->fetchByPostId($post_id);
+        
+        foreach ($replies as $reply) {
+            $this->delete($reply['id']);
+        }
+    }
+    
+    public function fetchCountByPostIds($post_ids)
+    {   
+        $sanitized_ids = [];
+        foreach ($post_ids as $post_id) {
+            $sanitized_ids[] = (int)$post_id; 
+        }
+        $sql = "SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (".implode(',', $sanitized_ids).") GROUP BY post_id";
+        
+        //$sql = "SELECT post_id, COUNT(*) AS cnt FROM (SELECT post_id FROM replies WHERE post_id IN (".implode(',', $sanitized_ids).") GROUP BY post_id) A";
+        $statement = $this->database->query($sql);
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function fetchCountByPostId($post_id)
+    {   
+        $sanitized_id = (int)$post_id;
+        $sql = "SELECT COUNT(*) AS CNT FROM replies WHERE post_id = {$sanitized_id}";
         
         $statement = $this->database->query($sql);
         
@@ -100,7 +113,7 @@ class ReplyRepository extends BaseRepository
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function validate($values, $post_id)
+    public function validate($values)
     {   
         $errors = [];
         if (empty($values)) {
@@ -114,7 +127,7 @@ class ReplyRepository extends BaseRepository
                     if ($this->getStringLength($values['name']) > self::MAX_NAME_LENGTH) {
                         $errors[] = "名前は".self::MAX_NAME_LENGTH."文字以内です。";
                     }
-                }    
+                }
             }
             
             if (isset($values['picture'])) {
@@ -170,12 +183,6 @@ class ReplyRepository extends BaseRepository
                         $errors[] = "本文は".self:: MAX_COMMENT_LENGTH."文字以内です。";
                     }    
                 } 
-            }
-            
-            if (isset($values['post_id'])) {
-                if ($values['post_id'] !== $post_id) {
-                    $errors[] = "不正な操作です。";
-                }
             }
             
         }

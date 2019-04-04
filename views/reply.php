@@ -37,7 +37,6 @@
     <?php  include('views/layouts/errormessage.php'); ?>
     <h2>レス投稿画面</h2>
     <form action="reply.php?id=<?php echo $post['id'] ?>" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="post_id" value="<?php echo $post['id'] ?>">
         <p>名前：<?php echo !empty($_SESSION['user_id']) ? h($user_info['name']) : ''; ?></p>
         <?php if (!empty($_SESSION['user_id'])) : ?>
             <input type="hidden" name="name" value="<?php echo h($user_info['name']) ?>">

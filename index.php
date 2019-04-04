@@ -56,11 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $user_ids = [];
     foreach ($posts as $post) {
+        $post_ids[] = $post['id'];
         if (isset($post['user_id'])) {
             $user_ids[] = $post['user_id'];
         }
     }
-
+    
+    $reply_cnts = $reply_repository->fetchCountByPostIds($post_ids);
+    dd($reply_cnts);
+    dd($reply_repository->fetchCountByPostId(150));
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
     }

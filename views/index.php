@@ -80,9 +80,19 @@
                     時間：
                     <?php echo $post['created_at'] ?><br />
                     レス :
-                    <a href="reply.php?id=<?php echo $post['id'] ?>">
-                        <?php echo $reply_repository->fetchCountByPostId($post['id']) ?>件
-                    </a><br />
+                    <?php if (isset($reply_cnts)) : ?>
+                        <?php foreach ($reply_cnts as $reply_cnt) : ?>
+                            <?php if ($post['id'] === $reply_cnt['post_id']) : ?>
+                                <a href="reply.php?id=<?php echo $post['id'] ?>">
+                                    レス<?php echo $reply_cnt['cnt'] ?>件
+                                </a><br />
+                            <?php endif ?>
+                        <?php endforeach ?>
+                    <?php else : ?>
+                        <a href="reply.php?id=<?php echo $post['id'] ?>">
+                            レス0件
+                        </a><br />
+                    <?php endif ?>
                     <!--if文でパスワードが設定されていなかったら非表示   -->
                     <?php if (!empty($post['password'] )) : ?>
                         <form action="delete.php" method="get">

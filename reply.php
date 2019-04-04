@@ -27,16 +27,15 @@ if (isset($_SESSION['user_id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values = $_POST;
-    
     if (isset($_FILES['picture'])) {
         $values['picture'] = $_FILES['picture'];
     }
-    $errors = $reply_repository->validate($values, $post['id']);
+    $errors = $reply_repository->validate($values);
     if (empty($errors)) {
         if (isset($_SESSION['user_id'])) {
-            $reply_repository->create($values, $_SESSION['user_id']);
+            $reply_repository->create($post['id'], $values, $_SESSION['user_id']);
         } else {
-            $reply_repository->create($values);
+            $reply_repository->create($post['id'], $values);
         }
         header('Location: reply.php?id='.$post['id'].'');
         exit;

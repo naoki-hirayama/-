@@ -14,7 +14,7 @@ class UserRepository extends BaseRepository
     const MIN_LOGIN_ID_LENGTH        = 4;
     const MAX_PICTURE_SIZE           = 1*1024*1024;
     
-    public function register($values)
+    public function create($values)
     {   
         $values = $this->trimValues($values);
         $password_hash = password_hash($values['password'], PASSWORD_DEFAULT);
