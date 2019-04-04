@@ -92,10 +92,13 @@ class ReplyRepository extends BaseRepository
     
     public function fetchCountByPostId($post_id)
     {   
-        $sanitized_id = (int)$post_id;
-        $sql = "SELECT COUNT(*) AS CNT FROM replies WHERE post_id = {$sanitized_id}";
+        $sql = "SELECT COUNT(*) AS CNT FROM replies WHERE post_id = :post_id";
         
-        $statement = $this->database->query($sql);
+        $statement = $this->database->prepare($sql);
+        
+        $statement->bindParam(':post_id', $post_id);
+        
+        $statement->execute();
         
         return $statement->fetchColumn();
     }
