@@ -18,7 +18,7 @@ if ($post === false) {
     header('HTTP/1.1 404 Not Found');
     exit;
 }
-dd($current_user_name);
+
 if (isset($_SESSION['user_id'])) {
     $user_info = $user_repository->fetchById($_SESSION['user_id']);
 }

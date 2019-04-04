@@ -10,8 +10,13 @@
     <?php  include('views/layouts/errormessage.php'); ?>
     <ul>
         <li>
-            名前：<?php echo h($reply_post['name']); ?><br />
-            本文：<?php echo h($reply_post['comment']); ?><br />
+            名前：
+                  <?php if (!empty($reply_post['user_id'])) : ?>
+                      <?php echo h($current_user_name['name']) ?><br />
+                  <?php else : ?>
+                      <?php echo h($reply_post['name']) ?><br />
+                  <?php endif ?>
+            本文：<?php echo h($reply_post['comment']) ?><br />
             画像：
                   <?php if (!empty($reply_post['picture'])) : ?>
                       <img src="replyimages/<?php echo h($reply_post['picture']) ?>" width="300" height="200"><br />

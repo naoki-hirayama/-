@@ -9,12 +9,12 @@ require_once('models/ReplyRepository.php');
 $database = db_connect();
 $post_repository = new PostRepository($database);
 $reply_repository = new ReplyRepository($database);
+$user_repository = new UserRepository($database);
 
 if (isset($_SESSION['user_id'])) {
-    $user_repository = new UserRepository($database);
     $user_info = $user_repository->fetchById($_SESSION['user_id']);
 }
-
+$current_user_name = $user_repository->fetchById($reply_repository->fetchById($_GET['id'])['user_id']);
 $reply_post = $reply_repository->fetchById($_GET['id']);
 
 if ($reply_post === false) {

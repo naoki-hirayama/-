@@ -15,11 +15,11 @@
                         <?php echo h($current_user_name['name']); ?>
                     </a><br />
                 <?php else : ?>
-                    <?php echo h($post['name']); ?><br />
+                    <?php echo h($post['name']) ?><br />
                 <?php endif ?>
             本文 :
                 <font color="<?php echo h($post['color']) ?>">
-                    <?php echo h($post['comment']); ?>
+                    <?php echo h($post['comment']) ?>
                 </font><br />
             画像：
                 <?php if (!empty($post['picture'])) : ?>
