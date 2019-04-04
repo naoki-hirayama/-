@@ -75,7 +75,7 @@
         <?php if ($reply_posts) : ?>
             <?php foreach ($reply_posts as $reply_post) : ?>
                 <li>
-                    ID :
+                    レスID :
                     <?php echo $reply_post['id'] ?><br />
                     名前：
                     <?php if (isset($reply_post['user_id']) && isset($users)) : ?>
