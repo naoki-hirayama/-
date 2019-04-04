@@ -55,7 +55,8 @@
         <?php if ($posts) : ?>
             <?php foreach ($posts as $post) : ?>
                 <li>
-                    ID : <?php echo $post['id'] ?><br />
+                    ID : 
+                    <?php echo $post['id'] ?><br />
                     名前：
                     <?php if (isset($post['user_id']) && isset($users)) : ?>
                         <?php foreach ($users as $user) : ?>

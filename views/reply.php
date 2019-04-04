@@ -6,29 +6,30 @@
     <!--ログイン情報-->
     <?php  include('views/layouts/loginuserinfo.php') ?>
     <a href="index.php"　class="btn btn-primary">投稿画面へ戻る</a>
-    <h1>ID:<?php echo $post['id'] ?>の投稿</h1>
     <ul>
         <li>
+            投稿ID:
+            <?php echo $post['id'] ?><br />
             名前：
-                <?php if (!empty($post['user_id'])) : ?>
-                    <a href="profile.php?id=<?php echo $post['user_id'] ?>">
-                        <?php echo h($current_user_name['name']); ?>
-                    </a><br />
-                <?php else : ?>
-                    <?php echo h($post['name']) ?><br />
-                <?php endif ?>
+            <?php if (!empty($post['user_id'])) : ?>
+                <a href="profile.php?id=<?php echo $post['user_id'] ?>">
+                    <?php echo h($current_user_name['name']); ?>
+                </a><br />
+            <?php else : ?>
+                <?php echo h($post['name']) ?><br />
+            <?php endif ?>
             本文 :
-                <font color="<?php echo h($post['color']) ?>">
-                    <?php echo h($post['comment']) ?>
-                </font><br />
+            <font color="<?php echo h($post['color']) ?>">
+                <?php echo h($post['comment']) ?>
+            </font><br />
             画像：
-                <?php if (!empty($post['picture'])) : ?>
-                    <img src="images/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
-                <?php else : ?>
-                    なし<br />
-                <?php endif ?>
+            <?php if (!empty($post['picture'])) : ?>
+                <img src="images/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
+            <?php else : ?>
+                なし<br />
+            <?php endif ?>
             時間：
-                <?php echo h($post['created_at']) ?><br />
+            <?php echo h($post['created_at']) ?><br />
             ---------------------------------------------<br />
         </li>
     </ul>

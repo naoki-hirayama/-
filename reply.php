@@ -6,6 +6,7 @@ require_once('models/UserRepository.php');
 require_once('models/PostRepository.php');
 require_once('models/ReplyRepository.php');
 $database = db_connect();
+
 $user_repository = new UserRepository($database);
 $post_repository = new PostRepository($database);
 $reply_repository = new ReplyRepository($database);
@@ -14,6 +15,7 @@ $select_color_options = ReplyRepository::getSelectColorOptions();
 
 $post = $post_repository->fetchById($_GET['id']);
 $current_user_name = $user_repository->fetchById($post_repository->fetchById($_GET['id'])['user_id']);
+
 if ($post === false) {
     header('HTTP/1.1 404 Not Found');
     exit;
@@ -29,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['picture'])) {
         $values['picture'] = $_FILES['picture'];
     }
-    $errors = $reply_repository->validate($values);
+    $errors = $reply_repository->validate($values, $post['id']);
     if (empty($errors)) {
         if (isset($_SESSION['user_id'])) {
             $reply_repository->create($values, $_SESSION['user_id']);

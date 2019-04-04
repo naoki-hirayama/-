@@ -100,7 +100,7 @@ class ReplyRepository extends BaseRepository
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function validate($values)
+    public function validate($values, $post_id)
     {   
         $errors = [];
         if (empty($values)) {
@@ -171,6 +171,13 @@ class ReplyRepository extends BaseRepository
                     }    
                 } 
             }
+            
+            if (isset($values['post_id'])) {
+                if ($values['post_id'] !== $post_id) {
+                    $errors[] = "不正な操作です。";
+                }
+            }
+            
         }
         return $errors;
     }
