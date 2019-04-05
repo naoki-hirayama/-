@@ -63,14 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
    
     $reply_cnts = $reply_repository->fetchCountByPostIds($post_ids);
-    $cnt = [];
-    $have_cnt_id = [];
+    $have_cnt_post_ids_id = [];
     foreach ($reply_cnts as $reply_cnt) {
-        $cnt[] = $reply_cnt['cnt'];
-        $have_cnt_id[] = $reply_cnt['post_id'];
+        $have_cnt_post_ids[] = $reply_cnt['post_id'];
     }
-    dd($have_cnt_id);
-    dd($cnt);
+    
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
     }
