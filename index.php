@@ -61,9 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_ids[] = $post['user_id'];
         }
     }
-   
+    
     $reply_cnts = $reply_repository->fetchCountByPostIds($post_ids);
-    $have_cnt_post_ids_id = [];
+    $have_cnt_post_ids = [];
     foreach ($reply_cnts as $reply_cnt) {
         $have_cnt_post_ids[] = $reply_cnt['post_id'];
     }
