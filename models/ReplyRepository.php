@@ -84,7 +84,6 @@ class ReplyRepository extends BaseRepository
         }
         $sql = "SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (".implode(',', $sanitized_ids).") GROUP BY post_id";
         
-        
         $statement = $this->database->query($sql);
         
         return $statement->fetchAll(PDO::FETCH_ASSOC);

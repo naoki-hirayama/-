@@ -35,7 +35,7 @@ class PostRepository extends BaseRepository
             $values['picture']['name'] = null;
         }
         //パスワードが入力されない時の処理
-        if (strlen($values['password']) === 0) {
+        if ($this->getStringLength($values['password']) === 0) {
             $values['password'] = null;
         }
         

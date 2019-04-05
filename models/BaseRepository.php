@@ -24,7 +24,9 @@ class BaseRepository
     public function fetchCount()
     {   
         $sql = "SELECT COUNT(*) AS CNT FROM `{$this->table_name}`";
+        
         $statement = $this->database->query($sql);
+        
         return $statement->fetchColumn();
     }
     
@@ -59,6 +61,7 @@ class BaseRepository
     public function fetchByOffSetAndLimit($offset, $limit)
     {
         $sql = "SELECT * FROM `{$this->table_name}` ORDER BY created_at DESC LIMIT :offset, :limit";
+        
         $statement = $this->database->prepare($sql);
         
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
