@@ -56,11 +56,11 @@ class ReplyRepository extends BaseRepository
         $statement->execute();
     }
     
-    public function delete($reply_id)
+    public function delete($id)
     {   
-        $reply_post = $this->fetchById($reply_id);
+        $reply_post = $this->fetchById($id);
         
-        parent::delete($reply_id);
+        parent::delete($id);
         
         if (isset($reply_post['picture'])) {
             unlink("replyimages/{$reply_post['picture']}");
