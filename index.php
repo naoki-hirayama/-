@@ -69,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $cnt[] = $reply_cnt['cnt'];
         $have_cnt_id[] = $reply_cnt['post_id'];
     }
-   
+    dd($have_cnt_id);
+    dd($cnt);
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
     }

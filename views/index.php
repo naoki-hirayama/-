@@ -80,9 +80,9 @@
                     時間：
                     <?php echo $post['created_at'] ?><br />
                     レス :
-                    <?php if (array_search($post['id'], $have_cnt_id)): ?>
+                    <?php if (in_array($post['id'], $have_cnt_id)): ?>
                         <?php foreach ($reply_cnts as $reply_cnt) : ?>
-                            <?php if ($post['id'] === $reply_cnt['post_id']) : ?>
+                            <?php if ((int)$post['id'] == (int)$reply_cnt['post_id']) : ?>
                                 <a href="reply.php?id=<?php echo $post['id'] ?>">
                                     <?php echo $reply_cnt['cnt'] ?>件
                                 </a><br />
