@@ -27,7 +27,7 @@ class PostRepository extends BaseRepository
             $picture_type = $finfo->file($posted_picture);
             $specific_num = uniqid(mt_rand()); 
             $rename_file = $specific_num.'.'.basename($picture_type);
-            $rename_file_path = 'images/'.$rename_file;
+            $rename_file_path = 'images/posts/'.$rename_file;
             move_uploaded_file($values['picture']['tmp_name'], $rename_file_path);
             
             $values['picture']['name'] = $rename_file;
@@ -39,8 +39,6 @@ class PostRepository extends BaseRepository
             $values['password'] = null;
         }
         
-        $values['user_id'] = $user_id;
-        
         $sql = 'INSERT INTO posts (name,comment,color,password,picture,user_id) VALUES (:name,:comment,:color,:password,:picture,:user_id)';
         
         $statement = $this->database->prepare($sql);
@@ -50,7 +48,7 @@ class PostRepository extends BaseRepository
         $statement->bindParam(':color', $values['color']);
         $statement->bindParam(':password', $values['password']);
         $statement->bindParam(':picture', $values['picture']['name']);
-        $statement->bindParam(':user_id', $values['user_id']);
+        $statement->bindParam(':user_id', $user_id);
         
         $statement->execute();
     }
@@ -62,7 +60,7 @@ class PostRepository extends BaseRepository
         parent::delete($id);
         
         if (isset($post['picture'])) {
-            unlink("images/{$post['picture']}");
+            unlink("images/posts/{$post['picture']}");
         }
     }
     

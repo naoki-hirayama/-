@@ -43,14 +43,14 @@ class UserRepository extends BaseRepository
             $picture_type = $finfo->file($posted_picture);
             $specific_num = uniqid(mt_rand()); 
             $rename_file = $specific_num.'.'.basename($picture_type);
-            $rename_file_path = 'userimages/'.$rename_file;
+            $rename_file_path = 'images/users/'.$rename_file;
             move_uploaded_file($values['picture']['tmp_name'], $rename_file_path);
             
             if (empty($user['picture'])) {
                 $values['picture']['name'] = $rename_file;
             } else {
                 $values['picture']['name'] = $rename_file;
-                unlink("userimages/{$user['picture']}"); 
+                unlink("images/users/{$user['picture']}"); 
             }
         } else {
             $values['picture']['name'] = isset($user['picture']) ? $user['picture'] : null;

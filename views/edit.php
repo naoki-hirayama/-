@@ -16,7 +16,7 @@
         <input type="text" name="name" value="<?php echo h($user_info['name']) ?>"><br />
         <p>画像：</p>
         <?php if (!empty($user_info['picture'])) : ?>
-            <img src="userimages/<?php echo h($user_info['picture']) ?>" width="150" height="150"><br />
+            <img src="images/users/<?php echo h($user_info['picture']) ?>" width="150" height="150"><br />
         <?php else : ?>
             なし<br />
         <?php endif ?>

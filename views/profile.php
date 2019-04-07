@@ -13,7 +13,7 @@
             <?php echo h($user['name']) ?><br />
             画像：
             <?php if (!empty($user['picture'])) : ?>
-                <img src="userimages/<?php echo h($user['picture']) ?>" width="150" height="150"><br />
+                <img src="images/users/<?php echo h($user['picture']) ?>" width="150" height="150"><br />
             <?php else : ?>
                 なし<br />
             <?php endif ?>

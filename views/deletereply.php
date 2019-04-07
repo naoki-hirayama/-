@@ -20,7 +20,7 @@
             <?php echo h($reply_post['comment']) ?><br />
             画像：
             <?php if (!empty($reply_post['picture'])) : ?>
-                <img src="replyimages/<?php echo h($reply_post['picture']) ?>" width="300" height="200"><br />
+                <img src="images/replies/<?php echo h($reply_post['picture']) ?>" width="300" height="200"><br />
             <?php else : ?>
                 なし<br />
             <?php endif ?>

@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reply_posts = $reply_repository->fetchByPostId($post['id']);
     $total_replies = $reply_repository->fetchCountByPostId($post['id']);
     
+    $user_ids = [];
     foreach ($reply_posts as $reply_post) {
         if (isset($reply_post['user_id'])) {
             $user_ids[] = $reply_post['user_id'];
@@ -52,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
+        $user_names_are_key_as_user_ids = array_column($users, 'name', 'id');
     }
 }    
 

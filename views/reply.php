@@ -79,11 +79,7 @@
                     <?php echo $reply_post['id'] ?><br />
                     名前：
                     <?php if (isset($reply_post['user_id']) && isset($users)) : ?>
-                        <?php foreach ($users as $user) : ?>
-                            <?php if ($reply_post['user_id'] === $user['id']) : ?>
-                                <a href="profile.php?id=<?php echo $user['id'] ?>"><?php echo h($user['name']) ?></a><br />
-                            <?php endif ?>
-                        <?php endforeach ?>
+                        <a href="profile.php?id=<?php echo $reply_post['user_id'] ?>"><?php echo h($user_names_are_key_as_user_ids[$reply_post['user_id']]) ?></a><br />
                     <?php else : ?>
                         <?php echo h($reply_post['name']) ?><br />
                     <?php endif ?>
@@ -93,7 +89,7 @@
                     </font><br />
                     画像：
                     <?php if (!empty($reply_post['picture'])) : ?>
-                        <img src="replyimages/<?php echo h($reply_post['picture']) ?>" width="300" height="200"><br />
+                        <img src="images/replies/<?php echo h($reply_post['picture']) ?>" width="300" height="200"><br />
                     <?php else : ?>
                         なし<br />
                     <?php endif ?>

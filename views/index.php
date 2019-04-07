@@ -58,12 +58,8 @@
                     ID : 
                     <?php echo $post['id'] ?><br />
                     名前：
-                    <?php if (isset($post['user_id']) && isset($users)) : ?>
-                        <?php foreach ($users as $user) : ?>
-                            <?php if ($post['user_id'] === $user['id']) : ?>
-                                <a href="profile.php?id=<?php echo $user['id'] ?>"><?php echo h($user['name']) ?></a><br />
-                            <?php endif ?>
-                        <?php endforeach ?>
+                    <?php if (isset($post['user_id'])) : ?>
+                        <a href="profile.php?id=<?php echo $post['user_id'] ?>"><?php echo h($user_names_are_key_as_user_ids[$post['user_id']]) ?></a><br />
                     <?php else : ?>
                         <?php echo h($post['name']) ?><br />
                     <?php endif ?>
@@ -73,21 +69,17 @@
                     </font><br />
                     画像：
                     <?php if (!empty($post['picture'])) : ?>
-                        <img src="images/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
+                        <img src="images/posts/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
                     <?php else : ?>
                         なし<br />
                     <?php endif ?>
                     時間：
                     <?php echo $post['created_at'] ?><br />
                     レス :
-                    <?php if (in_array($post['id'], $have_cnt_post_ids)): ?>
-                        <?php foreach ($reply_cnts as $reply_cnt) : ?>
-                            <?php if ((int)$post['id'] === (int)$reply_cnt['post_id']) : ?>
-                                <a href="reply.php?id=<?php echo $post['id'] ?>">
-                                    <?php echo $reply_cnt['cnt'] ?>件
-                                </a><br />
-                            <?php endif ?>   
-                        <?php endforeach ?>
+                    <?php if (isset($cnts_are_key_as_post_ids) && (in_array($post['id'], $post_ids_have_replies,true))): ?>
+                        <a href="reply.php?id=<?php echo $post['id'] ?>">
+                            <?php echo $cnts_are_key_as_post_ids[$post['id']] ?>件
+                        </a><br />
                     <?php else : ?>  
                         <a href="reply.php?id=<?php echo $post['id'] ?>">
                             0件

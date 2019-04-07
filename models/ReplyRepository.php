@@ -27,7 +27,7 @@ class ReplyRepository extends BaseRepository
             $picture_type = $finfo->file($posted_picture);
             $specific_num = uniqid(mt_rand()); 
             $rename_file = $specific_num.'.'.basename($picture_type);
-            $rename_file_path = 'replyimages/'.$rename_file;
+            $rename_file_path = 'images/replies/'.$rename_file;
             move_uploaded_file($values['picture']['tmp_name'], $rename_file_path);
             
             $values['picture']['name'] = $rename_file;
@@ -38,9 +38,7 @@ class ReplyRepository extends BaseRepository
         if ($this->getStringLength($values['password']) === 0) {
             $values['password'] = null;
         }
-        
-        $values['user_id'] = $user_id;
-        
+    
         $sql = 'INSERT INTO replies (name,comment,color,password,picture,user_id,post_id) VALUES (:name,:comment,:color,:password,:picture,:user_id,:post_id)';
         
         $statement = $this->database->prepare($sql);
@@ -50,20 +48,20 @@ class ReplyRepository extends BaseRepository
         $statement->bindParam(':color', $values['color']);
         $statement->bindParam(':password', $values['password']);
         $statement->bindParam(':picture', $values['picture']['name']);
-        $statement->bindParam(':user_id', $values['user_id']);
+        $statement->bindParam(':user_id', $user_id);
         $statement->bindParam(':post_id', $post_id);
         
         $statement->execute();
     }
     
-    public function delete($id)
+    public function delete($reply_id)
     {   
-        $reply_post = $this->fetchById($id);
+        $reply_post = $this->fetchById($reply_id);
         
-        parent::delete($id);
+        parent::delete($reply_id);
         
         if (isset($reply_post['picture'])) {
-            unlink("replyimages/{$reply_post['picture']}");
+            unlink("images/replies/{$reply_post['picture']}");
         }
     }
     
@@ -91,7 +89,7 @@ class ReplyRepository extends BaseRepository
     
     public function fetchCountByPostId($post_id)
     {   
-        $sql = "SELECT COUNT(*) AS CNT FROM replies WHERE post_id = :post_id";
+        $sql = "SELECT COUNT(*) FROM replies WHERE post_id = :post_id";
         
         $statement = $this->database->prepare($sql);
         

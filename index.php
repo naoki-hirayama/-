@@ -61,15 +61,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_ids[] = $post['user_id'];
         }
     }
-    
-    $reply_cnts = $reply_repository->fetchCountByPostIds($post_ids);
-    $have_cnt_post_ids = [];
-    foreach ($reply_cnts as $reply_cnt) {
-        $have_cnt_post_ids[] = $reply_cnt['post_id'];
-    }
-    
+   
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
+        
+        $user_names_are_key_as_user_ids = array_column($users, 'name', 'id');
+    }
+    
+    $posts_have_replies_and_cnts = $reply_repository->fetchCountByPostIds($post_ids);
+    
+    if (!empty($posts_have_replies_and_cnts)) {
+        $post_ids_have_replies = [];
+        foreach ($posts_have_replies_and_cnts as $post_have_replies_and_cnts) {
+            $post_ids_have_replies[] = $post_have_replies_and_cnts['post_id'];
+        }
+        
+        $cnts_are_key_as_post_ids = array_column($posts_have_replies_and_cnts, 'cnt', 'post_id');
     }
 }
 
