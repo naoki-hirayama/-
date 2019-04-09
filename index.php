@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_ids[] = $post['user_id'];
         }
     }
-   
+    
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
         

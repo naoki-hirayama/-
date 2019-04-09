@@ -64,6 +64,35 @@ class PostRepository extends BaseRepository
         }
     }
     
+    public function fetchByKeywords($values)
+    {
+        $sql = "SELECT * FROM posts WHERE comment LIKE :comment AND name LIKE :name";
+        //名前がユーザーネームと違う
+        //select * from posts inner join users on posts.user_id=users.id;
+        // select * from posts left outer join users on posts.user_id = users.id;
+        // select * from posts,users where posts.user_id=users.id;
+        // select users.name from posts,users where posts.user_id=users.id; 
+        $statement = $this->database->prepare($sql);
+        $comment = '%'.$values['comment'].'%';
+        $name = '%'.$values['name'].'%';
+        $statement->bindParam(':comment', $comment);
+        $statement->bindParam(':name', $name);
+        
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function fetchByName($name)
+    {
+        
+    }
+    
+    public function fetchByNameAndComment($values)
+    {
+        
+    }
+    
     public function validate($values)
     {   
         $errors = [];
@@ -135,6 +164,30 @@ class PostRepository extends BaseRepository
                     }    
                 } 
             }
+        }
+        return $errors;
+    }
+    
+    public function searchValidate($values)
+    {   
+        $errors = [];
+        $values = $this->trimValues($values);
+        if (isset($values['name'], $values['comment'])) {
+            if ($this->getStringLength($values['name']) === 0 )  {
+                $errors[] = "名前を入力してください。";
+            
+                if ($this->getStringLength($values['name']) > self::MAX_NAME_LENGTH) {
+                    $errors[] = "名前は".self::MAX_NAME_LENGTH."文字以内です。";
+                }
+            }
+                
+            if ($this->getStringLength($values['comment']) === 0) {
+                $errors[] = "本文を入力してください。";
+                
+                if ($this->getStringLength($values['comment']) > self::MAX_COMMENT_LENGTH) {
+                    $errors[] = "本文は".self:: MAX_COMMENT_LENGTH."文字以内です。";
+                }
+            }   
         }
         return $errors;
     }

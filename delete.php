@@ -14,6 +14,7 @@ if (isset($_SESSION['user_id'])) {
     $user_repository = new UserRepository($database);
     $user_info = $user_repository->fetchById($_SESSION['user_id']);
 }
+
 $post = $post_repository->fetchById($_GET['id']);
 
 if ($post === false) {

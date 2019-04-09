@@ -5,7 +5,10 @@ $ mysql -u root
 TRUNCATE table users; 
 use bbs
 d  
-
+select * from posts inner join users on posts.user_id=users.id;
+select * from posts left outer join users on posts.user_id = users.id;
+select * from posts,users where posts.user_id=users.id;
+select users.name from posts,users where posts.user_id=users.id;     
 source ~/environment/kadai-ibg/memo/create_table_bbs.users.sql
 <?php var_dump($post['password']);exit; ?>
 $ git push origin master
@@ -88,7 +91,7 @@ array (size=1)
 
 include_once文は、include文と同じく外部ファイルを読み込むときに使用しますが
 
-、違いとして外部ファイルがすでに読み込まれているか、チェックを行います。
+違いとして外部ファイルがすでに読み込まれているか、チェックを行います。
 
 すでに外部ファイルが読み込まれている場合は、ファイルを読み込むことはありません。
 
@@ -96,7 +99,6 @@ include_once文は、include文と同じく外部ファイルを読み込むと�
 
 意図しない関数の再定義や値の初期化を防ぎたい場合に使用します。
 
-https://www.sejuku.net/blog/23852
 <?php
 if ($_FILES['picture']['name'] != null) {
     $valid_picture_types = array(

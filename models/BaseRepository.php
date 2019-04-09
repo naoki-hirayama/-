@@ -10,6 +10,11 @@ class BaseRepository
         $this->database = $database;
     }
     
+    public function fetchByname()
+    {
+        
+    }
+    
     public function delete($id)
     {   
         $sql = "DELETE FROM `{$this->table_name}` WHERE id = :id";
