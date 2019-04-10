@@ -72,6 +72,23 @@ class UserRepository extends BaseRepository
         $statement->execute();
     }
     
+    public function fetchByName($name)
+    {
+        $sql = "SELECT * FROM users WHERE name LIKE :name";
+        //名前がユーザーネームと違う
+        //select * from posts inner join users on posts.user_id=users.id;
+        // select * from posts left outer join users on posts.user_id = users.id;
+        // select * from posts,users where posts.user_id=users.id;
+        // select users.name from posts,users where posts.user_id=users.id;
+        $statement = $this->database->prepare($sql);
+        $name = '%'.$name.'%';
+        $statement->bindParam(':name', $name);
+        
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     public function changePassword($id, $values)
     {   
         $values = $this->trimValues($values);

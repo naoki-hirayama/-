@@ -96,31 +96,28 @@
     <?php if ($pager->hasNextPage()) : ?>           
         <a href="?page=<?php echo $pager->getNextPage() ?>">次へ</a>
     <?php endif ?>
-        <!--ここまで-->
-    
-    
+    <!--ここまで-->
     <div id="modalwin" class="modalwin hide">
         <a herf="#" class="modal-close"></a>
         <h1>編集</h1>
         <div class="modalwin-contents">
             <form action="index.php" method="post" enctype="multipart/form-data">
                 <input id="input_name" type="text" name="name" value="">
-                <br>
+                <br />
                 <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
                 <!--<img src="../images/posts/"></img>-->
                 <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $picture_max_size ?>">
-                <br>
+                <br />
                 <input type="file" name="picture"><br />
                 <select id="input_color" name="color">
                 <?php foreach($select_color_options as $key => $value) : ?>
                     <option value="<?php echo $key ?>"><?php echo $value; ?></option>
                 <?php endforeach ?>
                 </select>
-                <br>
-                <input type="submit" value="Submit"/>
-                <br>
+                <br />
+                <input type="submit" value="編集"/>
+                <br />
             </form>
-            <p>テキスト</p>
             <button>閉じる</button>
         </div>
     </div>
@@ -128,8 +125,8 @@
 <script type="text/javascript">
     var json_posts = '<?php echo json_encode($posts); ?>';
     console.log(json_posts);
-    var hogehoge = [1,2,3,4];
-    console.log(hogehoge[0]);
+    // var hogehoge = [1,2,3,4];
+    // console.log(hogehoge[0]);
     $(function() {
         $('.show-modal').on('click', function() {
             // console.log(json_posts);

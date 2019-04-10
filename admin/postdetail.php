@@ -24,12 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //jqueryでポスト送信
     //レス削除
     
-    
-    
-    
-    
-    
-    
 }
 
 $reply_posts = $reply_repository->fetchByPostId($post['id']);

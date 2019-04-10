@@ -4,7 +4,8 @@ $ sudo service mysqld start
 $ mysql -u root
 TRUNCATE table users; 
 use bbs
-d  
+d  "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name AND user_id IS NULL)) AND ((WHRE user_id IN (".implode(',', $sanitized_ids).")) AND (comment LIKE :comment))";
+SELECT * FROM posts WHERE (comment LIKE :comment) AND (name LIKE :name AND user_id IS NULL)
 select * from posts inner join users on posts.user_id=users.id;
 select * from posts left outer join users on posts.user_id = users.id;
 select * from posts,users where posts.user_id=users.id;

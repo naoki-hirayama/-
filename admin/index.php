@@ -27,13 +27,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $values = $_GET;
         $errors = $post_repository->searchValidate($values);
         //テーブル結合　classはどうするのか？
-        //
         if (empty($errors)) {
-            $comment_search_results = $post_repository->fetchByKeywords($values);
-            dd($comment_search_results);
-        }    
+            $search_results_are_guest_users = $post_repository->fetchSearchResultsByKeywords($values);
+            $name_search_results_in_users = $user_repository->fetchByName($values['name']);
+            
+            if (!empty($name_search_results_in_users)) {
+                $search_user_ids = [];
+                foreach ($name_search_results_in_users as $name_search_result_in_users) {
+                    $search_user_ids[] = $name_search_result_in_users['id'];
+                }
+                $search_results_are_having_account_users = $post_repository->fetchSearchResultsByUserIds($values['comment'], $search_user_ids);
+            }
+            
+            $searched_posts = array_merge($search_results_are_guest_users, $search_results_are_having_account_users);
+        }
     }
-    
+    dd($searched_posts);
     $max_pager_range = 10;
     $per_page_records = 30;
     $total_records = $post_repository->fetchCount();

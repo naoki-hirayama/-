@@ -11,7 +11,7 @@ $(function() {
         }
     });
     //削除アラートが二個目から出ない
-    $('#delete_reply').click(function() {
+    $("input[value=削除]").click(function() {
         if (!confirm('本当にレスを削除しますか？')) {
             return false;
         }

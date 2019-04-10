@@ -64,14 +64,10 @@ class PostRepository extends BaseRepository
         }
     }
     
-    public function fetchByKeywords($values)
+    public function fetchSearchResultsByKeywords($values)
     {
-        $sql = "SELECT * FROM posts WHERE comment LIKE :comment AND name LIKE :name";
-        //名前がユーザーネームと違う
-        //select * from posts inner join users on posts.user_id=users.id;
-        // select * from posts left outer join users on posts.user_id = users.id;
-        // select * from posts,users where posts.user_id=users.id;
-        // select users.name from posts,users where posts.user_id=users.id; 
+        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name AND user_id IS NULL))";
+        
         $statement = $this->database->prepare($sql);
         $comment = '%'.$values['comment'].'%';
         $name = '%'.$values['name'].'%';
@@ -83,14 +79,21 @@ class PostRepository extends BaseRepository
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function fetchByName($name)
+    public function fetchSearchResultsByUserIds($comment, $user_ids)
     {
+        //implodeの処理がうまくいってない　sql文はあってる
+        //バインド処理
+        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (user_id IN (".implode(',', $user_ids).")))";
         
-    }
-    
-    public function fetchByNameAndComment($values)
-    {
+        $statement = $this->database->prepare($sql);
         
+        $comment_like = '%'.$comment.'%';
+        
+        $statement->bindParam(':comment', $comment_like);
+        
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     
     public function validate($values)
