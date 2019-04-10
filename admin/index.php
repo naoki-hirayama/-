@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_GET['name'], $_GET['comment'])) {
         $values = $_GET;
         $errors = $post_repository->searchValidate($values);
-        //テーブル結合　classはどうするのか？
+        
         if (empty($errors)) {
             $search_results_are_guest_users = $post_repository->fetchSearchResultsByKeywords($values);
             $name_search_results_in_users = $user_repository->fetchByName($values['name']);
@@ -49,36 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $searched_posts = array_merge($search_results_are_guest_users, $search_results_are_having_account_users);
             }
         }
-        
-            $user_ids = [];
-            foreach ($posts as $post) {
-                $post_ids[] = $post['id'];
-                if (isset($post['user_id'])) {
-                    $user_ids[] = $post['user_id'];
-                }
-            }
-            
-            if (!empty($user_ids)) {
-                $users = $user_repository->fetchByIds($user_ids);
-                
-                $user_names_are_key_as_user_ids = array_column($users, 'name', 'id');
-            }
-            
-            $posts_have_replies_and_cnts = $reply_repository->fetchCountByPostIds($post_ids);
-            
-            if (!empty($posts_have_replies_and_cnts)) {
-                $post_ids_have_replies = [];
-                foreach ($posts_have_replies_and_cnts as $post_have_replies_and_cnts) {
-                    $post_ids_have_replies[] = $post_have_replies_and_cnts['post_id'];
-                }
-                
-                $cnts_are_key_as_post_ids = array_column($posts_have_replies_and_cnts, 'cnt', 'post_id');
-            }
-        
-        
-        
-        
-        
     }
     
     $max_pager_range = 10;
@@ -107,20 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
-        
-        $user_names_are_key_as_user_ids = array_column($users, 'name', 'id');
+        $user_names = array_column($users, 'name', 'id');
     }
     
-    $posts_have_replies_and_cnts = $reply_repository->fetchCountByPostIds($post_ids);
-    
-    if (!empty($posts_have_replies_and_cnts)) {
-        $post_ids_have_replies = [];
-        foreach ($posts_have_replies_and_cnts as $post_have_replies_and_cnts) {
-            $post_ids_have_replies[] = $post_have_replies_and_cnts['post_id'];
-        }
-        
-        $cnts_are_key_as_post_ids = array_column($posts_have_replies_and_cnts, 'cnt', 'post_id');
-    }
+    $reply_counts = $reply_repository->fetchCountByPostIds($post_ids);
 }
 
 include('../admin/views/index.php');

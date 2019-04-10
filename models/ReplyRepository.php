@@ -84,7 +84,7 @@ class ReplyRepository extends BaseRepository
         
         $statement = $this->database->query($sql);
         
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return array_column($statement->fetchAll(PDO::FETCH_ASSOC), 'cnt', 'post_id');
     }
     
     public function fetchCountByPostId($post_id)

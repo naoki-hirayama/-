@@ -9,8 +9,6 @@
         本文：<input type="text" name="comment"><br />
             　<input type="submit" value="検索"><br />
     </form>
-    <!-- エラーメッセージ -->
-    <?php  include('views/layouts/errormessage.php') ?>
     <!--検索結果表示-->
     <?php  include('views/layouts/searchresults.php') ?>
     <!--ここまで-->
@@ -33,30 +31,22 @@
             <td>
             <?php echo h($post['created_at']) ?>
             </td>
+            <td>
             <?php if (isset($post['user_id'])) : ?>
-                <td>
-                <?php echo h($user_names_are_key_as_user_ids[$post['user_id']]) ?>
-                </td>
+                <?php echo h($user_names[$post['user_id']]) ?>
             <?php else : ?>
-                <td>
                 <?php echo h($post['name']) ?>
-                </td>
             <?php endif ?>
+            </td>
             </td>
             <td>
                 <font color="<?php echo $post['color'] ?>">
                     <?php echo h($post['comment']) ?>
                 </font>
             </td>
-                <?php if (isset($cnts_are_key_as_post_ids) && (in_array($post['id'], $post_ids_have_replies,true))): ?>
-                    <td>        
-                    <?php echo $cnts_are_key_as_post_ids[$post['id']] ?>件
-                    </td>       
-                <?php else : ?>  
-                    <td>          
-                    0件
-                    </td>            
-                <?php endif ?>
+            <td>          
+                <?php echo (isset($reply_counts[$post['id']])) ? $reply_counts[$post['id']] : 0 ?>件
+            </td>            
             <td>
                 <input type="button" id="btn" value="編集" class="show-modal" data-key="<?php echo $key; ?>">
             </td>

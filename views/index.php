@@ -59,7 +59,7 @@
                     <?php echo $post['id'] ?><br />
                     名前：
                     <?php if (isset($post['user_id'])) : ?>
-                        <a href="profile.php?id=<?php echo $post['user_id'] ?>"><?php echo h($user_names_are_key_as_user_ids[$post['user_id']]) ?></a><br />
+                        <a href="profile.php?id=<?php echo $post['user_id'] ?>"><?php echo h($user_names[$post['user_id']]) ?></a><br />
                     <?php else : ?>
                         <?php echo h($post['name']) ?><br />
                     <?php endif ?>
@@ -76,15 +76,9 @@
                     時間：
                     <?php echo $post['created_at'] ?><br />
                     レス :
-                    <?php if (isset($cnts_are_key_as_post_ids) && (in_array($post['id'], $post_ids_have_replies,true))): ?>
-                        <a href="reply.php?id=<?php echo $post['id'] ?>">
-                            <?php echo $cnts_are_key_as_post_ids[$post['id']] ?>件
-                        </a><br />
-                    <?php else : ?>  
-                        <a href="reply.php?id=<?php echo $post['id'] ?>">
-                            0件
-                        </a><br />
-                    <?php endif ?>
+                    <a href="reply.php?id=<?php echo $post['id'] ?>">
+                        <?php echo (isset($reply_counts[$post['id']])) ? $reply_counts[$post['id']] : 0 ?>件
+                    </a><br />
                     <!--if文でパスワードが設定されていなかったら非表示   -->
                     <?php if (!empty($post['password'] )) : ?>
                         <form action="delete.php" method="get">

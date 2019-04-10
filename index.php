@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $posts = $post_repository->fetchByOffSetAndLimit($offset, $per_page_records);
     
     $user_ids = [];
+    $post_ids = [];
     foreach ($posts as $post) {
         $post_ids[] = $post['id'];
         if (isset($post['user_id'])) {
@@ -64,20 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (!empty($user_ids)) {
         $users = $user_repository->fetchByIds($user_ids);
-        
-        $user_names_are_key_as_user_ids = array_column($users, 'name', 'id');
+        $user_names = array_column($users, 'name', 'id');
     }
     
-    $posts_have_replies_and_cnts = $reply_repository->fetchCountByPostIds($post_ids);
-    
-    if (!empty($posts_have_replies_and_cnts)) {
-        $post_ids_have_replies = [];
-        foreach ($posts_have_replies_and_cnts as $post_have_replies_and_cnts) {
-            $post_ids_have_replies[] = $post_have_replies_and_cnts['post_id'];
-        }
-        
-        $cnts_are_key_as_post_ids = array_column($posts_have_replies_and_cnts, 'cnt', 'post_id');
-    }
+    $reply_counts = $reply_repository->fetchCountByPostIds($post_ids);
 }
 
 include('views/index.php');

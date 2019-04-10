@@ -66,7 +66,7 @@ class PostRepository extends BaseRepository
     
     public function fetchSearchResultsByKeywords($values)
     {
-        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name AND user_id IS NULL))";
+        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name))";
         
         $statement = $this->database->prepare($sql);
         $comment = '%'.$values['comment'].'%';
@@ -79,10 +79,10 @@ class PostRepository extends BaseRepository
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function fetchSearchResultsByUserIds($comment, $user_ids)
+    
+    
+    public function fetchByUserName($comment, $user_ids)
     {
-        //implodeの処理がうまくいってない　sql文はあってる
-        //バインド処理
         $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (user_id IN (".implode(',', $user_ids).")))";
         
         $statement = $this->database->prepare($sql);
@@ -167,30 +167,6 @@ class PostRepository extends BaseRepository
                     }    
                 } 
             }
-        }
-        return $errors;
-    }
-    
-    public function searchValidate($values)
-    {   
-        $errors = [];
-        $values = $this->trimValues($values);
-        if (isset($values['name'], $values['comment'])) {
-            if ($this->getStringLength($values['name']) === 0 )  {
-                $errors[] = "名前を入力してください。";
-            
-                if ($this->getStringLength($values['name']) > self::MAX_NAME_LENGTH) {
-                    $errors[] = "名前は".self::MAX_NAME_LENGTH."文字以内です。";
-                }
-            }
-                
-            if ($this->getStringLength($values['comment']) === 0) {
-                $errors[] = "本文を入力してください。";
-                
-                if ($this->getStringLength($values['comment']) > self::MAX_COMMENT_LENGTH) {
-                    $errors[] = "本文は".self:: MAX_COMMENT_LENGTH."文字以内です。";
-                }
-            }   
         }
         return $errors;
     }
