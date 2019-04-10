@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $posts = $post_repository->fetchByOffSetAndLimit($offset, $per_page_records);
     
     $user_ids = [];
+    $post_ids = [];
     foreach ($posts as $post) {
         $post_ids[] = $post['id'];
         if (isset($post['user_id'])) {
