@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 } else {
 //getでアクセスされた時の処理
+    //検索機能
     if (isset($_GET['name'], $_GET['comment'])) {
-        //検索機能
         $values = $_GET;
         $errors = $post_repository->searchValidate($values);
         //テーブル結合　classはどうするのか？
@@ -39,10 +39,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $search_results_are_having_account_users = $post_repository->fetchSearchResultsByUserIds($values['comment'], $search_user_ids);
             }
             
-            $searched_posts = array_merge($search_results_are_guest_users, $search_results_are_having_account_users);
+            if (empty($search_results_are_guest_users) && empty($search_results_are_having_account_users)) {
+                $errors[] = '存在しません';
+            } else if (empty($search_results_are_guest_users) && !empty($search_results_are_having_account_users)) {
+                $searched_posts = $search_results_are_having_account_users;
+            } else if (!empty($search_results_are_guest_users) && empty($search_results_are_having_account_users)) {
+                $searched_posts = $search_results_are_guest_users;
+            } else {
+                $searched_posts = array_merge($search_results_are_guest_users, $search_results_are_having_account_users);
+            }
         }
+        
+            $user_ids = [];
+            foreach ($posts as $post) {
+                $post_ids[] = $post['id'];
+                if (isset($post['user_id'])) {
+                    $user_ids[] = $post['user_id'];
+                }
+            }
+            
+            if (!empty($user_ids)) {
+                $users = $user_repository->fetchByIds($user_ids);
+                
+                $user_names_are_key_as_user_ids = array_column($users, 'name', 'id');
+            }
+            
+            $posts_have_replies_and_cnts = $reply_repository->fetchCountByPostIds($post_ids);
+            
+            if (!empty($posts_have_replies_and_cnts)) {
+                $post_ids_have_replies = [];
+                foreach ($posts_have_replies_and_cnts as $post_have_replies_and_cnts) {
+                    $post_ids_have_replies[] = $post_have_replies_and_cnts['post_id'];
+                }
+                
+                $cnts_are_key_as_post_ids = array_column($posts_have_replies_and_cnts, 'cnt', 'post_id');
+            }
+        
+        
+        
+        
+        
     }
-    dd($searched_posts);
+    
     $max_pager_range = 10;
     $per_page_records = 30;
     $total_records = $post_repository->fetchCount();

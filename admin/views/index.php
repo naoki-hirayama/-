@@ -10,19 +10,9 @@
             　<input type="submit" value="検索"><br />
     </form>
     <!-- エラーメッセージ -->
-    <?php  include('../views/layouts/errormessage.php') ?>
+    <?php  include('views/layouts/errormessage.php') ?>
     <!--検索結果表示-->
-    <h2>検索結果一覧</h2>
-    <table border="1">
-        <tr>
-            <th>投稿ID</th>
-            <th>投稿日時</th>
-            <th>名前</th>
-            <th>本文</th>
-            <th>レス数</th>
-            <th>編集リンク</th>
-            <th>詳細リンク</th>
-        </tr>
+    <?php  include('views/layouts/searchresults.php') ?>
     <!--ここまで-->
     <h2>投稿一覧</h2>
     <table border="2">
