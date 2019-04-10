@@ -9,9 +9,11 @@
         本文：<input type="text" name="comment"><br />
             　<input type="submit" value="検索"><br />
     </form>
-    <!--検索結果表示-->
-    <?php  include('views/layouts/searchresults.php') ?>
-    <!--ここまで-->
+    <?php if (isset($searched_posts)) : ?>
+        <?php  include('views/layouts/searchresults.php') ?>
+    <?php endif ?>
+    
+    <?php if (empty($searched_posts)) : ?>
     <h2>投稿一覧</h2>
     <table border="2">
         <tr>
@@ -26,10 +28,10 @@
         <?php foreach ($posts as $key => $post) : ?>
         <tr>
             <td>
-            <?php echo h($post['id']) ?>
+                <?php echo h($post['id']) ?>
             </td>
             <td>
-            <?php echo h($post['created_at']) ?>
+                <?php echo h($post['created_at']) ?>
             </td>
             <td>
             <?php if (isset($post['user_id'])) : ?>
@@ -37,7 +39,6 @@
             <?php else : ?>
                 <?php echo h($post['name']) ?>
             <?php endif ?>
-            </td>
             </td>
             <td>
                 <font color="<?php echo $post['color'] ?>">
@@ -77,6 +78,7 @@
         <a href="?page=<?php echo $pager->getNextPage() ?>">次へ</a>
     <?php endif ?>
     <!--ここまで-->
+   <?php endif ?> 
     <div id="modalwin" class="modalwin hide">
         <a herf="#" class="modal-close"></a>
         <h1>編集</h1>
@@ -105,11 +107,8 @@
 <script type="text/javascript">
     var json_posts = '<?php echo json_encode($posts); ?>';
     console.log(json_posts);
-    // var hogehoge = [1,2,3,4];
-    // console.log(hogehoge[0]);
     $(function() {
         $('.show-modal').on('click', function() {
-            // console.log(json_posts);
             console.log($(this).data());
             var key = $(this).data('key');
             console.log(key);

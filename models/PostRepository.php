@@ -64,32 +64,47 @@ class PostRepository extends BaseRepository
         }
     }
     
-    public function fetchSearchResultsByKeywords($values)
+    public function fetchByName($name)
     {
-        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name))";
+        $sql = "SELECT * FROM posts WHERE name LIKE :name";
         
         $statement = $this->database->prepare($sql);
-        $comment = '%'.$values['comment'].'%';
-        $name = '%'.$values['name'].'%';
-        $statement->bindParam(':comment', $comment);
-        $statement->bindParam(':name', $name);
+        
+        $_name = '%'.$name.'%';
+        
+        $statement->bindParam(':name', $_name);
         
         $statement->execute();
         
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    
-    
-    public function fetchByUserName($comment, $user_ids)
+    public function fetchByComment($comment)
     {
-        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (user_id IN (".implode(',', $user_ids).")))";
+        $sql = "SELECT * FROM posts WHERE comment LIKE :comment";
         
         $statement = $this->database->prepare($sql);
         
-        $comment_like = '%'.$comment.'%';
+        $_comment = '%'.$comment.'%';
         
-        $statement->bindParam(':comment', $comment_like);
+        $statement->bindParam(':comment', $_comment);
+        
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function fetchByCommentAndName($values)
+    {
+        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name ))";
+        
+        $statement = $this->database->prepare($sql);
+        
+        $name = '%'.$values['name'].'%';
+        $comment = '%'.$values['comment'].'%';
+        
+        $statement->bindParam(':name', $name);
+        $statement->bindParam(':comment', $comment);
         
         $statement->execute();
         

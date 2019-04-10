@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $max_pager_range = 10;
     $per_page_records = 5;
     
-    if (!empty($_GET['page'])) {
+    if (isset($_GET['page'])) {
         $page = $_GET['page'];
     } else {
         $page = 1;
