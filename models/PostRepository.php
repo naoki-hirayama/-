@@ -84,7 +84,7 @@ class PostRepository extends BaseRepository
     
     public function fetchCountByComment($values)
     {
-        $sql = "SELECT COUNT(*) FROM posts WHERE ((comment LIKE :comment) AND (color LIKE :color)) ";
+        $sql = "SELECT COUNT(*) FROM posts WHERE ((comment LIKE :comment) AND (color LIKE :color))";
         
         $statement = $this->database->prepare($sql);
         
@@ -102,13 +102,11 @@ class PostRepository extends BaseRepository
     
     public function fetchCountByColor($values)
     {
-        $sql = "SELECT COUNT(*) FROM posts WHERE color LIKE :color";
+        $sql = "SELECT COUNT(*) FROM posts WHERE color = :color";
         
         $statement = $this->database->prepare($sql);
         
-        $color = '%'.$values['color'].'%';
-        
-        $statement->bindParam(':color', $color);
+        $statement->bindParam(':color', $values['color']);
         
         $statement->execute();
         
@@ -118,6 +116,12 @@ class PostRepository extends BaseRepository
     public function fetchCountByNameAndComment($values)
     {
         $sql = "SELECT COUNT(*) FROM posts WHERE ((name LIKE :name ) AND (comment LIKE :comment) AND (color LIKE :color))";
+        // //SELECT COUNT(*) FROM posts WHERE ((name LIKE :name ) AND (comment LIKE :comment) AND (color IN ($values['color']))
+        // $colors = $this::getSelectColorOptions();
+        // $select_colors = [];
+        // foreach ($colors as $key => $value) {
+        //     $select_colors[] = $key;
+        // }
         
         $statement = $this->database->prepare($sql);
         
@@ -174,13 +178,11 @@ class PostRepository extends BaseRepository
     
     public function fetchByColor($values, $offset, $limit)
     {
-        $sql = "SELECT * FROM posts WHERE color LIKE :color ORDER BY created_at DESC LIMIT :offset, :limit";
+        $sql = "SELECT * FROM posts WHERE color = :color ORDER BY created_at DESC LIMIT :offset, :limit";
         
         $statement = $this->database->prepare($sql);
         
-        $color = '%'.$values['color'].'%';
-        
-        $statement->bindParam(':color', $color);
+        $statement->bindParam(':color', $values['color']);
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
         $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
         
