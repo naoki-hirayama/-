@@ -10,10 +10,13 @@
             　<input type="submit" value="検索"><br />
     </form>
     <?php if (isset($searched_posts)) : ?>
-        <?php  include('views/layouts/searchresults.php') ?>
-    <?php endif ?>
-    
-    <?php if (empty($searched_posts)) : ?>
+        <?php if (!empty($searched_posts)) : ?>  
+            <?php include('views/layouts/searchresults.php') ?>
+        <?php else : ?>
+            <?php include('views/layouts/errormessage.php') ?>
+            <a href="index.php">戻る</a>
+        <?php endif ?>
+    <?php else : ?>
     <h2>投稿一覧</h2>
     <table border="2">
         <tr>
@@ -78,7 +81,7 @@
         <a href="?page=<?php echo $pager->getNextPage() ?>">次へ</a>
     <?php endif ?>
     <!--ここまで-->
-   <?php endif ?> 
+   
     <div id="modalwin" class="modalwin hide">
         <a herf="#" class="modal-close"></a>
         <h1>編集</h1>
@@ -104,21 +107,22 @@
         </div>
     </div>
    
-<script type="text/javascript">
-    var json_posts = '<?php echo json_encode($posts); ?>';
-    console.log(json_posts);
-    $(function() {
-        $('.show-modal').on('click', function() {
-            console.log($(this).data());
-            var key = $(this).data('key');
-            console.log(key);
-            console.log(json_posts[5]);
-            console.log(json_posts[key]);
-            $('#input_name').val(json_posts[key].id);
-            $('#input_comment').val(json_posts[key].comment);
+    <script type="text/javascript">
+        var json_posts = '<?php echo json_encode($posts); ?>';
+        console.log(json_posts);
+        $(function() {
+            $('.show-modal').on('click', function() {
+                console.log($(this).data());
+                var key = $(this).data('key');
+                console.log(key);
+                console.log(json_posts[5]);
+                console.log(json_posts[key]);
+                $('#input_name').val(json_posts[key].id);
+                $('#input_comment').val(json_posts[key].comment);
+            });
         });
-    });
-</script>
+    </script>
+    <?php endif ?> 
 <?php
     include('../admin/views/layouts/footer.php');
 ?>

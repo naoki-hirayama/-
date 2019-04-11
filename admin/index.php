@@ -14,29 +14,44 @@ $select_color_options = PostRepository::getSelectColorOptions();
 
 if (isset($_GET['name'], $_GET['comment'])) {
     $values = $_GET;
+    $errors = [];
     
-    $search_results_name = $post_repository->fetchByName($values['name']);
-    $search_results_comment = $post_repository->fetchByComment($values['comment']);
-    $search_results_both = $post_repository->fetchByCommentAndName($values);
-     
-    $searched_posts = $search_results_both;
-    
-    $user_ids = [];
-    $post_ids = [];
-    foreach ($searched_posts as $searched_post) {
-        $post_ids[] = $searched_post['id'];
-        if (isset($searched_post['user_id'])) {
-            $user_ids[] = $searched_post['user_id'];
+    if (strlen($values['name']) === 0 && strlen($values['comment']) === 0) {
+        header('Location: index.php');
+        exit;
+    } else {
+        if (strlen($values['name']) !== 0 && strlen($values['comment']) === 0) {
+            $searched_posts = $post_repository->fetchByName($values['name']);
+        }
+        
+        if (strlen($values['name']) === 0 && strlen($values['comment']) !== 0) {
+            $searched_posts = $post_repository->fetchByComment($values['comment']);
+        }
+        
+        if (strlen($values['name']) !== 0 && strlen($values['comment']) !== 0) {
+            $searched_posts = $post_repository->fetchByCommentAndName($values);
         }
     }
-    
-    if (!empty($user_ids)) {
-        $users = $user_repository->fetchByIds($user_ids);
-        $user_names = array_column($users, 'name', 'id');
+    if (!empty($searched_posts)) {
+        $user_ids = [];
+        $post_ids = [];
+        foreach ($searched_posts as $searched_post) {
+            $post_ids[] = $searched_post['id'];
+            if (isset($searched_post['user_id'])) {
+                $user_ids[] = $searched_post['user_id'];
+            }
+        }
+        
+        if (!empty($user_ids)) {
+            $users = $user_repository->fetchByIds($user_ids);
+            $user_names = array_column($users, 'name', 'id');
+        }
+        
+        $reply_counts = $reply_repository->fetchCountByPostIds($post_ids);
+    } else {
+        $errors = [];
+        $errors[] = "検索結果なし";
     }
-    dd($post_ids);
-    $reply_counts = $reply_repository->fetchCountByPostIds($post_ids);
-    dd($reply_counts);exit;
 } else {
     
     $max_pager_range = 10;
