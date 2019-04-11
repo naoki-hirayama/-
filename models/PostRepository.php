@@ -134,7 +134,6 @@ class PostRepository extends BaseRepository
         return $statement->fetchColumn();
     }
     
-    
     public function fetchByName($values, $offset, $limit)
     {
         $sql = "SELECT * FROM posts WHERE ((name LIKE :name) AND (color LIKE :color)) ORDER BY created_at DESC LIMIT :offset, :limit";
@@ -153,8 +152,6 @@ class PostRepository extends BaseRepository
         
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    
     
     public function fetchByComment($values, $offset, $limit)
     {
