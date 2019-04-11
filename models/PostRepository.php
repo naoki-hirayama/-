@@ -64,9 +64,9 @@ class PostRepository extends BaseRepository
         }
     }
     
-    public function fetchByName($name)
+    public function fetchCountByName($name)
     {
-        $sql = "SELECT * FROM posts WHERE name LIKE :name";
+        $sql = "SELECT COUNT(*) FROM posts WHERE name LIKE :name";
         
         $statement = $this->database->prepare($sql);
         
@@ -76,12 +76,13 @@ class PostRepository extends BaseRepository
         
         $statement->execute();
         
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $statement->fetchColumn();
+        
     }
     
-    public function fetchByComment($comment)
+    public function fetchCountByComment($comment)
     {
-        $sql = "SELECT * FROM posts WHERE comment LIKE :comment";
+        $sql = "SELECT COUNT(*) FROM posts WHERE comment LIKE :comment";
         
         $statement = $this->database->prepare($sql);
         
@@ -91,12 +92,13 @@ class PostRepository extends BaseRepository
         
         $statement->execute();
         
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $statement->fetchColumn();
+        
     }
     
-    public function fetchByCommentAndName($values)
+    public function fetchCountByNameAndComment($values)
     {
-        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name ))";
+        $sql = "SELECT COUNT(*) FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name ))";
         
         $statement = $this->database->prepare($sql);
         
@@ -105,6 +107,62 @@ class PostRepository extends BaseRepository
         
         $statement->bindParam(':name', $name);
         $statement->bindParam(':comment', $comment);
+        
+        $statement->execute();
+        
+        return $statement->fetchColumn();
+    }
+    
+    
+    public function fetchByName($name, $offset, $limit)
+    {
+        $sql = "SELECT * FROM posts WHERE name LIKE :name ORDER BY created_at DESC LIMIT :offset, :limit";
+        
+        $statement = $this->database->prepare($sql);
+        
+        $_name = '%'.$name.'%';
+        
+        $statement->bindParam(':name', $_name);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    
+    
+    public function fetchByComment($comment, $offset, $limit)
+    {
+        $sql = "SELECT * FROM posts WHERE comment LIKE :comment ORDER BY created_at DESC LIMIT :offset, :limit";
+        
+        $statement = $this->database->prepare($sql);
+        
+        $_comment = '%'.$comment.'%';
+        
+        $statement->bindParam(':comment', $_comment);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function fetchByNameAndComment($values, $offset, $limit)
+    {
+        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name )) ORDER BY created_at DESC LIMIT :offset, :limit";
+        
+        $statement = $this->database->prepare($sql);
+        
+        $name = '%'.$values['name'].'%';
+        $comment = '%'.$values['comment'].'%';
+        
+        $statement->bindParam(':name', $name);
+        $statement->bindParam(':comment', $comment);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
         
         $statement->execute();
         

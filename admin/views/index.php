@@ -9,8 +9,8 @@
         本文：<input type="text" name="comment"><br />
             　<input type="submit" value="検索"><br />
     </form>
-    <?php if (isset($searched_posts)) : ?>
-        <?php if (!empty($searched_posts)) : ?>  
+    <?php if (isset($searched_total_records)) : ?>
+        <?php if (isset($searched_posts)) : ?>  
             <?php include('views/layouts/searchresults.php') ?>
         <?php else : ?>
             <?php include('views/layouts/errormessage.php') ?>

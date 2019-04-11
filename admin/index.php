@@ -21,18 +21,43 @@ if (isset($_GET['name'], $_GET['comment'])) {
         exit;
     } else {
         if (strlen($values['name']) !== 0 && strlen($values['comment']) === 0) {
-            $searched_posts = $post_repository->fetchByName($values['name']);
+            $searched_total_records = $post_repository->fetchCountByName($values['name']);
         }
         
         if (strlen($values['name']) === 0 && strlen($values['comment']) !== 0) {
-            $searched_posts = $post_repository->fetchByComment($values['comment']);
+            $searched_total_records = $post_repository->fetchCountByComment($values['comment']);
         }
         
         if (strlen($values['name']) !== 0 && strlen($values['comment']) !== 0) {
-            $searched_posts = $post_repository->fetchByCommentAndName($values);
+            $searched_total_records = $post_repository->fetchCountByNameAndComment($values);
         }
     }
-    if (!empty($searched_posts)) {
+    
+    if ($searched_total_records > 0) {
+        $max_pager_range = 10;
+        $per_page_records = 10;
+        
+        if (isset($_GET['page'])) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
+        
+        $pager = new Pager($searched_total_records, $max_pager_range, $per_page_records);
+        $pager->setCurrentPage($page);
+        $offset = $pager->getOffset();
+        $per_page_records = $pager->getPerPageRecords();
+        
+        if (strlen($values['name']) !== 0 && strlen($values['comment']) === 0) {
+            $searched_posts = $post_repository->fetchByName($values['name'], $offset, $per_page_records);
+            
+        } elseif (strlen($values['name']) === 0 && strlen($values['comment']) !== 0) {
+            $searched_posts = $post_repository->fetchByComment($values['commnt'], $offset, $per_page_records);
+            
+        } elseif (strlen($values['name']) !== 0 && strlen($values['comment']) !== 0) {
+            $searched_posts = $post_repository->fetchByNameAndComment($values, $offset, $per_page_records);
+        }
+        
         $user_ids = [];
         $post_ids = [];
         foreach ($searched_posts as $searched_post) {
@@ -48,6 +73,7 @@ if (isset($_GET['name'], $_GET['comment'])) {
         }
         
         $reply_counts = $reply_repository->fetchCountByPostIds($post_ids);
+        
     } else {
         $errors = [];
         $errors[] = "検索結果なし";

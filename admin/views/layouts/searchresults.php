@@ -42,3 +42,24 @@
     </tr>
     <?php endforeach ?>
 </table>
+<!--ページング処理-->
+<?php if ($pager->hasPreviousPage()) : ?>
+    <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getPreviousPage() ?>">前へ</a>
+<?php endif ?>
+
+<?php foreach ($pager->getPageNumbers() as $i) : ?>
+    <?php if ($i === $pager->getCurrentPage()) : ?>
+        <span>
+            <?php echo $i ?>
+        </span>
+    <?php else : ?>
+        <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $i ?>">
+            <?php echo $i ?>
+        </a>
+    <?php endif ?>
+<?php endforeach ?>
+
+<?php if ($pager->hasNextPage()) : ?>           
+    <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getNextPage() ?>">次へ</a>
+<?php endif ?>
+<!--ここまで-->
