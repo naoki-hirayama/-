@@ -7,7 +7,18 @@
         <p>検索機能(名前と本文)</p>
         名前：<input type="text" name="name"><br />
         本文：<input type="text" name="comment"><br />
-            　<input type="submit" value="検索"><br />
+        <select name="color">
+        <?php foreach($select_color_options as $key => $value) : ?>
+            <?php if (!empty($_GET['color'])) : ?>
+                <option value="<?php echo $key ?>"<?php echo $key === $_GET['color'] ? 'selected' : ''; ?>>
+            <?php else : ?>
+                <option value="<?php echo $key ?>">
+            <?php endif ?>
+                    <?php echo $value ?>
+                </option>
+        <?php endforeach ?>
+        </select><br />
+        <input type="submit" value="検索"><br />
     </form>
     <?php if (isset($searched_total_records)) : ?>
         <?php if (isset($searched_posts)) : ?>  

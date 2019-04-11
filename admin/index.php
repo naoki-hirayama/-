@@ -10,9 +10,12 @@ $user_repository = new UserRepository($database);
 $post_repository = new PostRepository($database);
 $reply_repository = new ReplyRepository($database);
 $picture_max_size = $user_repository::MAX_PICTURE_SIZE;
-$select_color_options = PostRepository::getSelectColorOptions();
 
-if (isset($_GET['name'], $_GET['comment'])) {
+$select_color_options = PostRepository::getSelectColorOptions();
+$add_color[''] = '選択しない';
+$select_color_options = array_merge($add_color, $select_color_options);
+
+if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
     $values = $_GET;
     $errors = [];
     
@@ -21,11 +24,11 @@ if (isset($_GET['name'], $_GET['comment'])) {
         exit;
     } else {
         if (strlen($values['name']) !== 0 && strlen($values['comment']) === 0) {
-            $searched_total_records = $post_repository->fetchCountByName($values['name']);
+            $searched_total_records = $post_repository->fetchCountByName($values);
         }
         
         if (strlen($values['name']) === 0 && strlen($values['comment']) !== 0) {
-            $searched_total_records = $post_repository->fetchCountByComment($values['comment']);
+            $searched_total_records = $post_repository->fetchCountByComment($values);
         }
         
         if (strlen($values['name']) !== 0 && strlen($values['comment']) !== 0) {
@@ -49,10 +52,10 @@ if (isset($_GET['name'], $_GET['comment'])) {
         $per_page_records = $pager->getPerPageRecords();
         
         if (strlen($values['name']) !== 0 && strlen($values['comment']) === 0) {
-            $searched_posts = $post_repository->fetchByName($values['name'], $offset, $per_page_records);
+            $searched_posts = $post_repository->fetchByName($values, $offset, $per_page_records);
             
         } elseif (strlen($values['name']) === 0 && strlen($values['comment']) !== 0) {
-            $searched_posts = $post_repository->fetchByComment($values['commnt'], $offset, $per_page_records);
+            $searched_posts = $post_repository->fetchByComment($values, $offset, $per_page_records);
             
         } elseif (strlen($values['name']) !== 0 && strlen($values['comment']) !== 0) {
             $searched_posts = $post_repository->fetchByNameAndComment($values, $offset, $per_page_records);

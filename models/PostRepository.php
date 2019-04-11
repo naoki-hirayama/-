@@ -64,15 +64,17 @@ class PostRepository extends BaseRepository
         }
     }
     
-    public function fetchCountByName($name)
+    public function fetchCountByName($values)
     {
-        $sql = "SELECT COUNT(*) FROM posts WHERE name LIKE :name";
+        $sql = "SELECT COUNT(*) FROM posts WHERE ((name LIKE :name) AND (color LIKE :color))";
         
         $statement = $this->database->prepare($sql);
         
-        $_name = '%'.$name.'%';
+        $name = '%'.$values['name'].'%';
+        $color = '%'.$values['color'].'%';
         
-        $statement->bindParam(':name', $_name);
+        $statement->bindParam(':name', $name);
+        $statement->bindParam(':color', $color);
         
         $statement->execute();
         
@@ -80,15 +82,17 @@ class PostRepository extends BaseRepository
         
     }
     
-    public function fetchCountByComment($comment)
+    public function fetchCountByComment($values)
     {
-        $sql = "SELECT COUNT(*) FROM posts WHERE comment LIKE :comment";
+        $sql = "SELECT COUNT(*) FROM posts WHERE ((comment LIKE :comment) AND (color LIKE :color)) ";
         
         $statement = $this->database->prepare($sql);
         
-        $_comment = '%'.$comment.'%';
+        $comment = '%'.$values['comment'].'%';
+        $color = '%'.$values['color'].'%';
         
-        $statement->bindParam(':comment', $_comment);
+        $statement->bindParam(':comment', $comment);
+        $statement->bindParam(':color', $color);
         
         $statement->execute();
         
@@ -98,15 +102,17 @@ class PostRepository extends BaseRepository
     
     public function fetchCountByNameAndComment($values)
     {
-        $sql = "SELECT COUNT(*) FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name ))";
+        $sql = "SELECT COUNT(*) FROM posts WHERE ((name LIKE :name ) AND (comment LIKE :comment) AND (color LIKE :color))";
         
         $statement = $this->database->prepare($sql);
         
         $name = '%'.$values['name'].'%';
         $comment = '%'.$values['comment'].'%';
+        $color = '%'.$values['color'].'%';
         
         $statement->bindParam(':name', $name);
         $statement->bindParam(':comment', $comment);
+        $statement->bindParam(':color', $color);
         
         $statement->execute();
         
@@ -114,15 +120,17 @@ class PostRepository extends BaseRepository
     }
     
     
-    public function fetchByName($name, $offset, $limit)
+    public function fetchByName($values, $offset, $limit)
     {
-        $sql = "SELECT * FROM posts WHERE name LIKE :name ORDER BY created_at DESC LIMIT :offset, :limit";
+        $sql = "SELECT * FROM posts WHERE ((name LIKE :name) AND (color LIKE :color)) ORDER BY created_at DESC LIMIT :offset, :limit";
         
         $statement = $this->database->prepare($sql);
         
-        $_name = '%'.$name.'%';
+        $name = '%'.$values['name'].'%';
+        $color = '%'.$values['color'].'%';
         
-        $statement->bindParam(':name', $_name);
+        $statement->bindParam(':name', $name);
+        $statement->bindParam(':color', $color);
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
         $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
         
@@ -133,15 +141,17 @@ class PostRepository extends BaseRepository
     
     
     
-    public function fetchByComment($comment, $offset, $limit)
+    public function fetchByComment($values, $offset, $limit)
     {
-        $sql = "SELECT * FROM posts WHERE comment LIKE :comment ORDER BY created_at DESC LIMIT :offset, :limit";
+        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (color LIKE :color)) ORDER BY created_at DESC LIMIT :offset, :limit";
         
         $statement = $this->database->prepare($sql);
         
-        $_comment = '%'.$comment.'%';
+        $comment = '%'.$values['comment'].'%';
+        $color = '%'.$values['color'].'%';
         
-        $statement->bindParam(':comment', $_comment);
+        $statement->bindParam(':comment', $comment);
+        $statement->bindParam(':color', $color);
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
         $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
         
@@ -152,15 +162,18 @@ class PostRepository extends BaseRepository
     
     public function fetchByNameAndComment($values, $offset, $limit)
     {
-        $sql = "SELECT * FROM posts WHERE ((comment LIKE :comment) AND (name LIKE :name )) ORDER BY created_at DESC LIMIT :offset, :limit";
+        $sql = "SELECT * FROM posts WHERE ((name LIKE :name) AND (comment LIKE :comment) AND (color LIKE :color)) ORDER BY created_at DESC LIMIT :offset, :limit";
         
         $statement = $this->database->prepare($sql);
         
         $name = '%'.$values['name'].'%';
         $comment = '%'.$values['comment'].'%';
+        $color = '%'.$values['color'].'%';
         
         $statement->bindParam(':name', $name);
         $statement->bindParam(':comment', $comment);
+        $statement->bindParam(':color', $color);
+        
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
         $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
         

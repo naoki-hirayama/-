@@ -44,7 +44,7 @@
 </table>
 <!--ページング処理-->
 <?php if ($pager->hasPreviousPage()) : ?>
-    <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getPreviousPage() ?>">前へ</a>
+    <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getPreviousPage() ?>&color=<?php echo $_GET['color'] ?>">前へ</a>
 <?php endif ?>
 
 <?php foreach ($pager->getPageNumbers() as $i) : ?>
@@ -53,13 +53,13 @@
             <?php echo $i ?>
         </span>
     <?php else : ?>
-        <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $i ?>">
+        <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $i ?>&color=<?php echo $_GET['color'] ?>">
             <?php echo $i ?>
         </a>
     <?php endif ?>
 <?php endforeach ?>
 
 <?php if ($pager->hasNextPage()) : ?>           
-    <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getNextPage() ?>">次へ</a>
+    <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getNextPage() ?>&color=<?php echo $_GET['color'] ?>">次へ</a>
 <?php endif ?>
 <!--ここまで-->
