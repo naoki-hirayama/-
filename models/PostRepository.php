@@ -100,6 +100,21 @@ class PostRepository extends BaseRepository
         
     }
     
+    public function fetchCountByColor($values)
+    {
+        $sql = "SELECT COUNT(*) FROM posts WHERE color LIKE :color";
+        
+        $statement = $this->database->prepare($sql);
+        
+        $color = '%'.$values['color'].'%';
+        
+        $statement->bindParam(':color', $color);
+        
+        $statement->execute();
+        
+        return $statement->fetchColumn();
+    }
+    
     public function fetchCountByNameAndComment($values)
     {
         $sql = "SELECT COUNT(*) FROM posts WHERE ((name LIKE :name ) AND (comment LIKE :comment) AND (color LIKE :color))";
@@ -151,6 +166,23 @@ class PostRepository extends BaseRepository
         $color = '%'.$values['color'].'%';
         
         $statement->bindParam(':comment', $comment);
+        $statement->bindParam(':color', $color);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function fetchByColor($values, $offset, $limit)
+    {
+        $sql = "SELECT * FROM posts WHERE color LIKE :color ORDER BY created_at DESC LIMIT :offset, :limit";
+        
+        $statement = $this->database->prepare($sql);
+        
+        $color = '%'.$values['color'].'%';
+        
         $statement->bindParam(':color', $color);
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
         $statement->bindParam(':limit', $limit, PDO::PARAM_INT);

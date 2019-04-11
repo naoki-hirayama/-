@@ -19,7 +19,7 @@ if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
     $values = $_GET;
     $errors = [];
     
-    if (strlen($values['name']) === 0 && strlen($values['comment']) === 0) {
+    if (strlen($values['name']) === 0 && strlen($values['comment']) === 0 && strlen($values['color']) === 0) {
         header('Location: index.php');
         exit;
     } else {
@@ -31,13 +31,17 @@ if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
             $searched_total_records = $post_repository->fetchCountByComment($values);
         }
         
+        if (strlen($values['name']) === 0 && strlen($values['comment']) === 0 && strlen($values['color']) !== 0 ) {
+            $searched_total_records = $post_repository->fetchCountByColor($values);
+        }
+        
         if (strlen($values['name']) !== 0 && strlen($values['comment']) !== 0) {
             $searched_total_records = $post_repository->fetchCountByNameAndComment($values);
         }
     }
     
     if ($searched_total_records > 0) {
-        $max_pager_range = 10;
+        $max_pager_range = 4;
         $per_page_records = 10;
         
         if (isset($_GET['page'])) {
@@ -57,8 +61,12 @@ if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
         } elseif (strlen($values['name']) === 0 && strlen($values['comment']) !== 0) {
             $searched_posts = $post_repository->fetchByComment($values, $offset, $per_page_records);
             
+        } elseif (strlen($values['name']) === 0 && strlen($values['comment']) === 0 && strlen($values['color']) !== 0 ) {
+            $searched_posts = $post_repository->fetchByColor($values, $offset, $per_page_records);
+            
         } elseif (strlen($values['name']) !== 0 && strlen($values['comment']) !== 0) {
             $searched_posts = $post_repository->fetchByNameAndComment($values, $offset, $per_page_records);
+            
         }
         
         $user_ids = [];
@@ -81,8 +89,8 @@ if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
         $errors = [];
         $errors[] = "検索結果なし";
     }
-} else {
     
+} else {
     $max_pager_range = 10;
     $per_page_records = 30;
     $total_records = $post_repository->fetchCount();
