@@ -66,7 +66,7 @@ class PostRepository extends BaseRepository
     
     public function fetchCountByKeywords($values)
     {   
-        $sql = "SELECT COUNT(*) FROM posts WHERE ((name LIKE :name ) AND (comment LIKE :comment) AND (:color IN ('',color)))";
+        $sql = "SELECT COUNT(*) FROM posts WHERE ((name LIKE :name ) AND (comment LIKE :comment) AND (:color IN ('', color)))";
         
         $statement = $this->database->prepare($sql);
         
@@ -82,9 +82,14 @@ class PostRepository extends BaseRepository
         return $statement->fetchColumn();
     }
     
+    // public function find($conditions)
+    // {
+        
+    // }
+    
     public function fetchByKeywords($values, $offset, $limit)
     {
-        $sql = "SELECT * FROM posts WHERE ((name LIKE :name) AND (comment LIKE :comment) AND (:color IN ('',color))) ORDER BY created_at DESC LIMIT :offset, :limit";
+        $sql = "SELECT * FROM posts WHERE ((name LIKE :name) AND (comment LIKE :comment) AND (:color IN ('', color))) ORDER BY created_at DESC LIMIT :offset, :limit";
         
         $statement = $this->database->prepare($sql);
         

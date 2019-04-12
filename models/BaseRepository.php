@@ -57,6 +57,15 @@ class BaseRepository
         
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+    //ex
+    public function fetchAll()
+    {
+        $sql ="select posts.id, posts.name, posts.comment, posts.picture, posts.created_at ,users.name from posts left join users on posts.user_id = users.id";
+        $statement = $this->database->prepare($sql);
+         $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        
+    }
     
     public function fetchByOffSetAndLimit($offset, $limit)
     {

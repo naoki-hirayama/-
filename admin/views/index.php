@@ -20,15 +20,22 @@
         </select><br />
         <input type="submit" value="検索"><br />
     </form>
-    <?php if (isset($result_records)) : ?>
-        <?php if (isset($searched_posts)) : ?>  
-            <?php include('views/layouts/searchresults.php') ?>
-        <?php else : ?>
-            <?php include('views/layouts/errormessage.php') ?>
-            <a href="index.php">戻る</a>
+    
+    <?php if (isset($result_records)) : ?>  
+        <a href="index.php">戻る</a>
+        <h2>検索結果<?php echo $result_records ?>件</h2>
+        <ul>
+            <li>名前：<?php echo ($_GET['name'] !== '') ? $_GET['name'] :'指定なし' ?></li>
+            <li>本文：<?php echo ($_GET['comment'] !== '') ? $_GET['comment'] :'指定なし' ?></li>
+            <li>色：<?php echo ($_GET['color'] !== '') ? $select_color_options[$_GET['color']]:'指定なし' ?></li>
+        </ul>
+        <?php if ($result_records == 0) : ?>
+            <?php exit; ?>
         <?php endif ?>
     <?php else : ?>
-    <h2>投稿一覧</h2>
+        <h2>投稿一覧</h2>
+    <?php endif ?>
+    
     <table border="2">
         <tr>
             <th>投稿ID</th>
@@ -73,7 +80,11 @@
     </table>
     <!--ページング処理-->
     <?php if ($pager->hasPreviousPage()) : ?>
-        <a href="?page=<?php echo $pager->getPreviousPage() ?>">前へ</a>
+        <?php if (isset($result_records)) : ?>  
+            <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getPreviousPage() ?>&color=<?php echo $_GET['color'] ?>">前へ</a>
+        <?php else :?>
+            <a href="?page=<?php echo $pager->getPreviousPage() ?>">前へ</a>
+        <?php endif ?>
     <?php endif ?>
     
     <?php foreach ($pager->getPageNumbers() as $i) : ?>
@@ -82,17 +93,26 @@
                 <?php echo $i ?>
             </span>
         <?php else : ?>
-            <a href="?page=<?php echo $i ?>">
-                <?php echo $i ?>
-            </a>
+            <?php if (isset($result_records)) : ?>  
+                <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $i ?>&color=<?php echo $_GET['color'] ?>">
+                    <?php echo $i ?>
+                </a>
+            <?php else : ?>
+                <a href="?page=<?php echo $i ?>">
+                    <?php echo $i ?>
+                </a>
+            <?php endif ?>
         <?php endif ?>
     <?php endforeach ?>
     
-    <?php if ($pager->hasNextPage()) : ?>           
-        <a href="?page=<?php echo $pager->getNextPage() ?>">次へ</a>
+    <?php if ($pager->hasNextPage()) : ?>
+        <?php if (isset($result_records)) : ?>  
+            <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getNextPage() ?>&color=<?php echo $_GET['color'] ?>">次へ</a>
+        <?php else :?>
+            <a href="?page=<?php echo $pager->getNextPage() ?>">次へ</a>
+        <?php endif ?>
     <?php endif ?>
     <!--ここまで-->
-   
     <div id="modalwin" class="modalwin hide">
         <a herf="#" class="modal-close"></a>
         <h1>編集</h1>
@@ -119,7 +139,7 @@
     </div>
    
     <script type="text/javascript">
-        var json_posts = '<?php echo json_encode($posts); ?>';
+        var json_posts = '<?php echo json_encode($post); ?>';
         console.log(json_posts);
         $(function() {
             $('.show-modal').on('click', function() {
@@ -133,7 +153,6 @@
             });
         });
     </script>
-    <?php endif ?> 
 <?php
     include('../admin/views/layouts/footer.php');
 ?>
