@@ -23,24 +23,10 @@ if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
         header('Location: index.php');
         exit;
     } else {
-        if (strlen($values['name']) !== 0 && strlen($values['comment']) === 0) {
-            $searched_total_records = $post_repository->fetchCountByName($values);
-        }
-        
-        if (strlen($values['name']) === 0 && strlen($values['comment']) !== 0) {
-            $searched_total_records = $post_repository->fetchCountByComment($values);
-        }
-        
-        if (strlen($values['name']) === 0 && strlen($values['comment']) === 0 && strlen($values['color']) !== 0 ) {
-            $searched_total_records = $post_repository->fetchCountByColor($values);
-        }
-        
-        if (strlen($values['name']) !== 0 && strlen($values['comment']) !== 0) {
-            $searched_total_records = $post_repository->fetchCountByNameAndComment($values);
-        }
+        $result_records = $post_repository->fetchCountByKeywords($values);
     }
     
-    if ($searched_total_records > 0) {
+    if ($result_records > 0) {
         $max_pager_range = 4;
         $per_page_records = 10;
         
@@ -50,24 +36,11 @@ if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
             $page = 1;
         }
         
-        $pager = new Pager($searched_total_records, $max_pager_range, $per_page_records);
+        $pager = new Pager($result_records, $max_pager_range, $per_page_records);
         $pager->setCurrentPage($page);
         $offset = $pager->getOffset();
         $per_page_records = $pager->getPerPageRecords();
-        
-        if (strlen($values['name']) !== 0 && strlen($values['comment']) === 0) {
-            $searched_posts = $post_repository->fetchByName($values, $offset, $per_page_records);
-            
-        } elseif (strlen($values['name']) === 0 && strlen($values['comment']) !== 0) {
-            $searched_posts = $post_repository->fetchByComment($values, $offset, $per_page_records);
-            
-        } elseif (strlen($values['name']) === 0 && strlen($values['comment']) === 0 && strlen($values['color']) !== 0 ) {
-            $searched_posts = $post_repository->fetchByColor($values, $offset, $per_page_records);
-            
-        } elseif (strlen($values['name']) !== 0 && strlen($values['comment']) !== 0) {
-            $searched_posts = $post_repository->fetchByNameAndComment($values, $offset, $per_page_records);
-            
-        }
+        $searched_posts = $post_repository->fetchByKeywords($values, $offset, $per_page_records);
         
         $user_ids = [];
         $post_ids = [];
