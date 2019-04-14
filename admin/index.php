@@ -12,9 +12,16 @@ $reply_repository = new ReplyRepository($database);
 $picture_max_size = $user_repository::MAX_PICTURE_SIZE;
 
 $select_color_options = PostRepository::getSelectColorOptions();
-$add_color[''] = '選択しない';
-$select_color_options = array_merge($add_color, $select_color_options);
-//dd($post_repository->fetchAll());exit;
+$select_color_options = array_merge(['' => '選択しない'], $select_color_options);
+$max_pager_range = 10;
+$per_page_records = 30;
+
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
+} else {
+    $page = 1;
+}
+
 if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
     $values = $_GET;
     $errors = [];
@@ -27,38 +34,22 @@ if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
     }
     
     if ($result_records > 0) {
-        $max_pager_range = 3;
-        $per_page_records = 10;
-        
-        if (isset($_GET['page'])) {
-            $page = $_GET['page'];
-        } else {
-            $page = 1;
-        }
         
         $pager = new Pager($result_records, $max_pager_range, $per_page_records);
         $pager->setCurrentPage($page);
         $offset = $pager->getOffset();
         $per_page_records = $pager->getPerPageRecords();
         $posts = $post_repository->fetchByKeywords($values, $offset, $per_page_records);
-    } 
-    
-} else {
-    $max_pager_range = 10;
-    $per_page_records = 30;
-    $total_records = $post_repository->fetchCount();
-    
-    if (isset($_GET['page'])) {
-        $page = $_GET['page'];
-    } else {
-        $page = 1;
+        $pager->setUri($_SERVER['SCRIPT_NAME'], $_GET);
     }
-    
+} else {
+    $total_records = $post_repository->fetchCount();
     $pager = new Pager($total_records, $max_pager_range, $per_page_records);
     $pager->setCurrentPage($page);
     $offset = $pager->getOffset();
     $per_page_records = $pager->getPerPageRecords();
     $posts = $post_repository->fetchByOffSetAndLimit($offset, $per_page_records);
+    $pager->setUri($_SERVER['SCRIPT_NAME'], $_GET);
 }
 
 if (!empty($posts)) {
@@ -81,4 +72,3 @@ if (!empty($posts)) {
 }
 
 include('../admin/views/index.php');
-

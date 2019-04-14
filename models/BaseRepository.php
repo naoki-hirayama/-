@@ -58,13 +58,18 @@ class BaseRepository
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     //ex
-    public function fetchAll()
+    public function fetchUserNameAndPostByOffSetAndLimit($offset, $limit)
     {
-        $sql ="select posts.id, posts.name, posts.comment, posts.picture, posts.created_at ,users.name from posts left join users on posts.user_id = users.id";
-        $statement = $this->database->prepare($sql);
-         $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        $sql ="SELECT posts.id, posts.name, posts.comment, posts.picture, posts.created_at, posts.user_id, users.name AS users_name FROM posts LEFT JOIN users ON posts.user_id = users.id ORDER BY created_at DESC LIMIT :offset, :limit";
         
+        $statement = $this->database->prepare($sql);
+        
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        
+        $statement->execute();
+        
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     
     public function fetchByOffSetAndLimit($offset, $limit)

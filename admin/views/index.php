@@ -4,19 +4,15 @@
 ?>
     <h1>管理画面</h1>
     <form action="index.php" method="get">
-        <p>検索機能(名前と本文)</p>
+        <p><strong>検索フォーム</strong></p>
         名前：<input type="text" name="name"><br />
         本文：<input type="text" name="comment"><br />
         <select name="color">
-        <?php foreach($select_color_options as $key => $value) : ?>
-            <?php if (!empty($_GET['color'])) : ?>
-                <option value="<?php echo $key ?>"<?php echo $key === $_GET['color'] ? 'selected' : ''; ?>>
-            <?php else : ?>
-                <option value="<?php echo $key ?>">
-            <?php endif ?>
+            <?php foreach($select_color_options as $key => $value) : ?>
+                <option value="<?php echo $key ?>"<?php echo (!empty($_GET['color']) && $key === $_GET['color']) ? 'selected' : ''; ?>>
                     <?php echo $value ?>
                 </option>
-        <?php endforeach ?>
+            <?php endforeach ?>
         </select><br />
         <input type="submit" value="検索"><br />
     </form>
@@ -80,11 +76,7 @@
     </table>
     <!--ページング処理-->
     <?php if ($pager->hasPreviousPage()) : ?>
-        <?php if (isset($result_records)) : ?>  
-            <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getPreviousPage() ?>&color=<?php echo $_GET['color'] ?>">前へ</a>
-        <?php else :?>
-            <a href="?page=<?php echo $pager->getPreviousPage() ?>">前へ</a>
-        <?php endif ?>
+        <a href="<?php echo $pager->createUri($pager->getPreviousPage()) ?>">前へ</a>
     <?php endif ?>
     
     <?php foreach ($pager->getPageNumbers() as $i) : ?>
@@ -93,24 +85,14 @@
                 <?php echo $i ?>
             </span>
         <?php else : ?>
-            <?php if (isset($result_records)) : ?>  
-                <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $i ?>&color=<?php echo $_GET['color'] ?>">
-                    <?php echo $i ?>
-                </a>
-            <?php else : ?>
-                <a href="?page=<?php echo $i ?>">
-                    <?php echo $i ?>
-                </a>
-            <?php endif ?>
+            <a href="<?php echo $pager->createUri($i) ?>">
+                <?php echo $i ?>
+            </a>
         <?php endif ?>
     <?php endforeach ?>
     
     <?php if ($pager->hasNextPage()) : ?>
-        <?php if (isset($result_records)) : ?>  
-            <a href="?name=<?php echo $_GET['name'] ?>&comment=<?php echo $_GET['comment'] ?>&page=<?php echo $pager->getNextPage() ?>&color=<?php echo $_GET['color'] ?>">次へ</a>
-        <?php else :?>
-            <a href="?page=<?php echo $pager->getNextPage() ?>">次へ</a>
-        <?php endif ?>
+        <a href="<?php echo $pager->createUri($pager->getNextPage()) ?>">次へ</a>
     <?php endif ?>
     <!--ここまで-->
     <div id="modalwin" class="modalwin hide">

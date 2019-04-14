@@ -5,6 +5,8 @@ class Pager
     private $per_page_records;
     private $max_pager_range;
     private $current_page;
+    private $uri;
+    private $params;
     
     public function __construct($total_records, $max_pager_range, $per_page_records)
     {
@@ -94,6 +96,21 @@ class Pager
     public function getNextPage()
     {
         return $this->current_page + 1;
+    }
+    
+    public function setUri($uri, $params = array())
+    {
+        $this->uri = $uri;
+        $this->params = $params;
+    }
+    
+    public function createUri($page = null)
+    {
+        $params = $this->params;
+        $params['page'] = $page;
+        $uri_params = http_build_query($params);
+        
+        return "{$this->uri}?{$uri_params}";
     }
     
     private function getBothRanges()
