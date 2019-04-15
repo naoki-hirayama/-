@@ -99,12 +99,13 @@
         <a herf="#" class="modal-close"></a>
         <h1>編集</h1>
         <div class="modalwin-contents">
-            <form action="index.php" method="post" enctype="multipart/form-data">
+            <form action="edit.php" method="post" enctype="multipart/form-data">
                 <input id="input_name" type="text" name="name" value="">
                 <br />
                 <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
                 <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $picture_max_size ?>">
                 <br />
+                <img src="images/posts/" id=input_pictre width="30" height="30"><br />
                 <input type="file" name="picture"><br />
                 <select id="input_color" name="color">
                 <?php foreach($select_color_options as $key => $value) : ?>
@@ -120,17 +121,18 @@
     </div>
    
     <script type="text/javascript">
-        var json_posts = '<?php echo json_encode($post); ?>';
+        var json_posts = JSON.parse('<?php echo json_encode($posts) ?>');
         console.log(json_posts);
+        console.log(json_posts[0]);
         $(function() {
             $('.show-modal').on('click', function() {
-                console.log($(this).data());
+                
                 var key = $(this).data('key');
-                console.log(key);
-                console.log(json_posts[5]);
-                console.log(json_posts[key]);
-                $('#input_name').val(json_posts[key].id);
+                
+                $('#input_name').val(json_posts[key].name);
                 $('#input_comment').val(json_posts[key].comment);
+                $('#input_pictuere').val(json_posts[key].picture);
+                $('#input_color').val(json_posts[key].color);
             });
         });
     </script>
