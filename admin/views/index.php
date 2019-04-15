@@ -103,7 +103,6 @@
                 <input id="input_name" type="text" name="name" value="">
                 <br />
                 <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
-                <!--<img src="../images/posts/"></img>-->
                 <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $picture_max_size ?>">
                 <br />
                 <input type="file" name="picture"><br />

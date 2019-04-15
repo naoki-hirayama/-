@@ -20,16 +20,9 @@ if ($post === false) {
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //jqueryでポスト送信
-    //レス削除
-    
-}
-
 $reply_posts = $reply_repository->fetchByPostId($post['id']);
 
 $user_ids = [];
-
 foreach ($reply_posts as $reply_post) {
     if (isset($reply_post['user_id'])) {
         $user_ids[] = $reply_post['user_id'];

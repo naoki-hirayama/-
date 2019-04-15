@@ -106,10 +106,8 @@ class Pager
     
     public function createUri($page = null)
     {
-        $params = $this->params;
-        $params['page'] = $page;
-        $uri_params = http_build_query($params);
-        
+        $this->params['page'] = $page;
+        $uri_params = http_build_query($this->params);
         return "{$this->uri}?{$uri_params}";
     }
     

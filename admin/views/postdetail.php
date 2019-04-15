@@ -28,8 +28,10 @@
             ---------------------------------------------<br />
         </li>
     </ul>
-    <input type="button" value="投稿削除" id="delete">
-    <input type="hidden" value="<?php echo $post['id'] ?>" name="post_id">
+    <form action="deleted.php" method="post" id="deleteform">
+        <input type="hidden" value="<?php echo $post['id'] ?>" name="post_id">
+        <input type="submit" value="投稿削除">
+    </form>
     <input type="button" value="投稿編集">
     <h2>レス一覧</h2>
     <table border="2">
@@ -67,8 +69,11 @@
                 <input type="button" value="編集">
             </td>
             <td>
-                <input type="button" value="削除" id="delete_reply">
-                <input type="hidden" value="<?php echo $reply_post['id'] ?>" name="reply_id">
+                <form action="reply_delete.php" method="post" id="delete_reply_form">
+                    <input type="hidden" value="<?php echo $reply_post['id'] ?>" name="reply_id">
+                    <input type="hidden" value="<?php echo $post['id'] ?>" name="post_id">
+                    <input type="submit" value="削除">
+                </form>
             </td>
         </tr>
         <?php endforeach ?>

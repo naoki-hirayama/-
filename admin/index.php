@@ -34,7 +34,6 @@ if (isset($_GET['name'], $_GET['comment'], $_GET['color'])) {
     }
     
     if ($result_records > 0) {
-        
         $pager = new Pager($result_records, $max_pager_range, $per_page_records);
         $pager->setCurrentPage($page);
         $offset = $pager->getOffset();

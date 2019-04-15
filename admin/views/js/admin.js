@@ -1,22 +1,31 @@
 $(function() {
-    $('#delete').click(function() {
+
+    $('#deleteform').submit(function() {
         if (!confirm('本当に投稿を削除しますか？')) {
             return false;
         }
-        else {
-            $.post("deleted.php", {
-                post_id: $("input[name=post_id]").val()
-            });
-            location.href = 'deleted.php';
-        }
     });
+
     //削除アラートが二個目から出ない
-    $("input[value=削除]").click(function() {
+    $("#delete_reply_form").click(function() {
         if (!confirm('本当にレスを削除しますか？')) {
             return false;
         }
-        else {
-
-        }
     });
+
+    // $("input[value=削除]").click(function() {
+    //         if (!confirm('本当にレスを削除しますか？')) {
+    //             return false;
+    //         }
+    //         else {
+    //             $.ajax({
+    //                 type: 'POST',
+    //                 url: 'postdetail.php',
+    //                 data: {
+    //                     reply_id: $("input[name=reply_id]").val()
+    //                 }
+    //             })
+    //             location.href = 'postdetail.php';
+    //         }
+    //     });
 });
