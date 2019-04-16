@@ -112,7 +112,6 @@
                 </select>
                 <br />
                 <button id="ajax">編集</button>
-                <!--<input type="submit" value="編集"/>-->
                 <br />
             </form>
             <button>閉じる</button>
@@ -139,14 +138,13 @@
     				$("#input_comment").val(post.comment);
     				$("#img").attr('src', '/kadai-ibg/images/posts/' + post.picture);
     				$("#input_color").val(post.color);
-                });
-                
-                
-                
+                }).fail(function()  {
+                    alert("通信に失敗しました");
+                }); 
             });
-            
-            
+                
             $('#ajax').on('click', function() {
+                
                 $.ajax({
                     url:'edit_ajax.php',
                     type:'POST',
@@ -154,11 +152,22 @@
                         'id':$("#input_id").val(),
                         'name':$("#input_name").val(),
                         'comment':$("#input_comment").val(),
-                        'color':$("#input_color").val()
+                        'color':$("#input_color").val(),
+                    },
+                    dataType: 'json',
+                }).done(function(response) {
+                    if (response === true) {
+                        alert("編集しました。");
+                    } else {
+                        alert(response);
+                        console.log('hoge');
                     }
+                    
+                }).fail(function()  {
+                    alert("通信に失敗しました");
                 });
             });
-            
+
         });
     </script>
 <?php

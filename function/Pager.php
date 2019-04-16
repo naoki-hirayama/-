@@ -100,9 +100,8 @@ class Pager
     
     public function setUri($uri, $params = array())
     {   
-        $this->uri = $uri;
+        $this->uri = parse_url($uri)['path'];
         $this->params = $params;
-        //マージ
     }
     
     public function createUri($page = null)

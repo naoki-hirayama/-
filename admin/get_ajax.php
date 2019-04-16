@@ -14,7 +14,6 @@ $reply_repository = new ReplyRepository($database);
 $picture_max_size = $user_repository::MAX_PICTURE_SIZE;
 $select_color_options = PostRepository::getSelectColorOptions();
 
-
 $post_id = $_GET['id'];
 
 $post = $post_repository->fetchById($post_id);

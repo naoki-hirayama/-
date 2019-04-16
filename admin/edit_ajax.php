@@ -21,7 +21,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (empty($errors)) {
         $post_repository->edit($_POST);
+        $response = true;
+        echo json_encode($response);
     } else {
-        echo json_encode($errors);
+        $response =  $errors;
+        echo json_encode($response);
     }
 }
+// * ユーザーの投稿の場合は「名前」はフォームではなくユーザー名をテキストで表示する
+// * バリデーションのエラーメッセージはalertで表示する
+// * 編集が完了したら「編集しました」とalertと表示し、編集後の内容で一覧に表示される内容を書き換える。
+// * ページの再読み込みはせずDOMの書き換えでやる。
