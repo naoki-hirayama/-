@@ -8,7 +8,6 @@ $(function() {
             .attr('id', 'shade')
             .on('click', hideModal);
 
-
         var $modalWin = $('#modalwin');
         var $window = $(window);
         var posX = ($window.width() - $modalWin.outerWidth()) / 2;

@@ -66,7 +66,7 @@
                 <?php echo (isset($reply_counts[$post['id']])) ? $reply_counts[$post['id']] : 0 ?>件
             </td>            
             <td>
-                <input type="button" id="btn" value="編集" class="show-modal" data-key="<?php echo $key; ?>">
+                <input type="button" id="btn" value="編集" class="show-modal" data-id="<?php echo $post['id'] ?>">
             </td>
             <td>
                 <a href="postdetail.php?id=<?php echo $post['id'] ?>">投稿詳細</a>
@@ -97,23 +97,22 @@
     <!--ここまで-->
     <div id="modalwin" class="modalwin hide">
         <a herf="#" class="modal-close"></a>
-        <h1>編集</h1>
+        <h1>投稿編集</h1>
         <div class="modalwin-contents">
-            <form action="edit.php" method="post" enctype="multipart/form-data">
+            <form action="" method="post" enctype="multipart/form-data">
+                <input id="input_id" type="hidden" name="name" value="">
                 <input id="input_name" type="text" name="name" value="">
                 <br />
                 <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
-                <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $picture_max_size ?>">
-                <br />
-                <img src="images/posts/" id=input_pictre width="30" height="30"><br />
-                <input type="file" name="picture"><br />
+                <img id="img"src="" width="30" height="30"><br />
                 <select id="input_color" name="color">
                 <?php foreach($select_color_options as $key => $value) : ?>
                     <option value="<?php echo $key ?>"><?php echo $value; ?></option>
                 <?php endforeach ?>
                 </select>
                 <br />
-                <input type="submit" value="編集"/>
+                <button id="ajax">編集</button>
+                <!--<input type="submit" value="編集"/>-->
                 <br />
             </form>
             <button>閉じる</button>
@@ -121,19 +120,45 @@
     </div>
    
     <script type="text/javascript">
-        var json_posts = JSON.parse('<?php echo json_encode($posts) ?>');
-        console.log(json_posts);
-        console.log(json_posts[0]);
+    
         $(function() {
             $('.show-modal').on('click', function() {
                 
-                var key = $(this).data('key');
+                var id = $(this).data('id');
                 
-                $('#input_name').val(json_posts[key].name);
-                $('#input_comment').val(json_posts[key].comment);
-                $('#input_pictuere').val(json_posts[key].picture);
-                $('#input_color').val(json_posts[key].color);
+                $.ajax({
+                    url:'get_ajax.php',
+                    type:'GET',
+                    data:{
+                        'id': id,
+                    },
+                    dataType: 'json',
+                }).done(function(post) {
+                    $("#input_id").val(post.id);
+    				$("#input_name").val(post.name);
+    				$("#input_comment").val(post.comment);
+    				$("#img").attr('src', '/kadai-ibg/images/posts/' + post.picture);
+    				$("#input_color").val(post.color);
+                });
+                
+                
+                
             });
+            
+            
+            $('#ajax').on('click', function() {
+                $.ajax({
+                    url:'edit_ajax.php',
+                    type:'POST',
+                    data:{
+                        'id':$("#input_id").val(),
+                        'name':$("#input_name").val(),
+                        'comment':$("#input_comment").val(),
+                        'color':$("#input_color").val()
+                    }
+                });
+            });
+            
         });
     </script>
 <?php

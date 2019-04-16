@@ -15,7 +15,8 @@ $select_color_options = PostRepository::getSelectColorOptions();
 $select_color_options = array_merge(['' => '選択しない'], $select_color_options);
 $max_pager_range = 10;
 $per_page_records = 30;
-
+var_dump($_SERVER['SCRIPT_NAME']);
+var_dump($_SERVER['REQUEST_URI']);
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
 } else {
