@@ -31,7 +31,7 @@ foreach ($reply_posts as $reply_post) {
 
 if (!empty($user_ids)) {
     $users = $user_repository->fetchByIds($user_ids);
-    $user_names_are_key_as_user_ids = array_column($users, 'name', 'id');
+    $user_names = array_column($users, 'name', 'id');
 }
 
 include('../admin/views/postdetail.php');

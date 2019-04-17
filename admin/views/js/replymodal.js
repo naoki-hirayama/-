@@ -18,7 +18,7 @@ $(function() {
             .css({ left: posX, top: posY })
             .removeClass('hide')
             .addClass('show')
-            .on('click', '#ressclose', function() {
+            .on('click', '#reply_close', function() {
                 hideModal();
             });
     }

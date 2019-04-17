@@ -55,8 +55,8 @@
             </td>
             
             <td id="name_<?php echo h($reply_post['id']) ?>">
-            <?php if (isset($reply_post['user_id']) && isset($users)) : ?>
-                <?php echo h($user_names_are_key_as_user_ids[$reply_post['user_id']]) ?>
+            <?php if (isset($reply_post['user_id'])) : ?>
+                <?php echo h($user_names[$reply_post['user_id']]) ?>
             <?php else : ?>
                 <?php echo h($reply_post['name']) ?>
             <?php endif ?>
@@ -117,9 +117,9 @@
             <?php endforeach ?>
             </select>
             <br />
-            <button id="ressajax">編集</button>
+            <button id="reply_ajax">編集</button>
             <br />
-            <button id="ressclose">閉じる</button>
+            <button id="reply_close">閉じる</button>
         </div>
     </div>
     
@@ -200,7 +200,7 @@
                 });
             });
                 
-            $('#ressajax').on('click', function() {
+            $('#reply_ajax').on('click', function() {
                 
                 $.ajax({
                     url:'edit_reply_ajax.php',
