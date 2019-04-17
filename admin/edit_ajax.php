@@ -21,7 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (empty($errors)) {
         $post_repository->edit($_POST);
-        $response = true;
+        $response = [];
+        $response[0] = true;
+        $response[1] = $post_repository->fetchById($_POST['id']);
         echo json_encode($response);
     } else {
         $response =  $errors;

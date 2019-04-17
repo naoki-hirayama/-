@@ -50,7 +50,7 @@
             <td>
                 <?php echo h($post['created_at']) ?>
             </td>
-            <td>
+            <td id="edit_name_<?php echo h($post['id']) ?>">
             <?php if (isset($post['user_id'])) : ?>
                 <?php echo h($user_names[$post['user_id']]) ?>
             <?php else : ?>
@@ -58,7 +58,7 @@
             <?php endif ?>
             </td>
             <td>
-                <font color="<?php echo $post['color'] ?>">
+                <font id="font_<?php echo h($post['id']) ?>" color="<?php echo $post['color'] ?>">
                     <?php echo h($post['comment']) ?>
                 </font>
             </td>
@@ -99,22 +99,20 @@
         <a herf="#" class="modal-close"></a>
         <h1>投稿編集</h1>
         <div class="modalwin-contents">
-            <form action="" method="post" enctype="multipart/form-data">
-                <input id="input_id" type="hidden" name="name" value="">
-                <input id="input_name" type="text" name="name" value="">
-                <br />
-                <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
-                <img id="img"src="" width="30" height="30"><br />
-                <select id="input_color" name="color">
-                <?php foreach($select_color_options as $key => $value) : ?>
-                    <option value="<?php echo $key ?>"><?php echo $value; ?></option>
-                <?php endforeach ?>
-                </select>
-                <br />
-                <button id="ajax">編集</button>
-                <br />
-            </form>
-            <button>閉じる</button>
+            <input id="input_id" type="hidden" name="name" value="">
+            <input id="input_name" type="text" name="name" value="">
+            <br />
+            <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
+            <img id="img"src="" width="30" height="30"><br />
+            <select id="input_color" name="color">
+            <?php foreach($select_color_options as $key => $value) : ?>
+                <option value="<?php echo $key ?>"><?php echo $value; ?></option>
+            <?php endforeach ?>
+            </select>
+            <br />
+            <button id="ajax">編集</button>
+            <br />
+            <button id="close">閉じる</button>
         </div>
     </div>
    
@@ -156,11 +154,13 @@
                     },
                     dataType: 'json',
                 }).done(function(response) {
-                    if (response === true) {
+                    if (response[0] === true) {
                         alert("編集しました。");
+                        $('#edit_name_'+response[1].id).text(response[1].name);
+                        $('#font_'+response[1].id).text(response[1].comment);
+                        $('#font_'+response[1].id).attr('color',　response[1].color);
                     } else {
                         alert(response);
-                        console.log('hoge');
                     }
                     
                 }).fail(function()  {
