@@ -54,7 +54,7 @@
                 <?php echo h($reply_post['created_at']) ?>
             </td>
             
-            <td id="name_<?php echo h($reply_post['id']) ?>">
+            <td id="reply_name_<?php echo h($reply_post['id']) ?>">
             <?php if (isset($reply_post['user_id'])) : ?>
                 <?php echo h($user_names[$reply_post['user_id']]) ?>
             <?php else : ?>
@@ -62,7 +62,7 @@
             <?php endif ?>
             </td>
             <td>
-                <font id="font_<?php echo h($reply_post['id']) ?>" color="<?php echo $reply_post['color'] ?>">
+                <font id="reply_font_<?php echo h($reply_post['id']) ?>" color="<?php echo $reply_post['color'] ?>">
                     <?php echo h($reply_post['comment']) ?>
                 </font>
             </td>
@@ -105,12 +105,12 @@
         <a herf="#" class="modal-close"></a>
         <h1>レス編集</h1>
         <div class="modalwin-contents">
-            <input id="id" type="hidden" name="name" value="">
-            <input id="name" type="text" name="name" value="">
+            <input id="reply_id" type="hidden" name="name" value="">
+            <input id="reply_name" type="text" name="name" value="">
             <br />
-            <textarea id="comment" name="comment" rows="4" cols="20"></textarea><br />
+            <textarea id="reply_comment" name="comment" rows="4" cols="20"></textarea><br />
             <img id="reply_img" src="" width="30" height="30"><br />
-            <select id="color" name="color">
+            <select id="reply_color" name="color">
             <?php foreach($select_color_options as $key => $value) : ?>
                 <option value="<?php echo $key ?>"><?php echo $value; ?></option>
             <?php endforeach ?>
@@ -192,15 +192,15 @@
                     dataType: 'json',
                 }).done(function(reply_post) {
                     
-                    $("#id").val(reply_post.id);
-    				$("#name").val(reply_post.name); 
-    				$("#comment").val(reply_post.comment);
+                    $("#reply_id").val(reply_post.id);
+    				$("#reply_name").val(reply_post.name); 
+    				$("#reply_comment").val(reply_post.comment);
     				if (reply_post.picture !== null) {
     				    $("#reply_img").attr('src', '/kadai-ibg/images/replies/' + reply_post.picture);
     				} else {
     				    $("#reply_img").attr('src', '/kadai-ibg/images/replies/noimage.png');
     				}
-    				$("#fcolor").val(reply_post.color);
+    				$("#reply_color").val(reply_post.color);
                 }).fail(function() {
                     alert("通信に失敗しました");
                 });
@@ -212,18 +212,18 @@
                     url:'edit_reply_ajax.php',
                     type:'POST',
                     data:{
-                        'id':$("#id").val(),
-                        'name':$("#name").val(),
-                        'comment':$("#comment").val(),
-                        'color':$("#color").val(),
+                        'id':$("#reply_id").val(),
+                        'name':$("#reply_name").val(),
+                        'comment':$("#reply_comment").val(),
+                        'color':$("#reply_color").val(),
                     },
                     dataType: 'json',
                 }).done(function(response) {
                     if (response[0] === true) {
                         alert("編集しました。");
-                        $('#name_' + response[1].id).text(response[1].name);
-                        $('#font_' + response[1].id).text(response[1].comment);
-                        $('#font_' + response[1].id).attr('color',　response[1].color);
+                        $('#reply_name_' + response[1].id).text(response[1].name);
+                        $('#reply_font_' + response[1].id).text(response[1].comment);
+                        $('#reply_font_' + response[1].id).attr('color',　response[1].color);
                     } else {
                         alert(response);
                     }

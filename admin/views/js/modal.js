@@ -1,5 +1,5 @@
 $(function() {
-    // モーダルウィンドウを開く
+
     function showModal(event) {
         event.preventDefault();
 
