@@ -109,7 +109,7 @@
             <input id="name" type="text" name="name" value="">
             <br />
             <textarea id="comment" name="comment" rows="4" cols="20"></textarea><br />
-            <img id="img" src="" width="30" height="30"><br />
+            <img id="reply_img" src="" width="30" height="30"><br />
             <select id="color" name="color">
             <?php foreach($select_color_options as $key => $value) : ?>
                 <option value="<?php echo $key ?>"><?php echo $value; ?></option>
@@ -195,10 +195,10 @@
                     $("#id").val(reply_post.id);
     				$("#name").val(reply_post.name); 
     				$("#comment").val(reply_post.comment);
-    				if (post.picture !== null) {
-    				    $("#img").attr('src', '/kadai-ibg/images/replies/' + reply_post.picture);
+    				if (reply_post.picture !== null) {
+    				    $("#reply_img").attr('src', '/kadai-ibg/images/replies/' + reply_post.picture);
     				} else {
-    				    $("#img").attr('src', '/kadai-ibg/images/posts/noimage.png');
+    				    $("#reply_img").attr('src', '/kadai-ibg/images/replies/noimage.png');
     				}
     				$("#fcolor").val(reply_post.color);
                 }).fail(function() {
