@@ -1,4 +1,4 @@
-<?php
+<?php 
 require_once('../function/db_connect.php');
 require_once('../function/Pager.php');
 require_once('../function/function.php');
@@ -14,19 +14,7 @@ $reply_repository = new ReplyRepository($database);
 $picture_max_size = $user_repository::MAX_PICTURE_SIZE;
 $select_color_options = PostRepository::getSelectColorOptions();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $values = $_POST;
+$reply_post_id = $_GET['reply_id'];
 
-    $errors = $post_repository->validate($_POST);
-    
-    if (empty($errors)) {
-        $post_repository->edit($_POST);
-        $response = [];
-        $response[0] = true;
-        $response[1] = $post_repository->fetchById($_POST['id']);
-        echo json_encode($response);
-    } else {
-        $response =  $errors;
-        echo json_encode($response);
-    }
-}
+$reply_post = $reply_repository->fetchById($reply_post_id);
+echo json_encode($reply_post);

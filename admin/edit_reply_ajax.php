@@ -20,10 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = $post_repository->validate($_POST);
     
     if (empty($errors)) {
-        $post_repository->edit($_POST);
+        $reply_repository->edit($_POST);
         $response = [];
         $response[0] = true;
-        $response[1] = $post_repository->fetchById($_POST['id']);
+        $response[1] = $reply_repository->fetchById($_POST['id']);
         echo json_encode($response);
     } else {
         $response =  $errors;

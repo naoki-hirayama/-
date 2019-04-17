@@ -54,6 +54,21 @@ class ReplyRepository extends BaseRepository
         $statement->execute();
     }
     
+    public function edit($values)
+    {
+        $values = $this->trimValues($values);
+        
+        $sql = 'UPDATE replies SET name = :name, comment = :comment, color = :color WHERE id = :id';
+        $statement = $this->database->prepare($sql);
+        
+        $statement->bindParam(':id', $values['id']);
+        $statement->bindParam(':name', $values['name']);
+        $statement->bindParam(':comment', $values['comment']);
+        $statement->bindParam(':color', $values['color']);
+        
+        $statement->execute();
+    }
+    
     public function delete($reply_id)
     {   
         $reply_post = $this->fetchById($reply_id);

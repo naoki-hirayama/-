@@ -56,27 +56,6 @@ class PostRepository extends BaseRepository
     public function edit($values)
     {
         $values = $this->trimValues($values);
-        //$post = $this->fetchById($values['id']);
-        
-        // if ($values['picture']['error'] === UPLOAD_ERR_OK) {
-            
-        //     $posted_picture = $values['picture']['tmp_name'];
-        //     $finfo = new finfo(FILEINFO_MIME_TYPE);
-        //     $picture_type = $finfo->file($posted_picture);
-        //     $specific_num = uniqid(mt_rand()); 
-        //     $rename_file = $specific_num.'.'.basename($picture_type);
-        //     $rename_file_path = 'images/posts/'.$rename_file;
-        //     move_uploaded_file($values['picture']['tmp_name'], $rename_file_path);
-            
-        //     if (empty($post['picture'])) {
-        //         $values['picture']['name'] = $rename_file;
-        //     } else {
-        //         $values['picture']['name'] = $rename_file;
-        //         unlink("images/posts/{$post['picture']}"); 
-        //     }
-        // } else {
-        //     $values['picture']['name'] = isset($post['picture']) ? $post['picture'] : null;
-        // }
         
         $sql = 'UPDATE posts SET name = :name, comment = :comment, color = :color WHERE id = :id';
         $statement = $this->database->prepare($sql);
@@ -85,7 +64,6 @@ class PostRepository extends BaseRepository
         $statement->bindParam(':name', $values['name']);
         $statement->bindParam(':comment', $values['comment']);
         $statement->bindParam(':color', $values['color']);
-        //$statement->bindParam(':picture', $values['picture']['name']);
         
         $statement->execute();
     }
