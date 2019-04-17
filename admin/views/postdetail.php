@@ -101,7 +101,6 @@
         </div>
     </div>
     <!--レスモーダル-->
-    
     <div id="modalwin2" class="modalwin hide">
         <a herf="#" class="modal-close"></a>
         <h1>レス編集</h1>
@@ -123,7 +122,6 @@
         </div>
     </div>
     
-    
     <script type="text/javascript">
     
         $(function() {
@@ -142,13 +140,17 @@
                     $("#input_id").val(post.id);
     				$("#input_name").val(post.name);
     				$("#input_comment").val(post.comment);
-    				$("#img").attr('src', '/kadai-ibg/images/posts/' + post.picture);
+    				if (post.picture !== null) {
+    				    $("#img").attr('src', '/kadai-ibg/images/posts/' + post.picture);
+    				} else {
+    				    $("#img").attr('src', '/kadai-ibg/images/posts/noimage.png');
+    				}
     				$("#input_color").val(post.color);
                 }).fail(function()  {
                     alert("通信に失敗しました");
                 }); 
             });
-                
+
             $('#ajax').on('click', function() {
                 
                 $.ajax({
@@ -193,7 +195,11 @@
                     $("#id").val(reply_post.id);
     				$("#name").val(reply_post.name); 
     				$("#comment").val(reply_post.comment);
-    				$("#img").attr('src', '/kadai-ibg/images/replies/' + reply_post.picture);
+    				if (post.picture !== null) {
+    				    $("#img").attr('src', '/kadai-ibg/images/replies/' + reply_post.picture);
+    				} else {
+    				    $("#img").attr('src', '/kadai-ibg/images/posts/noimage.png');
+    				}
     				$("#fcolor").val(reply_post.color);
                 }).fail(function() {
                     alert("通信に失敗しました");

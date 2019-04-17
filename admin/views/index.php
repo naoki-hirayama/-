@@ -134,7 +134,11 @@
                     $("#input_id").val(post.id);
     				$("#input_name").val(post.name);
     				$("#input_comment").val(post.comment);
-    				$("#img").attr('src', '/kadai-ibg/images/posts/' + post.picture);
+    				if (post.picture !== null) {
+    				    $("#img").attr('src', '/kadai-ibg/images/posts/' + post.picture);
+    				} else {
+    				    $("#img").attr('src', '/kadai-ibg/images/posts/noimage.png');
+    				}
     				$("#input_color").val(post.color);
                 }).fail(function()  {
                     alert("通信に失敗しました");
