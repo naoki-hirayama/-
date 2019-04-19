@@ -54,14 +54,14 @@ class ReplyRepository extends BaseRepository
         $statement->execute();
     }
     
-    public function edit($values)
+    public function edit($values, $id)
     {
         $values = $this->trimValues($values);
         
         $sql = 'UPDATE replies SET name = :name, comment = :comment, color = :color WHERE id = :id';
         $statement = $this->database->prepare($sql);
         
-        $statement->bindParam(':id', $values['id']);
+        $statement->bindParam(':id', $id);
         $statement->bindParam(':name', $values['name']);
         $statement->bindParam(':comment', $values['comment']);
         $statement->bindParam(':color', $values['color']);
@@ -69,14 +69,14 @@ class ReplyRepository extends BaseRepository
         $statement->execute();
     }
     
-    public function delete($reply_id)
+    public function delete($id)
     {   
-        $reply_post = $this->fetchById($reply_id);
+        $reply = $this->fetchById($id);
         
-        parent::delete($reply_id);
+        parent::delete($id);
         
-        if (isset($reply_post['picture'])) {
-            unlink("images/replies/{$reply_post['picture']}");
+        if (isset($reply['picture'])) {
+            unlink("images/replies/{$reply['picture']}");
         }
     }
     

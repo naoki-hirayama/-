@@ -158,13 +158,14 @@
                     },
                     dataType: 'json',
                 }).done(function(response) {
-                    if (response[0] === true) {
+                    if (response['status'] === true) {
                         alert("編集しました。");
-                        $('#edit_name_'+response[1].id).text(response[1].name);
-                        $('#font_'+response[1].id).text(response[1].comment);
-                        $('#font_'+response[1].id).attr('color',　response[1].color);
+                        var post = response['post'];
+                        $('#edit_name_' + post['id']).text(post['name']);
+                        $('#font_' + post['id']).text(post['comment']);
+                        $('#font_' + post['id']).attr('color',　post['color']);
                     } else {
-                        alert(response);
+                        alert(response['errors']);
                     }
                     
                 }).fail(function()  {

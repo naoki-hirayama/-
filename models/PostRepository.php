@@ -53,14 +53,14 @@ class PostRepository extends BaseRepository
         $statement->execute();
     }
     
-    public function edit($values)
+    public function edit($values, $id)
     {
         $values = $this->trimValues($values);
         
         $sql = 'UPDATE posts SET name = :name, comment = :comment, color = :color WHERE id = :id';
         $statement = $this->database->prepare($sql);
         
-        $statement->bindParam(':id', $values['id']);
+        $statement->bindParam(':id', $id);
         $statement->bindParam(':name', $values['name']);
         $statement->bindParam(':comment', $values['comment']);
         $statement->bindParam(':color', $values['color']);

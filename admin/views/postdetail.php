@@ -164,13 +164,14 @@
                     },
                     dataType: 'json',
                 }).done(function(response) {
-                    if (response[0] === true) {
+                    if (response['status'] === true) {
                         alert("編集しました。");
-                        $('#post_name').text(response[1].name);
-                        $('#post_color').text(response[1].comment);
-                        $('#post_color').attr('color',　response[1].color);
+                        var post = response['post'];
+                        $('#post_name').text(post['name']);
+                        $('#post_color').text(post['comment']);
+                        $('#post_color').attr('color',　post['color']);
                     } else {
-                        alert(response);
+                        alert(response['errors']);
                     }
                     
                 }).fail(function()  {
@@ -219,13 +220,14 @@
                     },
                     dataType: 'json',
                 }).done(function(response) {
-                    if (response[0] === true) {
+                    if (response['status'] === true) {
                         alert("編集しました。");
-                        $('#reply_name_' + response[1].id).text(response[1].name);
-                        $('#reply_font_' + response[1].id).text(response[1].comment);
-                        $('#reply_font_' + response[1].id).attr('color',　response[1].color);
+                        var reply = response['reply']
+                        $('#reply_name_' + reply['id']).text(reply['name']);
+                        $('#reply_font_' + reply['id']).text(reply['comment']);
+                        $('#reply_font_' + reply['id']).attr('color',　reply['color']);
                     } else {
-                        alert(response);
+                        alert(response['errors']);
                     }
                     
                 }).fail(function()  {

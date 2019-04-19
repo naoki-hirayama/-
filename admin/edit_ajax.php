@@ -7,26 +7,22 @@ require_once('../models/PostRepository.php');
 require_once('../models/ReplyRepository.php');
 
 $database = db_connect();
-$user_repository = new UserRepository($database);
 $post_repository = new PostRepository($database);
-$reply_repository = new ReplyRepository($database);
-
-$picture_max_size = $user_repository::MAX_PICTURE_SIZE;
-$select_color_options = PostRepository::getSelectColorOptions();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values = $_POST;
-
-    $errors = $post_repository->validate($_POST);
+    $errors = $post_repository->validate($values);
     
     if (empty($errors)) {
-        $post_repository->edit($_POST);
+        $post_repository->edit($values, $values['id']);
         $response = [];
-        $response[0] = true;
-        $response[1] = $post_repository->fetchById($_POST['id']);
+        $response['status'] = true;
+        $response['post'] = $post_repository->fetchById($values['id']);
         echo json_encode($response);
     } else {
-        $response =  $errors;
+        $response = [];
+        $response['status'] = false;
+        $response['errors'] = $errors;
         echo json_encode($response);
     }
 }

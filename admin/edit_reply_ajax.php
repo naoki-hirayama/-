@@ -17,16 +17,18 @@ $select_color_options = PostRepository::getSelectColorOptions();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values = $_POST;
 
-    $errors = $post_repository->validate($_POST);
+    $errors = $post_repository->validate($values);
     
     if (empty($errors)) {
-        $reply_repository->edit($_POST);
+        $reply_repository->edit($values, $values['id']);
         $response = [];
-        $response[0] = true;
-        $response[1] = $reply_repository->fetchById($_POST['id']);
+        $response['status'] = true;
+        $response['reply'] = $reply_repository->fetchById($values['id']);
         echo json_encode($response);
     } else {
-        $response =  $errors;
+        $response = [];
+        $response['status'] = false;
+        $response['errors'] = $errors;
         echo json_encode($response);
     }
 }
