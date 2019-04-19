@@ -54,7 +54,7 @@ class ReplyRepository extends BaseRepository
         $statement->execute();
     }
     
-    public function edit($values, $id)
+    public function edit($id, $values)
     {
         $values = $this->trimValues($values);
         

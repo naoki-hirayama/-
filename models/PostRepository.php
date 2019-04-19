@@ -17,7 +17,7 @@ class PostRepository extends BaseRepository
         return ['black'=>'黒', 'red'=>'赤', 'blue'=>'青', 'yellow'=>'黄', 'green'=>'緑'];
     }
     
-    public function create($values, $user_id = null)
+    public function create($user_id = null, $values)
     {   
         $values = $this->trimValues($values);
         if ($values['picture']['error'] === UPLOAD_ERR_OK) {
@@ -53,7 +53,7 @@ class PostRepository extends BaseRepository
         $statement->execute();
     }
     
-    public function edit($values, $id)
+    public function edit($id, $values)
     {
         $values = $this->trimValues($values);
         
