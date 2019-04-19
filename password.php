@@ -14,11 +14,11 @@ $user_info = $user_repository->fetchById($_SESSION['user_id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $validate_result = $user_repository->validateChangePassword($_SESSION['user_id'], $_POST);
+    $validate_result = $user_repository->validateChangePassword($_POST, $_SESSION['user_id']);
     
     if (empty($validate_result)) {
         
-        $user_repository->changePassword($_SESSION['user_id'], $_POST);
+        $user_repository->changePassword($_POST, $_SESSION['user_id']);
         
         header('Location: edit.php');
         exit;

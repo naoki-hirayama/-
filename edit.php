@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors =  $user_repository->validate($values, $_SESSION['user_id']);
     
     if (empty($errors)) {
-        $user_repository->edit($_SESSION['user_id'], $values);
+        $user_repository->edit($values, $_SESSION['user_id']);
         header('Location: profile.php?id='.$user_info['id'].'');
         exit;
     }

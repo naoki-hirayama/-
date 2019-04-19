@@ -32,7 +32,7 @@ class UserRepository extends BaseRepository
         return $this->database->lastInsertId();
     }
     
-    public function edit($id, $values)
+    public function edit($values, $id)
     {
         $values = $this->trimValues($values);
         $user = $this->fetchById($id);
@@ -85,7 +85,7 @@ class UserRepository extends BaseRepository
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function changePassword($id, $values)
+    public function changePassword($values, $id)
     {   
         $values = $this->trimValues($values);
         
@@ -101,7 +101,7 @@ class UserRepository extends BaseRepository
         $statement->execute();
     }
     
-    public function validateChangePassword($id, $values)
+    public function validateChangePassword($values, $id)
     {
         $values = $this->trimValues($values);
         $user = $this->fetchById($id);
