@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = $post_repository->validate($values);
     
     if (empty($errors)) {
-        $post_repository->edit($values, $values['id']);
+        $post_repository->edit($values['id'], $values);
         $response = [];
         $response['status'] = true;
         $response['post'] = $post_repository->fetchById($values['id']);
