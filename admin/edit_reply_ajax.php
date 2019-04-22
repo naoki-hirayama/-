@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = $post_repository->validate($values);
     
     if (empty($errors)) {
-        $reply_repository->edit($values, $values['id']);
+        $reply_repository->edit($values['id'], $values);
         $response = [];
         $response['status'] = true;
         $response['reply'] = $reply_repository->fetchById($values['id']);
